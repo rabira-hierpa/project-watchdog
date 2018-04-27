@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, NavLink, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Landing from "./containers/Landing";
 import Signin from "./containers/Signin";
 import Signup from "./containers/Signup";
@@ -12,6 +12,7 @@ import Chat from "./containers/Chat";
 import Schedule from "./containers/Schedule";
 import History from "./containers/History";
 import AttachedFiles from "./containers/AttachedFiles";
+import ErrorPage from "./components/Error/Error";
 
 class Home extends Component {
   render() {
@@ -29,6 +30,7 @@ class Home extends Component {
         <Route path="/schedule" component={Schedule} />
         <Route path="/history" component={History} />
         <Route path="/files" component={AttachedFiles} />
+        <Route component={ErrorPage} />
         {/*
             <Route path="/project/view" component={TaskModal} />
             <Route path="/repository-view/" component={ArchiveDetails} />
