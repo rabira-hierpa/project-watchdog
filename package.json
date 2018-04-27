@@ -2,11 +2,18 @@
   "name": "project-watchdog-dev",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/api/*": {
+      "target": "http://localhost:4500"
+    }
+  },
   "dependencies": {
+    "axios": "^0.18.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "prettier": "^1.12.1",
     "react": "^16.3.2",
+    "react-chartjs-2": "^2.7.0",
     "react-dom": "^16.3.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
