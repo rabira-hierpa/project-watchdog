@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import Axios from "axios";
 
 class LoginForm extends Component {
@@ -37,9 +38,6 @@ class LoginForm extends Component {
 
   onPasswordChange(e) {
     let re = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/gm;
-    let passwd = e => {
-      return re.test(String(e.target.value));
-    };
     if (re.test(String(e.target.value))) {
       console.log(e.target.value);
       this.setState({
@@ -117,7 +115,7 @@ class LoginForm extends Component {
       passwdError = (
         <div className="text-danger">
           Password should be at least one capital letter, one small letter and 8
-          character length{" "}
+          character length
         </div>
       );
     }
@@ -131,8 +129,8 @@ class LoginForm extends Component {
                   <h3>
                     <i className="fa fa-lock" />
                     Sign in
-                  </h3>{" "}
-                </div>{" "}
+                  </h3>
+                </div>
                 <form action="/home" onSubmit={this.onSubmit.bind(this)}>
                   <div className="card-body mx-4">
                     <div className="md-form">
@@ -144,9 +142,9 @@ class LoginForm extends Component {
                         onChange={this.onEmailChange.bind(this)}
                         required
                       />
-                      <label htmlFor="Form-email1"> Your email </label>{" "}
-                    </div>{" "}
-                    {emailError}{" "}
+                      <label htmlFor="Form-email1"> Your email </label>
+                    </div>
+                    {emailError}
                     <div className="md-form pb-3">
                       <i className="fa fa-lock prefix grey-text" />
                       <input
@@ -155,16 +153,19 @@ class LoginForm extends Component {
                         className="form-control"
                         required
                         onChange={this.onPasswordChange.bind(this)}
-                      />{" "}
-                      <label htmlFor="Form-pass1"> Your password </label>{" "}
-                      {passwdError}{" "}
+                      />
+                      <label htmlFor="Form-pass1"> Your password </label>
+                      {passwdError}
                       <p className="font-small blue-text d-flex justify-content-end">
-                        Forgot{" "}
-                        <a href="#!" className="blue-text ml-1">
+                        Forgot
+                        <NavLink
+                          to="/forgetPassword"
+                          className="blue-text ml-1"
+                        >
                           Password ?
-                        </a>{" "}
-                      </p>{" "}
-                    </div>{" "}
+                        </NavLink>
+                      </p>
+                    </div>
                     <div className="text-center mb-3">
                       <button
                         type="submit"
@@ -172,11 +173,11 @@ class LoginForm extends Component {
                         className="btn blue-gradient btn-rounded z-depth-1a"
                       >
                         Sign in
-                      </button>{" "}
-                    </div>{" "}
+                      </button>
+                    </div>
                     <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
                       or Sign in with :
-                    </p>{" "}
+                    </p>
                     <div className="row my-3 d-flex justify-content-center">
                       <button
                         type="button"
@@ -184,26 +185,23 @@ class LoginForm extends Component {
                         onClick={this.googleSignin.bind(this)}
                       >
                         <i className="fa fa-google-plus blue-text" />
-                        <span className="text-primary text-center">
-                          {" "}
-                          Google{" "}
-                        </span>{" "}
-                      </button>{" "}
-                    </div>{" "}
-                  </div>{" "}
-                </form>{" "}
+                        <span className="text-primary text-center">Google</span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
                 <div className="modal-footer mx-5 pt-3 mb-1">
                   <p className="font-small grey-text d-flex justify-content-end">
                     Not a member ?
-                    <a href="/signup" className="blue-text ml-1">
-                      Sign Up{" "}
-                    </a>{" "}
-                  </p>{" "}
-                </div>{" "}
-              </div>{" "}
-            </section>{" "}
-          </div>{" "}
-        </div>{" "}
+                    <NavLink to="/signup" className="blue-text ml-1">
+                      Sign Up
+                    </NavLink>
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
     );
   }
