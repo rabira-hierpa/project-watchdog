@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router";
-import Axios from "../axios-instance";
+import Axios from "axios";
 
 class LoginForm extends Component {
   constructor(props) {
@@ -64,7 +63,15 @@ class LoginForm extends Component {
   signinUser(user) {
     Axios.request({
       method: "post",
-      url: "/auth/login/local",
+      url: "/api/auth/login/local",
+      // mode: "no-cors",
+      // headers: {
+      //   "Access-Control-Allow-Origin": "*",
+      //   "Content-Type": "application/json"
+      // },
+      // withCredentials: true,
+      // supportsCredentials: true,
+      // credentials: "same-origin",
       data: {
         Email: user.email,
         Password: user.passwd
@@ -72,9 +79,14 @@ class LoginForm extends Component {
     })
       .then(response => {
         console.log(response.data);
-        this.props.history.push(
-          "http://localhost:3000/home?id=" + response.data
-        );
+        if (response.data.message === "success") {
+          // this.props.history.push("http://localhost:3000/home");
+          window.location.href = "http://localhost:3000/tasks";
+        } else {
+          this.setState({
+            emailError: true
+          });
+        }
       })
       .catch(error => {
         console.log(error);
@@ -87,7 +99,7 @@ class LoginForm extends Component {
   }
 
   googleSignin() {
-    this.props.history.push("/signin?fa=t");
+    window.location.href = "/api/auth/google";
   }
   onSubmit(e) {
     if (this.state.emailError === false && this.state.passwdError === false) {
@@ -183,9 +195,9 @@ class LoginForm extends Component {
                 <div className="modal-footer mx-5 pt-3 mb-1">
                   <p className="font-small grey-text d-flex justify-content-end">
                     Not a member ?
-                    <Link to="/signup" className="blue-text ml-1">
+                    <a href="/signup" className="blue-text ml-1">
                       Sign Up{" "}
-                    </Link>{" "}
+                    </a>{" "}
                   </p>{" "}
                 </div>{" "}
               </div>{" "}
