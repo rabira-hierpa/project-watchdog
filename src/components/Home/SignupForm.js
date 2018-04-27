@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router";
-import Axios from "../axios-instance";
-import MainDashboard from "../../MainDashboard";
+import { NavLink } from "react-router-dom";
+import Axios from "axios";
 
 class SignupForm extends Component {
   constructor(props) {
@@ -40,10 +39,6 @@ class SignupForm extends Component {
 
   onEmailChange(e) {
     let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
-    let email = e => {
-      console.log(re.test(String(e.target.value).toLocaleLowerCase()));
-      return re.test(String(e.target.value).toLowerCase());
-    };
 
     if (re.test(String(e.target.value).toLowerCase())) {
       this.setState({
@@ -65,9 +60,6 @@ class SignupForm extends Component {
   }
   onPasswordChange(e) {
     let re = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/gm;
-    let passwd = e => {
-      return re.test(String(e.target.value));
-    };
     if (re.test(String(e.target.value))) {
       console.log(e.target.value);
       this.setState({
@@ -114,10 +106,14 @@ class SignupForm extends Component {
     });
   }
 
+  googleSignUp() {
+    window.location.href = "/api/auth/google";
+  }
+
   singinUser(user) {
     Axios.request({
       method: "post",
-      url: "/auth/signup/local",
+      url: "/api/auth/signup/local",
       data: {
         Fname: user.fname,
         Lname: user.lname,
@@ -284,6 +280,7 @@ class SignupForm extends Component {
                     <button
                       type="button"
                       className="btn btn-white btn-rounded z-depth-1a"
+                      onClick={this.googleSignUp.bind(this)}
                     >
                       <i className="fa fa-google-plus blue-text" />
                       <span className="text-primary h6">Google</span>
@@ -293,9 +290,9 @@ class SignupForm extends Component {
                 <div className="modal-footer mx-5 pt-3 mb-1">
                   <p className="font-small grey-text d-flex justify-content-end">
                     Already signed up!
-                    <a href="/signin" className="blue-text ml-1">
+                    <NavLink to="/signin" className="blue-text ml-1">
                       Sign In
-                    </a>
+                    </NavLink>
                   </p>
                 </div>
               </div>

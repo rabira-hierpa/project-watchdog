@@ -16,7 +16,7 @@ const PromptSignup = props => {
         <p>Lorem ipsum dolor, sit amet consectetur adipisicing.</p>
         <p>Lorem ipsum dolor sit amet.</p>
         <button className="btn btn-lg btn-dark-green">
-          <NavLink to="signup" className="text-white">
+          <NavLink to="/signup" className="text-white">
             <i className="fa fa-sign-in" aria-hidden="true" /> SignUp for Free
           </NavLink>
         </button>
