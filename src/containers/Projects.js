@@ -4,6 +4,7 @@ import MainFooter from "../components/Common/MainFooter";
 import PageHeader from "../components/Common/PageHeader";
 import ProjectTemplate from "../components/Projects/ProjectTemplate";
 import axios from "axios";
+import CreateProject from "../components/Projects/CreateProject";
 
 class Projects extends PureComponent {
   constructor(props) {
@@ -129,6 +130,7 @@ class Projects extends PureComponent {
           onLogout={this.onLogout.bind(this)}
           details={false}
         />{" "}
+        <CreateProject title="New Project" />
         <main className="no-pt minheight">
           <div className="container-fluid">
             <PageHeader title={this.title} /> <br />

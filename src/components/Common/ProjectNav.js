@@ -8,7 +8,7 @@ const ProjectNav = props => {
   const style = {
     height: "30px; !important"
   };
-  let sidebar, icon, details;
+  let sidebar, icon, details, quickadd;
 
   if (props.sidebar) {
     sidebar = (
@@ -30,6 +30,33 @@ const ProjectNav = props => {
         <a className="nav-link" data-toggle="modal" data-target="#detailsModal">
           <i className="fa fa-info-circle fa-lg" />
           <span className="clearfix d-none d-sm-inline-block">Details</span>
+        </a>
+      </li>
+    );
+  }
+  if (props.quickadd === "New Project") {
+    quickadd = (
+      <li className="nav-item">
+        <a
+          className="nav-link"
+          data-toggle="modal"
+          data-target="#createProjectModal"
+        >
+          <i className="fa fa-plus-circle fa-lg" />
+          <span className="clearfix d-none d-sm-inline-block">
+            {props.quickadd}
+          </span>
+        </a>
+      </li>
+    );
+  } else {
+    quickadd = (
+      <li className="nav-item">
+        <a className="nav-link" data-toggle="modal" data-target="#quicAddModal">
+          <i className="fa fa-plus-circle fa-lg" />
+          <span className="clearfix d-none d-sm-inline-block">
+            {props.quickadd}
+          </span>
         </a>
       </li>
     );
@@ -69,18 +96,7 @@ const ProjectNav = props => {
                 />
               </span>
             </form>
-            <li className="nav-item">
-              <a
-                className="nav-link"
-                data-toggle="modal"
-                data-target="#quickAddModal"
-              >
-                <i className="fa fa-plus-circle fa-lg" />
-                <span className="clearfix d-none d-sm-inline-block">
-                  {props.quickadd}
-                </span>
-              </a>
-            </li>
+            {quickadd}
             <li className="nav-item active">
               <NavLink to="/projects" className="nav-link">
                 <i className="fa fa-home fa-lg" />
