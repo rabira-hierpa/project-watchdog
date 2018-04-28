@@ -9,7 +9,7 @@ import CreateProject from "../components/Projects/CreateProject";
 class Projects extends PureComponent {
   constructor(props) {
     super(props);
-    this.user = {};
+    this.user = "";
     this.quickadd = "New Project";
     this.title = "My Projects";
     this.state = {
@@ -64,12 +64,12 @@ class Projects extends PureComponent {
 
   // Get projects of a user
   getUserProjects() {
-    let id = new URLSearchParams(this.props.location.search).get("id");
-    console.log(id);
+    this.user = new URLSearchParams(this.props.location.search).get("id");
+    console.log(this.user);
     axios
       .request({
         method: "get",
-        url: "/api/projects/user/" + id
+        url: "/api/projects/user/" + this.user
       })
       .then(response => {
         console.log(response.data);
@@ -92,6 +92,41 @@ class Projects extends PureComponent {
       });
   }
 
+  addNewProject(newProject) {
+    axios
+      .request({
+        method: "post",
+        url: "/api/projects/",
+        data: {
+          ProjectTitle: newProject.title,
+          ProjectDescription: newProject.desc,
+          DeadLine: newProject.deadline,
+          Leader: newProject.leader,
+          Member: newProject.member
+        }
+      })
+      .then(response => {
+        console.log(response.data);
+        let allprojects = [...this.state.projects];
+        allprojects.push(response.data);
+        this.setState(
+          {
+            projects: allprojects
+          },
+          () => {
+            console.log(this.state.projects);
+          }
+        );
+      })
+      .catch(error => {
+        this.setState({
+          error: true,
+          erro_mesg:
+            "Some error occured whilet trying to fetch the data! Please try again"
+        });
+        console.log(error);
+      });
+  }
   render() {
     let allprojects, errorMsg;
     if (this.state.projects && this.state.error === false) {
@@ -129,8 +164,13 @@ class Projects extends PureComponent {
           sidebar={false}
           onLogout={this.onLogout.bind(this)}
           details={false}
+          id={this.user}
         />{" "}
-        <CreateProject title="New Project" />
+        <CreateProject
+          title="New Project"
+          leader_id={new URLSearchParams(this.props.location.search).get("id")}
+          onNewProject={this.addNewProject.bind(this)}
+        />
         <main className="no-pt minheight">
           <div className="container-fluid">
             <PageHeader title={this.title} /> <br />

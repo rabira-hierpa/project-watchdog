@@ -98,7 +98,7 @@ const ProjectNav = props => {
             </form>
             {quickadd}
             <li className="nav-item active">
-              <NavLink to="/projects" className="nav-link">
+              <NavLink to={"/projects?id=" + props.id} className="nav-link">
                 <i className="fa fa-home fa-lg" />
                 <span className="clearfix d-none d-sm-inline-block">
                   Projects
