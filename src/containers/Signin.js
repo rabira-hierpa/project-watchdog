@@ -6,9 +6,8 @@ class Singin extends Component {
   render() {
     return (
       <div>
-        <h1>Signin page</h1>
         <Navbar />
-        <LoginForm />
+        <LoginForm {...this.props} />
         <Footer />
       </div>
     );

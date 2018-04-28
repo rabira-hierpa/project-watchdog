@@ -9,11 +9,14 @@ class LoginForm extends Component {
       user: {},
       emailError: false,
       passwdError: false,
-      loginedIn: false
+      loginError: false
     };
   }
 
   onEmailChange(e) {
+    this.setState({
+      loginError: false
+    });
     console.log(e.target.value);
     let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
 
@@ -37,6 +40,9 @@ class LoginForm extends Component {
   }
 
   onPasswordChange(e) {
+    this.setState({
+      loginError: false
+    });
     let re = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/gm;
     if (re.test(String(e.target.value))) {
       console.log(e.target.value);
@@ -56,6 +62,28 @@ class LoginForm extends Component {
         passwdError: true
       });
     }
+  }
+
+  getUserid() {
+    console.log("start of getuserid");
+    Axios.request({
+      method: "get",
+      url: "/api/auth/show/current"
+    })
+      .then(
+        response => {
+          this.user = response.data;
+          this.props.history.push("/projects?id=" + response.data);
+        },
+        () => {
+          console.log(this.user);
+        }
+      )
+      .catch(error => {
+        // User is not logged in
+        window.location.href = "http://localhost:3000/signin";
+      });
+    console.log("end of getuser id");
   }
 
   signinUser(user) {
@@ -78,11 +106,11 @@ class LoginForm extends Component {
       .then(response => {
         console.log(response.data);
         if (response.data.message === "success") {
-          // this.props.history.push("http://localhost:3000/home");
-          window.location.href = "http://localhost:3000/tasks";
+          this.getUserid();
+          // window.location.href = "http://localhost:3000/projects";
         } else {
           this.setState({
-            emailError: true
+            loginError: true
           });
         }
       })
@@ -107,7 +135,7 @@ class LoginForm extends Component {
   }
   render() {
     // console.log(this.props.history);
-    let emailError, passwdError;
+    let emailError, passwdError, loginError;
     if (this.state.emailError) {
       emailError = <div className="text-danger"> Invalid Email address </div>;
     }
@@ -116,6 +144,13 @@ class LoginForm extends Component {
         <div className="text-danger">
           Password should be at least one capital letter, one small letter and 8
           character length
+        </div>
+      );
+    }
+    if (this.state.loginError) {
+      loginError = (
+        <div className="text-danger">
+          Invalid email or password. Please try again
         </div>
       );
     }
@@ -133,6 +168,7 @@ class LoginForm extends Component {
                 </div>
                 <form action="/home" onSubmit={this.onSubmit.bind(this)}>
                   <div className="card-body mx-4">
+                    {loginError}
                     <div className="md-form">
                       <i className="fa fa-envelope prefix grey-text" />
                       <input

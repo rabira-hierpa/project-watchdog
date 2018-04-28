@@ -125,6 +125,7 @@ class SignupForm extends Component {
     })
       .then(response => {
         console.log(response.data);
+        window.location.href = "http://localhost:3000/signin";
       })
       .catch(error => {
         console.log(error);
@@ -234,13 +235,12 @@ class SignupForm extends Component {
                       <span>(optional)</span>{" "}
                     </label>
                   </div>
-                  <span htmlFor="">Your Department</span>
+                  <label htmlFor="">Your Department</label>
                   <div className="md-form">
                     <select
-                      className="browser-default"
-                      searchable="Search Your department"
+                      className="form-select"
+                      searchable="Search your department"
                       onChange={this.onDepChange.bind(this)}
-                      id="form-department"
                       defaultValue={0}
                       required
                     >
@@ -254,15 +254,17 @@ class SignupForm extends Component {
                         Choose Your Department
                       </option>
                       <option value="Computer Science">Computer Science</option>
-                      <option value="2">Mathimatics</option>
-                      <option value="3">Biology</option>
-                      <option value="4">Chemeistry</option>
-                      <option value="5">Civil Eng.</option>
-                      <option value="6">Sport Science</option>
-                      <option value="7">Statistics</option>
-                      <option value="8">Physics</option>
-                      <option value="9">Information Science</option>
-                      <option value="10">Software Eng.</option>
+                      <option value="Mathimatics">Mathimatics</option>
+                      <option value="Biology">Biology</option>
+                      <option value="Chemeistry">Chemeistry</option>
+                      <option value="Civil Eng.">Civil Eng.</option>
+                      <option value="Sport Science">Sport Science</option>
+                      <option value="Statistics">Statistics</option>
+                      <option value="Physics">Physics</option>
+                      <option value="Information Science">
+                        Information Science
+                      </option>
+                      <option value="Software Eng">Software Eng.</option>
                     </select>
                   </div>
                   <div className="text-center mb-3">

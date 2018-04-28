@@ -1,0 +1,33 @@
+<li className="nav-item dropdown">
+    <i className="fa fa-user-circle fa-lg" />
+    <a className="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        User
+    </a>
+    <div className="dropdown-menu dropdown-menu-left">
+        <a className="dropdown-item" href="#">
+            <i className="fa fa-gear" aria-hidden="true" /> Settings</a>
+        <a className="dropdown-item" href="#">
+            <i className="fa fa-id-card-o" aria-hidden="true" /> Profile</a>
+        <a className="dropdown-item" onClick={()=> props.onLogout()}>
+            <i className="fa fa-sign-out fa-sm fa-fw" />Logout</a>
+    </div>
+</li>
+<!-- MDBoostrap dropdown  -->
+
+<li className="nav-item dropdown">
+    <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i className="fa fa-user-circle fa-lg" />
+        <span className="clearfix d-none d-sm-inline-block">User</span>
+        <span className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+            <span className="dropdown-item" href="#!">
+                <i className="fa fa-gear" aria-hidden="true" /> Settings
+            </span>
+            <span className="dropdown-item" href="#!">
+                <i className="fa fa-id-card-o" aria-hidden="true" /> Profile
+            </span>
+            <span onClick={()=> props.onLogout()} className="dropdown-item" >
+                <i className="fa fa-sign-out fa-sm fa-fw" />Logout
+            </span>
+        </span>
+    </a>
+</li>
