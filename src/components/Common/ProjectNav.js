@@ -18,7 +18,7 @@ const ProjectNav = props => {
     );
     icon = (
       <div className="float-left">
-        <a href="#!" data-activates="slide-out" className="button-collapse">
+        <a data-activates="slide-out" className="button-collapse">
           <i className="fa fa-bars" />
         </a>
       </div>
@@ -52,7 +52,11 @@ const ProjectNav = props => {
   } else {
     quickadd = (
       <li className="nav-item">
-        <a className="nav-link" data-toggle="modal" data-target="#quicAddModal">
+        <a
+          className="nav-link"
+          data-toggle="modal"
+          data-target="#quickAddModal"
+        >
           <i className="fa fa-plus-circle fa-lg" />
           <span className="clearfix d-none d-sm-inline-block">
             {props.quickadd}

@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import $ from "jquery";
 import ProjectNav from "../components/Common/ProjectNav";
 import MainFooter from "../components/Common/MainFooter";
 import PageHeader from "../components/Common/PageHeader";
@@ -114,6 +115,7 @@ class Projects extends PureComponent {
             projects: allprojects
           },
           () => {
+            // $("#createProjectModal").modal("hide");
             console.log(this.state.projects);
           }
         );

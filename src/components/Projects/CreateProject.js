@@ -83,10 +83,6 @@ class CreateProject extends PureComponent {
       this.state.project.deadline !== undefined
     ) {
       this.props.onNewProject(this.state.project);
-      this.setState({
-        project: {}
-      });
-      // $.modal.close();
       e.preventDefault();
     } else {
       console.log("Form not submitted");

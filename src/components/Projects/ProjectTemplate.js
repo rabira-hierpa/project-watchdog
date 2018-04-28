@@ -84,7 +84,11 @@ class ProjectTemplate extends PureComponent {
               </h5>
             </NavLink>
             <br />
-            <div className="progress" style={{ height: "15px" }}>
+            <div
+              className="progress"
+              style={{ height: "15px" }}
+              title={"Progress : " + this.props.progress + "%"}
+            >
               <div
                 className="progress-bar progress-bar-striped progress-bar-animated bg-success"
                 role="progressbar"
@@ -95,7 +99,6 @@ class ProjectTemplate extends PureComponent {
                 aria-valuenow={this.props.progress}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                title={"Progress : " + this.props.progress + "%"}
               >
                 {this.props.progress}%
               </div>
