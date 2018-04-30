@@ -4,7 +4,43 @@ import DetailsModal from "./DetailsModal";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 
+let loggedUser, loggedId;
+
+function getUserid() {
+  axios
+    .request({
+      method: "get",
+      url: "/api/auth/show/current"
+    })
+    .then(response => {
+      loggedId = response.data;
+    })
+    .catch(error => {
+      // User is not logged in
+      window.location.href = "http://localhost:3000/signin";
+    });
+  return loggedId;
+}
+
+let userName = userid => {
+  axios
+    .request({
+      method: "get",
+      url: "/api/users/name/" + userid
+    })
+    .then(response => {
+      loggedUser = response.data.Fname;
+      // this.members.push(response.data.Fname);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  return loggedUser;
+};
+
 const ProjectNav = props => {
+  getUserid();
+  userName(loggedId);
   const style = {
     height: "30px; !important"
   };
@@ -13,7 +49,7 @@ const ProjectNav = props => {
   if (props.sidebar) {
     sidebar = (
       <nav>
-        <Sidebar />
+        <Sidebar projectid={loggedId} />
       </nav>
     );
     icon = (
@@ -102,7 +138,7 @@ const ProjectNav = props => {
             </form>
             {quickadd}
             <li className="nav-item active">
-              <NavLink to={"/projects?id=" + props.id} className="nav-link">
+              <NavLink to={"/projects?id=" + loggedId} className="nav-link">
                 <i className="fa fa-home fa-lg" />
                 <span className="clearfix d-none d-sm-inline-block">
                   Projects
@@ -127,7 +163,7 @@ const ProjectNav = props => {
                 data-toggle="dropdown"
               >
                 <i className="fa fa-user-circle fa-lg" />
-                User
+                {loggedUser}
               </a>
               <div className="dropdown-menu dropdown-menu-right">
                 <a className="dropdown-item" href="#!">
