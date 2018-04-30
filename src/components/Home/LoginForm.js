@@ -17,7 +17,6 @@ class LoginForm extends Component {
     this.setState({
       loginError: false
     });
-    console.log(e.target.value);
     let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
 
     if (re.test(String(e.target.value).toLowerCase())) {
@@ -45,7 +44,6 @@ class LoginForm extends Component {
     });
     let re = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/gm;
     if (re.test(String(e.target.value))) {
-      console.log(e.target.value);
       this.setState({
         passwdError: false,
         user: {
@@ -65,7 +63,6 @@ class LoginForm extends Component {
   }
 
   getUserid() {
-    console.log("start of getuserid");
     Axios.request({
       method: "get",
       url: "/api/auth/show/current"
@@ -76,14 +73,13 @@ class LoginForm extends Component {
           this.props.history.push("/projects?id=" + response.data);
         },
         () => {
-          console.log(this.user);
+          // console.log(this.user);
         }
       )
       .catch(error => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
-    console.log("end of getuser id");
   }
 
   signinUser(user) {

@@ -236,9 +236,9 @@ class SignupForm extends Component {
                     </label>
                   </div>
                   <label htmlFor="">Your Department</label>
-                  <div className="md-form">
+                  <div className="form-group">
                     <select
-                      className="form-select"
+                      className="browser-default form-control"
                       searchable="Search your department"
                       onChange={this.onDepChange.bind(this)}
                       defaultValue={0}
