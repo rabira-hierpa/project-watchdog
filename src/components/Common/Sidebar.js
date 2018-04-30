@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = props => {
   return (
@@ -26,13 +27,16 @@ const Sidebar = props => {
         </li>
         <ul className="nav flex-column">
           <li className="nav-item waves-effect waves-light">
-            <a href="/home" className="nav-link no-pl active text-white">
+            <NavLink
+              to={"/projects?id=" + props.projectid}
+              className="nav-link no-pl active text-white"
+            >
               <i
                 className="fa fa-tachometer fa-lg mr-4 ml-3"
                 aria-hidden="true"
               />
               Dashboard
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item waves-effect waves-light">
             <a href="/progress" className="nav-link no-pl text-white">
