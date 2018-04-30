@@ -11,27 +11,26 @@ class ProjectTemplate extends PureComponent {
   }
 
   componentWillMount(nextState) {
-    console.log(nextState);
+    // console.log(nextState);
     this.props.members.map((member, index) => {
-      console.log("called getusername");
-      this.getUserName(member);
+      return this.getUserName(member);
     });
-    console.log("called compWillMount in project Template");
+    // console.log("called compWillMount in project Template");
   }
 
   componentDidMount() {
-    console.log(this.state.memberNames);
-    console.log("called compDidMount in project Template");
+    // console.log(this.state.memberNames);
+    // console.log("called compDidMount in project Template");
   }
 
   getUserName(member) {
-    console.log("[ProjectTemplate.js] Inside getUserName");
+    // console.log("[ProjectTemplate.js] Inside getUserName");
     Axios.request({
       method: "get",
       url: "/api/users/name/" + member
     })
       .then(response => {
-        console.log(response.data.Fname);
+        // console.log(response.data.Fname);
         let currentMembers = [...this.state.memberNames];
         currentMembers.push(response.data.Fname);
         this.setState({
@@ -46,18 +45,16 @@ class ProjectTemplate extends PureComponent {
 
   render() {
     let allmembers;
-    console.log("called render in project Template");
+    // console.log("called render in project Template");
     if (this.state.memberNames.length > 0) {
-      console.log(this.state.memberNames);
-      this.state.memberNames.map((member, index) => {
-        allmembers = (
-          <span>
-            <i
-              key={index}
-              className="fa fa-user-circle fa-lg"
-              aria-hidden="true"
-            />
+      // console.log(this.state.memberNames);
+      allmembers = this.state.memberNames.map((member, index) => {
+        return (
+          <span key={index}>
+            <i className="fa fa-user-circle fa-lg" aria-hidden="true" />
+            &nbsp;
             {this.state.memberNames[index]}
+            &nbsp; &nbsp;
           </span>
         );
       });
@@ -70,7 +67,10 @@ class ProjectTemplate extends PureComponent {
             {
               //<a href="" className="activator p-3 mr-2"><i className="fa fa-share-alt"></i></a>
             }
-            <NavLink to={"/tasks?id=" + this.props.id} className="card-title">
+            <NavLink
+              to={"/milestones?id=" + this.props.id}
+              className="card-title"
+            >
               <h4>{this.props.title}</h4>
             </NavLink>
             <hr />
@@ -78,11 +78,11 @@ class ProjectTemplate extends PureComponent {
               {this.props.description}
             </p>
             {allmembers}
-            <NavLink to={"/tasks?id=" + this.props.id} className="link-text">
+            <a href={"/milestones?id=" + this.props.id} className="link-text">
               <h5 className="pull-right">
                 Open Project <i className="fa fa-chevron-right" />
               </h5>
-            </NavLink>
+            </a>
             <br />
             <div
               className="progress"

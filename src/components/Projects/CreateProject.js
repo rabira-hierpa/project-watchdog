@@ -78,12 +78,10 @@ class CreateProject extends PureComponent {
   }
 
   onSubmit(e) {
-    if (
-      !this.state.deadlineError ||
-      this.state.project.deadline !== undefined
-    ) {
+    if (!this.state.deadlineError) {
       this.props.onNewProject(this.state.project);
       e.preventDefault();
+      $("createProjectModa").modal("hide");
     } else {
       console.log("Form not submitted");
       this.setState({
@@ -129,7 +127,7 @@ class CreateProject extends PureComponent {
             </div>
             <div className="modal-body">
               <div className="">
-                <form>
+                <form method="POST" onSubmit={this.onSubmit.bind(this)}>
                   <div className="md-form">
                     <label htmlFor="projectTitle">Project Title</label>
                     <input
@@ -168,9 +166,9 @@ class CreateProject extends PureComponent {
                     <button
                       className="btn btn-success"
                       type="submit"
-                      onClick={this.onSubmit.bind(this)}
+                      onSubmit={this.onSubmit.bind(this)}
                     >
-                      Add New Project
+                      Add Project
                     </button>
                   </div>
                 </form>
