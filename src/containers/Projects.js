@@ -1,16 +1,16 @@
 import React, { PureComponent } from "react";
-import $ from "jquery";
+import axios from "axios";
 import ProjectNav from "../components/Common/ProjectNav";
 import MainFooter from "../components/Common/MainFooter";
 import PageHeader from "../components/Common/PageHeader";
 import ProjectTemplate from "../components/Projects/ProjectTemplate";
-import axios from "axios";
 import CreateProject from "../components/Projects/CreateProject";
 
 class Projects extends PureComponent {
   constructor(props) {
     super(props);
     this.user = "";
+    this.userName = "";
     this.quickadd = "New Project";
     this.title = "My Projects";
     this.state = {
@@ -24,6 +24,7 @@ class Projects extends PureComponent {
   // Called when the component is ready to be mounted
   componentWillMount() {
     this.getUserid();
+    this.getUserName();
   }
 
   // Called when the component is already mounted
@@ -47,6 +48,23 @@ class Projects extends PureComponent {
       });
   }
 
+  // Get fname of a user
+  getUserName() {
+    axios
+      .request({
+        method: "get",
+        url:
+          "/api/users/name/" +
+          new URLSearchParams(this.props.location.search).get("id")
+      })
+      .then(response => {
+        this.userName = response.data.Fname;
+        // this.members.push(response.data.Fname);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
   // Logout and reset the cookie session
   onLogout() {
     axios
@@ -66,20 +84,20 @@ class Projects extends PureComponent {
   // Get projects of a user
   getUserProjects() {
     this.user = new URLSearchParams(this.props.location.search).get("id");
-    console.log(this.user);
+    // console.log(this.user);
     axios
       .request({
         method: "get",
         url: "/api/projects/user/" + this.user
       })
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.setState(
           {
             projects: response.data
           },
           () => {
-            console.log(this.state.projects);
+            // console.log(this.state.projects);
           }
         );
       })
@@ -107,7 +125,7 @@ class Projects extends PureComponent {
         }
       })
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         let allprojects = [...this.state.projects];
         allprojects.push(response.data);
         this.setState(
@@ -115,8 +133,7 @@ class Projects extends PureComponent {
             projects: allprojects
           },
           () => {
-            // $("#createProjectModal").modal("hide");
-            console.log(this.state.projects);
+            // console.log(this.state.projects);
           }
         );
       })
@@ -130,8 +147,8 @@ class Projects extends PureComponent {
       });
   }
   render() {
-    let allprojects, errorMsg;
-    if (this.state.projects && this.state.error === false) {
+    let allprojects, noProjects, errorMsg;
+    if (this.state.projects.length > 0 && this.state.error === false) {
       allprojects = this.state.projects.map(project => {
         return (
           <ProjectTemplate
@@ -148,10 +165,12 @@ class Projects extends PureComponent {
       });
     } else if (this.state.projects.length === 0) {
       allprojects = (
-        <div>
-          {" "}
-          You currently have no projects created.Creat a new project by clickin
-          on New project in the navigation pane{" "}
+        <div className="col-lg-12 text-center my-5 text-primary h6">
+          <img className="img-fluid" src="./img/beach1.png" alt="Desert" />
+          <div className="my-3">
+            You currently have no projects created.Creat a new project by
+            clicking on New project in the navigation pane
+          </div>
         </div>
       );
     } else {
@@ -167,7 +186,7 @@ class Projects extends PureComponent {
           onLogout={this.onLogout.bind(this)}
           details={false}
           id={this.user}
-        />{" "}
+        />
         <CreateProject
           title="New Project"
           leader_id={new URLSearchParams(this.props.location.search).get("id")}
@@ -178,12 +197,12 @@ class Projects extends PureComponent {
             <PageHeader title={this.title} /> <br />
             <div className="row justify-content-center ">
               <div className="col-md-10">
-                <div className="row"> {allprojects} </div>{" "}
-                <div className="text-danger"> {errorMsg} </div>{" "}
-              </div>{" "}
-            </div>{" "}
-          </div>{" "}
-        </main>{" "}
+                <div className="row"> {allprojects} </div>
+                <div className="text-danger"> {errorMsg} </div>
+              </div>
+            </div>
+          </div>
+        </main>
         <MainFooter />
       </div>
     );
