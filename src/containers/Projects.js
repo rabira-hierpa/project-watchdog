@@ -94,15 +94,10 @@ class Projects extends PureComponent {
         url: "/api/projects/user/" + this.user
       })
       .then(response => {
-        // console.log(response.data);
-        this.setState(
-          {
-            projects: response.data
-          },
-          () => {
-            // console.log(this.state.projects);
-          }
-        );
+        console.log(response.data);
+        this.setState({
+          projects: response.data
+        });
       })
       .catch(error => {
         this.setState({

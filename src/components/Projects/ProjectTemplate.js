@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { NavLink, Link, withRouter } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import Axios from "axios";
 class ProjectTemplate extends PureComponent {
   constructor(props) {

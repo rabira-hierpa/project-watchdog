@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { Component } from "react";
-import { Route, NavLink, Switch, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
-import Tasks from "./Tasks";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -120,6 +119,12 @@ class Dashboard extends Component {
     return completed;
   }
 
+  getCompletedTasks() {
+    let completed = this.tasks.filter(tasks => {
+      return tasks.Catagory === 4;
+    });
+    return completed;
+  }
   render() {
     let projectDetails,
       completedMilestone = this.getCompletedMilesStones();
@@ -197,7 +202,7 @@ class Dashboard extends Component {
                 </a>
               </li>
               <li className="completed">
-                <a href="/tasks">
+                <a href={"/tasks?id=" + this.state.project._id}>
                   <span className="circle">
                     <i className="fa fa-list " aria-hidden="true" />
                   </span>

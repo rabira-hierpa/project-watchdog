@@ -15,15 +15,7 @@ const Sidebar = props => {
           </div>
         </li>
         <li className="mt-4">
-          <form className="search-form" role="search">
-            <div className="form-group waves-light ">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search"
-              />
-            </div>
-          </form>
+          <hr className="white" />
         </li>
         <ul className="nav flex-column">
           <li className="nav-item waves-effect waves-light">

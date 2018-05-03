@@ -284,7 +284,11 @@ class Milestones extends PureComponent {
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />
-        <QuickAddModal onAddMilestone={this.addMilestone.bind(this)} />
+        <QuickAddModal
+          onAddMilestone={this.addMilestone.bind(this)}
+          parent="milestone"
+          {...this.props}
+        />
         <main className="no-pt minheight">
           <div className="container-fluid">
             <PageHeader title="Milestones" />
