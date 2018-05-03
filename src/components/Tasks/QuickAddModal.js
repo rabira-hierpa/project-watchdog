@@ -1,13 +1,19 @@
+import axios from "axios";
 import React, { PureComponent } from "react";
-import $ from "jquery";
+// import $ from "jquery";
 class QuickAddModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       milestone: {},
       task: {},
-      deadlineError: false
+      members: [],
+      memberNames: [],
+      deadlineError: false,
+      done: false
     };
+    this.memberNames = [];
+    this.members = [];
     this.nextState = {};
     this.oldState = {};
   }
@@ -20,9 +26,52 @@ class QuickAddModal extends PureComponent {
   }
   componentDidMount() {
     this.oldState = this.state.milestone;
+    this.getProjectMembers();
   }
   componentWillUpdate(nextState) {
     this.nextState = nextState;
+  }
+
+  // Get project members
+  getProjectMembers() {
+    axios
+      .request({
+        method: "get",
+        url:
+          "/api/projects/" +
+          new URLSearchParams(this.props.location.search).get("id")
+      })
+      .then(response => {
+        this.members = response.data.Member;
+        this.setState({
+          members: response.data.Member
+        });
+        this.state.members.map((member, index) => {
+          return this.getMemberNames(member);
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  // Get group members name
+  getMemberNames(member) {
+    axios
+      .request({
+        method: "get",
+        url: "/api/users/name/" + member
+      })
+      .then(response => {
+        this.memberNames.push(response.data.Fname + " " + response.data.Lname);
+        this.setState({
+          memberNames: this.memberNames
+        });
+        console.log(this.state.memberNames);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   // Handles change on the milestone form
@@ -70,29 +119,102 @@ class QuickAddModal extends PureComponent {
     e.preventDefault();
   }
 
-  /* Handles change on the task form 
-  *  
-  */
+  /* Handles change on the task form */
 
-  onTasktTitleChange(e) {}
+  onTasktTitleChange(e) {
+    this.setState({
+      task: {
+        title: e.target.value,
+        desc: this.state.task.desc,
+        deadline: this.state.task.deadline,
+        assignedTo: this.state.task.assignedTo
+      }
+    });
+  }
 
-  onTaskDescChange(e) {}
+  onTaskDescChange(e) {
+    this.setState({
+      task: {
+        title: this.state.task.title,
+        desc: e.target.value,
+        deadline: this.state.task.deadline,
+        assignedTo: this.state.task.assignedTo
+      }
+    });
+  }
 
-  onTaskDeadlineChange(e) {}
+  onTaskDeadlineChange(e) {
+    if (new Date(e.target.value).getTime() >= new Date().getTime()) {
+      let deadline = new Date(e.target.value).toISOString();
+      this.setState({
+        task: {
+          title: this.state.task.title,
+          desc: this.state.task.desc,
+          deadline: deadline,
+          assignedTo: this.state.task.assignedTo
+        },
+        deadlineError: false
+      });
+    } else if (e.target.value === "" || e.target.value) {
+      this.setState({
+        deadlineError: true
+      });
+    }
+  }
 
-  onTaskAssignedChange(e) {}
+  onTaskAssignedChange(e) {
+    this.setState({
+      task: {
+        title: this.state.task.title,
+        desc: this.state.task.desc,
+        deadline: this.state.task.deadline,
+        assignedTo: e.target.value
+      }
+    });
+  }
 
   onTaskSubmit(e) {
+    console.log(this.state.task);
+    this.props.onAddTask(this.state.task);
     e.preventDefault();
-    $("#quickAddModal").modal("hide");
+    // $("#quickAddModal").modal("hide");
   }
+  /***** End of task handler */
+
   render() {
-    let deadlineError;
+    let deadlineError, parent, assigneTo;
+    if (this.props.parent === "task") {
+      parent = "#task";
+    } else if (this.props.parent === "milestone") {
+      parent = "#milestone";
+    }
     if (this.state.deadlineError) {
       deadlineError = (
         <div className="text-danger"> Proper deadline date is required</div>
       );
     }
+    if (this.state.memberNames.length > 0) {
+      assigneTo = (
+        <select
+          className="browser-default form-control"
+          id="taskAssigned"
+          onChange={this.onTaskAssignedChange.bind(this)}
+          required
+        >
+          <option disabled selected>
+            Choose a member{" "}
+          </option>
+          {this.state.memberNames.map((memberName, index) => {
+            return (
+              <option value={this.state.members[index]} key={index}>
+                {this.state.memberNames[index]}
+              </option>
+            );
+          })}
+        </select>
+      );
+    }
+
     return (
       <div
         className="modal fade"
@@ -122,20 +244,20 @@ class QuickAddModal extends PureComponent {
                 <ul className="nav classic-tabs tabs-blue" role="tablist">
                   <li className="nav-item">
                     <a
-                      className="nav-link waves-light active"
+                      className="nav-link waves-light"
                       data-toggle="tab"
-                      href="#task"
+                      href={parent}
                       role="tab"
                     >
                       <i className="fa fa-th-list fa-2x" aria-hidden="true" />
                       <br /> Task
                     </a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item ">
                     <a
                       className="nav-link waves-light"
                       data-toggle="tab"
-                      href="#milestone"
+                      href={parent}
                       role="tab"
                     >
                       <i className="fa fa-compass fa-2x" aria-hidden="true" />
@@ -147,7 +269,7 @@ class QuickAddModal extends PureComponent {
 
               <div className="tab-content card">
                 <div
-                  className="tab-pane fade in show active"
+                  className="tab-pane fade in show "
                   id="task"
                   role="tabpanel"
                 >
@@ -158,7 +280,7 @@ class QuickAddModal extends PureComponent {
                         type="text"
                         id="taskName"
                         className="form-control"
-                        onChange={this.onTasktTitleChange.bind(TouchList)}
+                        onChange={this.onTasktTitleChange.bind(this)}
                         required
                       />
                     </div>
@@ -170,7 +292,6 @@ class QuickAddModal extends PureComponent {
                         className="form-control md-textarea"
                         rows="5"
                         onChange={this.onTaskDescChange.bind(this)}
-                        required
                       />
                     </div>
                     <label htmlFor="taskDeadline">Deadline</label>
@@ -179,25 +300,15 @@ class QuickAddModal extends PureComponent {
                         placeholder="Selected date"
                         type="date"
                         id="taskDeadline"
-                        className="date-picker"
+                        className=""
                         onChange={this.onTaskDeadlineChange.bind(this)}
                         required
                       />
                     </div>
+                    {deadlineError}
                     <div className="form-group">
                       <label htmlFor="taskAssigned">Assigned To</label>
-                      <select
-                        className="browser-default form-control"
-                        id="taskAssigned"
-                        onChange={this.onTaskAssignedChange.bind(this)}
-                        required
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
+                      {assigneTo}
                     </div>
                     <div className="text-center mt-4">
                       <button
