@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 const Sidebar = props => {
   return (
@@ -27,8 +27,8 @@ const Sidebar = props => {
         </li>
         <ul className="nav flex-column">
           <li className="nav-item waves-effect waves-light">
-            <NavLink
-              to={"/projects?id=" + props.projectid}
+            <a
+              href={"/dashboard?id=" + props.projectid}
               className="nav-link no-pl active text-white"
             >
               <i
@@ -36,10 +36,31 @@ const Sidebar = props => {
                 aria-hidden="true"
               />
               Dashboard
-            </NavLink>
+            </a>
           </li>
           <li className="nav-item waves-effect waves-light">
-            <a href="/progress" className="nav-link no-pl text-white">
+            <a
+              href={"/milestones?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
+              <i className="fa fa-compass fa-lg mr-4 ml-3" aria-hidden="true" />
+              Milestone
+            </a>
+          </li>
+          <li className="nav-item waves-effect waves-light">
+            <a
+              href={"/tasks?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
+              <i className="fa fa-list fa-lg mr-4 ml-3" aria-hidden="true" />
+              Tasks
+            </a>
+          </li>
+          <li className="nav-item waves-effect waves-light">
+            <a
+              href={"/progress?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
               <i
                 className="fa fa-line-chart fa-lg mr-4 ml-3"
                 aria-hidden="true"
@@ -48,7 +69,10 @@ const Sidebar = props => {
             </a>
           </li>
           <li className="nav-item waves-effect waves-light">
-            <a href="/chat" className="nav-link no-pl text-white">
+            <a
+              href={"/chat?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
               <i
                 className="fa fa-comments fa-lg mr-4 ml-3"
                 aria-hidden="true"
@@ -56,23 +80,24 @@ const Sidebar = props => {
               Chat
             </a>
           </li>
+
           <li className="nav-item waves-effect waves-light">
-            <a href="/milestones" className="nav-link no-pl text-white">
-              <i className="fa fa-compass fa-lg mr-4 ml-3" aria-hidden="true" />
-              Milestone
-            </a>
-          </li>
-          <li className="nav-item waves-effect waves-light">
-            <a href="/files" className="nav-link no-pl text-white">
+            <a
+              href={"/files?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
               <i
                 className="fa fa-paperclip fa-lg mr-4 ml-3"
                 aria-hidden="true"
               />
-              Attached Files
+              Project Files
             </a>
           </li>
           <li className="nav-item waves-effect waves-light">
-            <a href="/schedule" className="nav-link no-pl text-white">
+            <a
+              href={"/schedule?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
               <i
                 className="fa fa-calendar fa-lg mr-4 ml-3"
                 aria-hidden="true"
@@ -81,7 +106,10 @@ const Sidebar = props => {
             </a>
           </li>
           <li className="nav-item waves-effect waves-light">
-            <a href="/history" className="nav-link no-pl text-white">
+            <a
+              href={"/history?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
               <i className="fa fa-clock-o fa-lg mr-4 ml-3" aria-hidden="true" />
               History
             </a>

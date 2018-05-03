@@ -41,6 +41,9 @@ class Projects extends PureComponent {
       })
       .then(response => {
         this.user = response.data;
+        this.setState({
+          id: response.data
+        });
       })
       .catch(error => {
         // User is not logged in
@@ -147,7 +150,7 @@ class Projects extends PureComponent {
       });
   }
   render() {
-    let allprojects, noProjects, errorMsg;
+    let allprojects, errorMsg;
     if (this.state.projects.length > 0 && this.state.error === false) {
       allprojects = this.state.projects.map(project => {
         return (
@@ -175,7 +178,17 @@ class Projects extends PureComponent {
       );
     } else {
       errorMsg = this.state.erro_mesg;
-      allprojects = errorMsg;
+      allprojects = (
+        <div className="col-lg-12 text-center my-5 text-primary h6">
+          <img
+            className=""
+            src="./img/noConnection.png"
+            height="600px"
+            alt="Desert"
+          />
+          <div className="my-3">{errorMsg}</div>
+        </div>
+      );
       console.log(errorMsg);
     }
     return (
@@ -185,7 +198,7 @@ class Projects extends PureComponent {
           sidebar={false}
           onLogout={this.onLogout.bind(this)}
           details={false}
-          id={this.user}
+          id={this.state.id}
         />
         <CreateProject
           title="New Project"

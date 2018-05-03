@@ -213,7 +213,7 @@ class EditMilestone extends PureComponent {
                         type="submit"
                         onSubmit={this.onSubmit.bind(this)}
                       >
-                        <i class="fa fa-check" />
+                        <i className="fa fa-check" />
                         Save
                       </button>
                       <button

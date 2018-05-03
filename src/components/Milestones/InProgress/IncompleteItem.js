@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Router from "react-router";
 import EditMilestone from "../EditMilestone";
 import { ModalManager } from "react-dynamic-modal/lib/Modal";
 

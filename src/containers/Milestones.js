@@ -1,13 +1,12 @@
+import axios from "axios";
 import React, { PureComponent } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import QuickAddModal from "../components/Tasks/QuickAddModal";
 import MainFooter from "../components/Common/MainFooter";
 import PageHeader from "../components/Common/PageHeader";
 import IncompleteItem from "../components/Milestones/InProgress/IncompleteItem";
-import axios from "axios";
 import ReviewItem from "../components/Milestones/Review/ReviewItem";
 import CompletedItem from "../components/Milestones/Completed/CompletedItem";
-// import InProgressList from "../components/Milestones/InProgress/InProgressList";
 
 class Milestones extends PureComponent {
   constructor(props) {
@@ -15,12 +14,15 @@ class Milestones extends PureComponent {
     this.quickadd = "Quick Add";
     this.title = "Milestones";
     this.state = {
-      milestones: []
+      milestones: [],
+      userId: ""
     };
     this.id = "";
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.getUserid();
+  }
 
   componentDidMount() {
     this.getMilestones();
@@ -32,6 +34,24 @@ class Milestones extends PureComponent {
 
   componentWillUnmount() {}
 
+  // Get the id of the logged in user
+  getUserid() {
+    axios
+      .request({
+        method: "get",
+        url: "/api/auth/show/current"
+      })
+      .then(response => {
+        this.user = response.data;
+        this.setState({
+          id: response.data
+        });
+      })
+      .catch(error => {
+        // User is not logged in
+        window.location.href = "http://localhost:3000/signin";
+      });
+  }
   // Logout and reset the cookie session
   onLogout() {
     axios
@@ -260,6 +280,8 @@ class Milestones extends PureComponent {
           sidebar={true}
           details={true}
           onLogout={this.onLogout.bind(this)}
+          id={this.state.id}
+          projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />
         <QuickAddModal onAddMilestone={this.addMilestone.bind(this)} />

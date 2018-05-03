@@ -13,6 +13,7 @@ import Schedule from "./containers/Schedule";
 import History from "./containers/History";
 import AttachedFiles from "./containers/AttachedFiles";
 import ErrorPage from "./components/Error/Error";
+import Dashboard from "./containers/Dashboard";
 
 class Home extends Component {
   render() {
@@ -22,6 +23,7 @@ class Home extends Component {
         <Route path="/signin" component={Signin} />
         <Route path="/signup" component={Signup} />
         <Route path="/projects" component={Projects} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="/tasks" component={Tasks} />
         <Route path="/milestones" component={Milestones} />
         <Route path="/repository" component={Archive} />

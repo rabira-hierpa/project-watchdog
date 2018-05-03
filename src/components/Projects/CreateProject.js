@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import $ from "jquery";
 import PropTypes from "prop-types";
 
 class CreateProject extends PureComponent {
@@ -81,7 +80,6 @@ class CreateProject extends PureComponent {
     if (!this.state.deadlineError) {
       this.props.onNewProject(this.state.project);
       e.preventDefault();
-      $("createProjectModa").modal("hide");
     } else {
       console.log("Form not submitted");
       this.setState({
