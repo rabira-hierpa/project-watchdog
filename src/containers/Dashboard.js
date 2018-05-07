@@ -127,7 +127,8 @@ class Dashboard extends Component {
   }
   render() {
     let projectDetails,
-      completedMilestone = this.getCompletedMilesStones();
+      completedMilestone = this.getCompletedMilesStones(),
+      completedTasks = this.getCompletedTasks();
     console.log(completedMilestone);
 
     if (!this.state.project.length) {
@@ -158,7 +159,7 @@ class Dashboard extends Component {
                 </a>
               </li>
 
-              <li className="warning">
+              <li className="completed">
                 <a href="#!">
                   <span className="circle">
                     <i className="fa fa-calendar-times-o " aria-hidden="true" />
@@ -166,7 +167,7 @@ class Dashboard extends Component {
                   <span className="label">
                     <span className="h6 ">
                       <strong> Deadline:</strong>
-                      <span className="text-danger ml-2">
+                      <span className="text-success ml-2">
                         {new Date(this.state.project.DeadLine).toDateString()}
                       </span>
                     </span>
@@ -207,12 +208,17 @@ class Dashboard extends Component {
                     <i className="fa fa-list " aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Tasks : {" " + this.tasks.length}
+                    Tasks :{" "}
+                    {" " +
+                      completedTasks.length +
+                      " out of " +
+                      this.tasks.length +
+                      " completed"}
                   </span>
                 </a>
               </li>
               <li className="completed">
-                <a href="/progress">
+                <a href={"/progress?id=" + this.state.project._id}>
                   <span className="circle">
                     <i className="fa fa-flag-checkered" aria-hidden="true" />
                   </span>
