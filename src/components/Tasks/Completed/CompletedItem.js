@@ -63,22 +63,11 @@ class CompletedItem extends PureComponent {
   render() {
     let deadline;
     let currentDate = new Date();
-    let calc =
-      currentDate.getTime() > this.deadline.getTime() &&
-      currentDate.getDate() !== this.deadline.getDate();
-    if (calc) {
-      deadline = (
-        <span className="pull-right bg-danger" title="Deadline Passed">
-          {new Date(this.props.deadline).toDateString().substr(0, 10)}
-        </span>
-      );
-    } else {
-      deadline = (
-        <span className="pull-right " title="Deadline">
-          {new Date(this.props.deadline).toDateString().substr(0, 10)}
-        </span>
-      );
-    }
+    deadline = (
+      <span className="pull-right " title="Deadline">
+        {new Date(this.props.deadline).toDateString().substr(0, 10)}
+      </span>
+    );
     return (
       <div className="grid" onClick={this.openModal.bind(this)}>
         <div className="card hoverable item" data-toggle="modal1">
