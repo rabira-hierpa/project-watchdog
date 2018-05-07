@@ -27,9 +27,10 @@ class ProjectNav extends Component {
         url: "/api/auth/show/current"
       })
       .then(response => {
-        this.userName(response.data);
+        console.log(response.data._id);
+        this.userName(response.data._id);
         this.setState({
-          id: response.data
+          id: response.data._id
         });
       })
       .catch(error => {
@@ -45,6 +46,7 @@ class ProjectNav extends Component {
         url: "/api/users/name/" + userid
       })
       .then(response => {
+        console.log(response.data);
         this.setState({
           username: response.data.Fname
         });

@@ -70,7 +70,7 @@ class LoginForm extends Component {
       .then(
         response => {
           this.user = response.data;
-          this.props.history.push("/projects?id=" + response.data);
+          this.props.history.push("/projects?id=" + response.data._id);
         },
         () => {
           // console.log(this.user);
@@ -131,7 +131,7 @@ class LoginForm extends Component {
   }
   render() {
     // console.log(this.props.history);
-    let emailError, passwdError, loginError;
+    let emailError, passwdError, loginError, connError;
     if (this.state.emailError) {
       emailError = <div className="text-danger"> Invalid Email address </div>;
     }
@@ -150,8 +150,29 @@ class LoginForm extends Component {
         </div>
       );
     }
+    if (this.state.error) {
+      connError = (
+        <div
+          className="alert alert-danger alert-dismissible fade show text-center"
+          role="alert"
+        >
+          <strong>Error!</strong> We could not sign you in for the moment.This
+          is probably a problem with your internet connection Please{" "}
+          <a href="/signin"> try again.</a>
+          <button
+            type="button"
+            className="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      );
+    }
     return (
       <div className="container mt-5">
+        {connError}
         <div className="row">
           <div className="col-md-6 offset-md-3 mt-5">
             <section className="form-elegant">

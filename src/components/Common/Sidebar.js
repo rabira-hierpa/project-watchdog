@@ -99,6 +99,15 @@ const Sidebar = props => {
           </li>
           <li className="nav-item waves-effect waves-light">
             <a
+              href={"/repository?id=" + props.projectid}
+              className="nav-link no-pl text-white"
+            >
+              <i className="fa fa-archive fa-lg mr-4 ml-3" aria-hidden="true" />
+              Archive
+            </a>
+          </li>
+          <li className="nav-item waves-effect waves-light">
+            <a
               href={"/history?id=" + props.projectid}
               className="nav-link no-pl text-white"
             >

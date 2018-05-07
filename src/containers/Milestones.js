@@ -42,9 +42,9 @@ class Milestones extends PureComponent {
         url: "/api/auth/show/current"
       })
       .then(response => {
-        this.user = response.data;
+        this.user = response.data._id;
         this.setState({
-          id: response.data
+          id: response.data._id
         });
       })
       .catch(error => {
