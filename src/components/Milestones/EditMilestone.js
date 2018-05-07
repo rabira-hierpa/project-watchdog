@@ -221,7 +221,8 @@ class EditMilestone extends PureComponent {
                         type="submit"
                         onClick={this.onDelete.bind(this)}
                       >
-                        <i class="fa fa-trash-o" aria-hidden="true" /> Delete
+                        <i className="fa fa-trash-o" aria-hidden="true" />{" "}
+                        Delete
                       </button>
                     </div>
                   </form>
