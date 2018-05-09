@@ -1,4 +1,3 @@
-import axios from "axios";
 import BarChart from "./BarChart";
 import PieChart from "./Pie";
 import LineChart from "./LineChart";
