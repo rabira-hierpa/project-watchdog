@@ -60,7 +60,7 @@ class ProjectNav extends Component {
     const style = {
       height: "30px; !important"
     };
-    let sidebar, icon, details, quickadd;
+    let sidebar, icon, details, quickadd, projects;
 
     if (this.props.sidebar) {
       sidebar = (
@@ -105,6 +105,8 @@ class ProjectNav extends Component {
           </a>
         </li>
       );
+    } else if (this.props.quickadd === "") {
+      quickadd = null;
     } else {
       quickadd = (
         <li className="nav-item">
@@ -118,6 +120,16 @@ class ProjectNav extends Component {
               {this.props.quickadd}
             </span>
           </a>
+        </li>
+      );
+    }
+    if (this.props.projects === true) {
+      projects = (
+        <li className="nav-item active">
+          <NavLink to={"/projects?id=" + this.state.id} className="nav-link">
+            <i className="fa fa-home fa-lg" />
+            <span className="clearfix d-none d-sm-inline-block">Projects</span>
+          </NavLink>
         </li>
       );
     }
@@ -157,17 +169,7 @@ class ProjectNav extends Component {
                 </span>
               </form>
               {quickadd}
-              <li className="nav-item active">
-                <NavLink
-                  to={"/projects?id=" + this.state.id}
-                  className="nav-link"
-                >
-                  <i className="fa fa-home fa-lg" />
-                  <span className="clearfix d-none d-sm-inline-block">
-                    Projects
-                  </span>
-                </NavLink>
-              </li>
+              {projects}
               <li className="nav-item">
                 <a className="nav-link">
                   <i className="fa fa-bell fa-lg" />
