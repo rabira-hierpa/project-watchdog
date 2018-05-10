@@ -67,15 +67,15 @@ class LoginForm extends Component {
       method: "get",
       url: "/api/auth/show/current"
     })
-      .then(
-        response => {
-          this.user = response.data;
+      .then(response => {
+        this.user = response.data;
+        console.log(response.data.type);
+        if (response.data.Type === "1") {
+          this.props.history.push("/admin-dashboard?id" + response.data._id);
+        } else if (response.data.Type === "3") {
           this.props.history.push("/projects?id=" + response.data._id);
-        },
-        () => {
-          // console.log(this.user);
         }
-      )
+      })
       .catch(error => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
