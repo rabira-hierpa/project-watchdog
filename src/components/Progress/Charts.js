@@ -59,17 +59,11 @@ class Charts extends Component {
     });
   };
 
-  componentWillMount() {
-    console.log("compWillMount");
-  }
+  componentWillMount() {}
 
-  componentDidMount() {
-    console.log("compDidMount");
-  }
+  componentDidMount() {}
 
   shouldComponentUpdate(nextProps, nextState) {
-    // console.log(nextProps);
-    console.log("shouldCompUpdate");
     return nextProps !== this.props ? true : false;
   }
 
@@ -79,8 +73,6 @@ class Charts extends Component {
     this.milestone = this.props.milestone;
     this.setTaskData();
     this.setMilestoneData();
-    console.log(this.milestone);
-    console.log("compWillUpdate");
     this.taskData = {
       labels: ["Todo", "Inprogress", "Review", "Completed"],
       datasets: [
@@ -146,7 +138,6 @@ class Charts extends Component {
             title="Task Progress"
             position="right"
           />
-
           <LineChart
             chartData={this.taskData}
             title="Project Progress"
