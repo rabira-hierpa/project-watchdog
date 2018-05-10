@@ -14,6 +14,7 @@ import History from "./containers/History";
 import AttachedFiles from "./containers/AttachedFiles";
 import ErrorPage from "./components/Error/Error";
 import Dashboard from "./containers/Dashboard";
+import AdminDashboard from "./containers/Admin";
 
 class Home extends Component {
   render() {
@@ -32,6 +33,7 @@ class Home extends Component {
         <Route path="/schedule" component={Schedule} />
         <Route path="/history" component={History} />
         <Route path="/files" component={AttachedFiles} />
+        <Route path="/admin-dashboard" component={AdminDashboard} />
         <Route component={ErrorPage} />
         {/*
             <Route path="/project/view" component={TaskModal} />
