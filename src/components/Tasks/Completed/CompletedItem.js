@@ -62,7 +62,6 @@ class CompletedItem extends PureComponent {
   }
   render() {
     let deadline;
-    let currentDate = new Date();
     deadline = (
       <span className="pull-right " title="Deadline">
         {new Date(this.props.deadline).toDateString().substr(0, 10)}

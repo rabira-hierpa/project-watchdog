@@ -15,7 +15,8 @@ class Milestones extends PureComponent {
     this.title = "Milestones";
     this.state = {
       milestones: [],
-      userId: ""
+      userId: "",
+      type: 0
     };
     this.id = "";
   }
@@ -44,7 +45,7 @@ class Milestones extends PureComponent {
       .then(response => {
         this.user = response.data._id;
         this.setState({
-          id: response.data._id
+          userId: response.data._id
         });
       })
       .catch(error => {
@@ -98,15 +99,14 @@ class Milestones extends PureComponent {
   // Handles the state when new milestone is added
   addMilestone(milestone) {
     this.id = new URLSearchParams(this.props.location.search).get("id");
-    console.log(this.id);
     axios
       .request({
         method: "put",
-        url: "/api/milestones/" + this.id,
+        url: "/api/milestones/" + this.id + "/" + this.state.userId,
         data: {
           MileStoneTitle: milestone.title,
           MileStoneDescription: milestone.desc,
-          DeadLine: milestone.deadline,
+          DeadLine: milestone.deadline, // Change the file gets uploaded
           FileLocation: "",
           Status: 1
         }
@@ -115,14 +115,9 @@ class Milestones extends PureComponent {
         console.log(response.data);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
-        this.setState(
-          {
-            milestones: allmilestones
-          },
-          () => {
-            console.log(this.state.milestones);
-          }
-        );
+        this.setState({
+          milestones: allmilestones
+        });
       })
       .catch(error => {
         this.setState({
@@ -153,14 +148,9 @@ class Milestones extends PureComponent {
         console.log(response.data);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
-        this.setState(
-          {
-            milestones: allmilestones
-          },
-          () => {
-            console.log(this.state.milestones);
-          }
-        );
+        this.setState({
+          milestones: allmilestones
+        });
       })
       .catch(error => {
         this.setState({
@@ -177,21 +167,16 @@ class Milestones extends PureComponent {
     this.id = new URLSearchParams(this.props.location.search).get("id");
     axios
       .request({
-        method: "delete",
-        url: "/api/milestones/" + this.id + "/" + milestone.id
+        method: "put",
+        url: "/api/milestones/delete/" + this.id + "/" + milestone.id
       })
       .then(response => {
         console.log(response.data);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
-        this.setState(
-          {
-            milestones: allmilestones
-          },
-          () => {
-            console.log(this.state.milestones);
-          }
-        );
+        this.setState({
+          milestones: allmilestones
+        });
       })
       .catch(error => {
         this.setState({
@@ -279,8 +264,9 @@ class Milestones extends PureComponent {
           quickadd="Quick Add"
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
+          projects={true}
           id={this.state.id}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />

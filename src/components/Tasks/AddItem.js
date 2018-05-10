@@ -14,7 +14,7 @@ class AddItem extends Component {
   }
 
   onSubmit(e) {
-    if (this.state.task !== "") {
+    if (this.state.task.title !== "") {
       this.props.onAddTask(this.state.task);
       this.setState({
         task: {

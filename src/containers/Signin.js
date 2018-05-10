@@ -7,8 +7,7 @@ class Singin extends Component {
     return (
       <div>
         <Navbar />
-        <LoginForm {...this.props} />
-        <Footer />
+        <LoginForm {...this.props} /> <Footer />
       </div>
     );
   }

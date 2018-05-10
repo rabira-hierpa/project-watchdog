@@ -97,7 +97,6 @@ class TaskModal extends PureComponent {
     if (JSON.stringify(this.oldState) !== JSON.stringify(this.state.task)) {
       this.props.data.onEdit(this.state.task);
       this.setState({ task: {} });
-      // console.log(this.state.task);
       e.preventDefault();
       ModalManager.close();
     }

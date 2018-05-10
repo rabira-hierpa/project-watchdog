@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { PureComponent } from "react";
-// import $ from "jquery";
 class QuickAddModal extends PureComponent {
   constructor(props) {
     super(props);
@@ -179,7 +178,7 @@ class QuickAddModal extends PureComponent {
     e.preventDefault();
     // $("#quickAddModal").modal("hide");
   }
-  /***** End of task handler */
+  /**** End of task handler */
 
   render() {
     let deadlineError, parent, assigneTo;
@@ -199,6 +198,7 @@ class QuickAddModal extends PureComponent {
           className="browser-default form-control"
           id="taskAssigned"
           onChange={this.onTaskAssignedChange.bind(this)}
+          defaultValue=""
           required
         >
           <option disabled selected>

@@ -61,8 +61,9 @@ class Schedule extends Component {
           quickadd="Quick Add"
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
+          projects={true}
           id={this.state.id}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />

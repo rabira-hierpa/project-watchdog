@@ -125,6 +125,7 @@ class Progress extends Component {
           quickadd="Quick Add"
           sidebar={true}
           details={true}
+          projects={true}
           onLogout={this.onLogout.bind(this)}
           id={this.state.id}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
