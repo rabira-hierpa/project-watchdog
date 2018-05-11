@@ -39,15 +39,10 @@ class Tasks extends PureComponent {
   // Get the id of the logged in user
   getUserid() {
     axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current"
-      })
+      .request({ method: "get", url: "/api/auth/show/current" })
       .then(response => {
-        this.user = response.data;
-        this.setState({
-          userId: response.data
-        });
+        this.user = response.data._id;
+        this.setState({ userId: response.data._id });
       })
       .catch(error => {
         // User is not logged in
@@ -57,10 +52,7 @@ class Tasks extends PureComponent {
   // Logout and reset the cookie session
   onLogout() {
     axios
-      .request({
-        method: "get",
-        url: "/api/auth/logout"
-      })
+      .request({ method: "get", url: "/api/auth/logout" })
       .then(response => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
@@ -80,9 +72,7 @@ class Tasks extends PureComponent {
       })
       .then(response => {
         console.log(response.data.Task);
-        this.setState({
-          tasks: response.data.Task
-        });
+        this.setState({ tasks: response.data.Task });
         console.log(this.state.tasks);
       })
       .catch(error => {
@@ -97,11 +87,10 @@ class Tasks extends PureComponent {
   // Handles the state when new task is added
   addTask(task) {
     this.id = new URLSearchParams(this.props.location.search).get("id");
-    // console.log(this.id);
     axios
       .request({
         method: "put",
-        url: "/api/tasks/" + this.id,
+        url: "/api/tasks/" + this.id + "/" + this.state.userId,
         data: {
           TaskTitle: task.title,
           TaskDescription: task.desc,
@@ -112,13 +101,9 @@ class Tasks extends PureComponent {
         }
       })
       .then(response => {
-        // console.log(response.data.Task);
         let alltasks = this.state.tasks;
         alltasks = response.data.Task;
-        // console.log(alltasks);
-        this.setState({
-          tasks: alltasks
-        });
+        this.setState({ tasks: alltasks });
       })
       .catch(error => {
         this.setState({
@@ -175,16 +160,14 @@ class Tasks extends PureComponent {
     this.id = new URLSearchParams(this.props.location.search).get("id");
     axios
       .request({
-        method: "delete",
-        url: "/api/tasks/" + this.id + "/" + task.id
+        method: "put",
+        url: "/api/tasks/delete/" + this.id + "/" + task.id
       })
       .then(response => {
         console.log(response.data);
         let alltasks = this.state.tasks;
         alltasks = response.data.Task;
-        this.setState({
-          tasks: alltasks
-        });
+        this.setState({ tasks: alltasks });
       })
       .catch(error => {
         this.setState({
@@ -196,17 +179,21 @@ class Tasks extends PureComponent {
       });
   }
   render() {
-    let todo, incomplete, review, completed, noTasks;
+    let todo, incomplete, review, completed, noTasks, tableTasks;
     if (this.state.tasks.length > 0) {
-      todo = this.state.tasks.reverse().map(task => {
+      tableTasks = this.state.tasks.reverse().map(tasks => {
+        if (tasks.Catagory === 1) {
+          return null;
+        } else {
+          return null;
+        }
+      });
+      todo = this.state.tasks.map(task => {
         if (task.Catagory === 1) {
           return (
             <TodoItem
               key={task._id}
               id={task._id}
-              // projectid={new URLSearchParams(this.props.location.search).get(
-              //   "id"
-              // )}
               title={task.TaskTitle}
               desc={task.TaskDescription}
               deadline={task.DeadLine}
@@ -229,9 +216,6 @@ class Tasks extends PureComponent {
             <InProgressItem
               key={task._id}
               id={task._id}
-              // projectid={new URLSearchParams(this.props.location.search).get(
-              //   "id"
-              // )}
               title={task.TaskTitle}
               desc={task.TaskDescription}
               deadline={task.DeadLine}
@@ -254,9 +238,6 @@ class Tasks extends PureComponent {
             <ReviewItem
               key={task._id}
               id={task._id}
-              // projectid={new URLSearchParams(this.props.location.search).get(
-              //   "id"
-              // )}
               title={task.TaskTitle}
               desc={task.TaskDescription}
               deadline={task.DeadLine}
@@ -279,9 +260,6 @@ class Tasks extends PureComponent {
             <CompletedItem
               key={task._id}
               id={task._id}
-              // projectid={new URLSearchParams(this.props.location.search).get(
-              //   "id"
-              // )}
               title={task.TaskTitle}
               desc={task.TaskDescription}
               deadline={task.DeadLine}
@@ -305,7 +283,7 @@ class Tasks extends PureComponent {
             <img className="img-fluid" src="./img/beach1.png" alt="Desert" />
             <br />
             <br />
-            Looks like you have no tasks. Create a new tasks by click on quick
+            Looks like you have no tasks.Create a new tasks by click on quick
             add.
           </div>
         </div>
@@ -317,8 +295,9 @@ class Tasks extends PureComponent {
           quickadd="Quick Add"
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
+          projects={true}
           id={this.state.id}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />
@@ -335,7 +314,7 @@ class Tasks extends PureComponent {
             <div className="row justify-content-center ">
               <div className="col-md-10 m-auto">
                 <div className="row">
-                  <div className="col-lg-3 col-md-6  mb-3">
+                  <div className="col-lg-3 col-md-6 mb-3">
                     <div className="text-center primary-text">
                       <h3>
                         <i
@@ -348,9 +327,11 @@ class Tasks extends PureComponent {
                     <AddItem
                       onAddTask={this.addTask.bind(this)}
                       currentUser={this.state.userId}
-                    />
+                    />{" "}
                     {todo}
-                    <div className="text-center danger-text">{}</div>
+                    <div className="text-center danger-text">
+                      {this.state.erro_mesg}
+                    </div>
                   </div>
                   <div className="col-lg-3 col-md-6 mb-3">
                     <div className="text-center primary-text mb-4">
@@ -360,7 +341,7 @@ class Tasks extends PureComponent {
                           aria-hidden="true"
                         />
                         <strong className="fg-warning-dark ml-2">
-                          Incomplete
+                          Inprogress
                         </strong>
                       </h3>
                     </div>
@@ -406,5 +387,4 @@ class Tasks extends PureComponent {
     );
   }
 }
-
 export default Tasks;

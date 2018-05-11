@@ -72,8 +72,10 @@ class InprogressItem extends PureComponent {
       currentDate.getDate() !== this.deadline.getDate();
     if (calc) {
       deadline = (
-        <span className="pull-right bg-danger" title="Deadline Passed">
-          {new Date(this.props.deadline).toDateString().substr(0, 10)}
+        <span className="pull-right" title="Deadline Passed">
+          <span className="text-danger">
+            {new Date(this.props.deadline).toDateString().substr(0, 10)}
+          </span>
         </span>
       );
     } else {
@@ -86,8 +88,8 @@ class InprogressItem extends PureComponent {
     return (
       <div className="grid" onClick={this.openModal.bind(this)}>
         <div className="card hoverable item" data-toggle="modal1">
-          <div className="card-header peach-gradient">
-            <a className="card-title text-white" title="Task Name">
+          <div className="card-header ">
+            <a className="card-title " title="Task Name">
               {this.props.title}
               {deadline}
             </a>

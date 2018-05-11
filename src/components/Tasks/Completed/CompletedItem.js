@@ -70,8 +70,8 @@ class CompletedItem extends PureComponent {
     return (
       <div className="grid" onClick={this.openModal.bind(this)}>
         <div className="card hoverable item" data-toggle="modal1">
-          <div className="card-header aqua-gradient">
-            <a className="card-title text-white" title="Task Name">
+          <div className="card-header ">
+            <a className="card-title " title="Task Name">
               {this.props.title}
               {deadline}
             </a>

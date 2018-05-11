@@ -68,8 +68,10 @@ class TodoItem extends PureComponent {
       currentDate.getDate() !== this.deadline.getDate();
     if (calc) {
       deadline = (
-        <span className="pull-right bg-danger" title="Deadline Passed">
+        <span className="pull-right" title="Deadline Passed">
+          <span className="text-danger">
           {new Date(this.props.deadline).toDateString().substr(0, 10)}
+        </span>
         </span>
       );
     } else {
@@ -80,10 +82,10 @@ class TodoItem extends PureComponent {
       );
     }
     return (
-      <div className="grid" onClick={this.openModal.bind(this)}>
-        <div className="card hoverable item" data-toggle="modal1">
-          <div className="card-header blue-gradient">
-            <a className="card-title text-white" title="Task Name">
+      <div className="grid" onClick={this.openModal.bind(this)} title="Click this to edit or delete">
+      <div className="card hoverable item" data-toggle="modal1">
+          <div className="card-header ">
+            <a className="card-title " title="Task Name">
               {this.props.title}
               {deadline}
             </a>

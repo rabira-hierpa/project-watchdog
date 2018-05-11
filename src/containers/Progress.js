@@ -23,7 +23,9 @@ class Progress extends Component {
     this.getProjectData();
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getChartData();
+  }
 
   // Get project data
   getProjectData() {
@@ -57,21 +59,22 @@ class Progress extends Component {
     this.setState({
       chartData: {
         labels: [
-          "Boston",
-          "Worcester",
-          "Springfield",
-          "Lowell",
-          "Cambridge",
-          "New Bedford"
+          "Dec 02 2017",
+          "Dec 10 2017",
+          "Jan 16 2018",
+          "Feb 04 2018",
+          "Feb 19 2018",
+          "Mar 24 2018",
+          "Apr 07 2018",
         ],
         datasets: [
           {
-            label: "Population",
-            data: [617594, 181045, 153060, 106519, 105162, 95072],
+            label: "Progress",
+            data: [0, 5, 15, 15, 20,20,30],
             backgroundColor: [
-              "rgba(255, 99, 132, 0.6)",
-              "rgba(54, 162, 235, 0.6)",
-              "rgba(255, 206, 86, 0.6)",
+              // "rgba(255, 99, 132, 0.6)",
+              // "rgba(54, 162, 235, 0.6)",
+              "rgba(0, 211, 142, 0.8)",
               "rgba(75, 192, 192, 0.6)",
               "rgba(153, 102, 255, 0.6)",
               "rgba(255, 159, 64, 0.6)",
@@ -178,6 +181,7 @@ class Progress extends Component {
                     task={this.tasks}
                     milestone={this.milestone}
                     member={this.member}
+                    line={this.state.chartData}
                   />
                 </div>
               </div>
