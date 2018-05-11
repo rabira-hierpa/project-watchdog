@@ -19,6 +19,7 @@ class Dashboard extends Component {
     this.tasks = [];
     this.members = [];
     this.memberNames = [];
+    this.history = [];
   }
 
   componentWillMount() {}
@@ -31,10 +32,7 @@ class Dashboard extends Component {
   // Logout and reset the cookie session
   onLogout() {
     axios
-      .request({
-        method: "get",
-        url: "/api/auth/logout"
-      })
+      .request({ method: "get", url: "/api/auth/logout" })
       .then(response => {
         window.location.href = "http://localhost:3000/";
       })
@@ -53,14 +51,13 @@ class Dashboard extends Component {
         url: "/api/projects/" + this.user
       })
       .then(response => {
-        console.log(response.data);
         this.milestones = response.data.MileStone;
         this.tasks = response.data.Task;
         this.members = response.data.Member;
         this.leaderId = response.data.Leader;
-        this.setState({
-          project: response.data
-        });
+        this.setState({ project: response.data });
+        this.history = response.data.History;
+        console.log(this.history);
         this.getUserName(response.data.Leader);
         this.members.map((member, index) => {
           return this.getMemberNames(member);
@@ -87,7 +84,6 @@ class Dashboard extends Component {
         this.setState({
           leaderName: response.data.Fname + " " + response.data.Lname
         });
-        // this.members.push(response.data.Fname);
       })
       .catch(error => {
         console.log(error);
@@ -103,10 +99,7 @@ class Dashboard extends Component {
       })
       .then(response => {
         this.memberNames.push(response.data.Fname + " " + response.data.Lname);
-        this.setState({
-          memberNames: this.memberNames
-        });
-        console.log(this.state.memberNames);
+        this.setState({ memberNames: this.memberNames });
       })
       .catch(error => {
         console.log(error);
@@ -128,20 +121,40 @@ class Dashboard extends Component {
   render() {
     let projectDetails,
       completedMilestone = this.getCompletedMilesStones(),
-      completedTasks = this.getCompletedTasks();
-    console.log(completedMilestone);
-
+      completedTasks = this.getCompletedTasks(),recentActivity;
     if (!this.state.project.length) {
+      recentActivity = this.history.reverse().map((activity,index) =>{
+        while(index < 5){
+          if(activity.UserName){
+            return (
+              <li key={index} className="list-group-item"> {new Date(activity.Date).toDateString().substr(0,10) + " - " + activity.Event + " by " + activity.UserName }</li>
+            );
+          }
+        }
+      })
+
       projectDetails = (
         <div className="row">
           <div className="col-lg-12 text-center unique-darker h4 mb-5">
             {this.state.project.ProjectTitle}
           </div>
           <div className="col-lg-6">
-            <div className="h5 align-right"> Description</div>
-            {this.state.project.ProjectDescription}
+            <div className="row">
+            <div className="h5 align-right">Description</div>
+              <div className="col-lg-12 box">
+                {this.state.project.ProjectDescription}
+              </div>
+              <div className="col-lg-12">
+                <div className="h6 my-3">Recent Activity</div>
+                <div>
+                  <ul className="list-group w-auto">
+                    {recentActivity}
+                    <li className="list-group"><a href={"/history?id=" + new URLSearchParams(this.props.location.search).get("id")}><span className="pull-right">Show More</span></a> </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-
           <div className="col-lg-6">
             <ul className="stepper stepper-vertical">
               <li className="completed">
@@ -150,15 +163,16 @@ class Dashboard extends Component {
                     <i className="fa fa-calendar-o " aria-hidden="true" />
                   </span>
                   <span className="label">
-                    <span className="h6  lighten-3">
-                      Start Date:<span className="text-primary ml-2">
+                    <span
+                      className="h6 lighten-3">
+                      Start Date:
+                      <span className="text-primary ml-2">
                         {new Date(this.state.project.StartDate).toDateString()}
                       </span>
                     </span>
                   </span>
                 </a>
               </li>
-
               <li className="completed">
                 <a href="#!">
                   <span className="circle">
@@ -166,7 +180,7 @@ class Dashboard extends Component {
                   </span>
                   <span className="label">
                     <span className="h6 ">
-                      <strong> Deadline:</strong>
+                      <strong>Deadline:</strong>
                       <span className="text-success ml-2">
                         {new Date(this.state.project.DeadLine).toDateString()}
                       </span>
@@ -174,7 +188,6 @@ class Dashboard extends Component {
                   </span>
                 </a>
               </li>
-
               <li className="completed">
                 <a href="#!">
                   <span className="circle">
@@ -193,7 +206,7 @@ class Dashboard extends Component {
                     <i className="fa fa-compass fa-md " aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Milestones :{" "}
+                    Milestones:{" "}
                     {" " +
                       completedMilestone.length +
                       " out of " +
@@ -208,7 +221,7 @@ class Dashboard extends Component {
                     <i className="fa fa-list " aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Tasks :{" "}
+                    Tasks:{" "}
                     {" " +
                       completedTasks.length +
                       " out of " +
@@ -223,7 +236,7 @@ class Dashboard extends Component {
                     <i className="fa fa-flag-checkered" aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Progress :
+                    Progress:{" "}
                     {" " + this.state.project.Progress + " % completed"}
                   </span>
                 </a>
@@ -236,14 +249,28 @@ class Dashboard extends Component {
                   <span className="label h6">Members</span>
                 </a>
                 <div className="step-content my-2">
-                  {this.state.memberNames.map((member, index) => {
+                  {this.state.memberNames.map((members, index) => {
                     return (
                       <div key={index}>
-                        <i className="fa fa-user" aria-hidden="true" />
-                        {" " + this.state.memberNames[index]}
+                        <i className="fa fa-user-o" />
+                        {" " + this.memberNames[index]}
                       </div>
                     );
                   })}
+                  <div className="py-3">
+                    <span className="btn btn-outline-success btn-rounded waves-effect">
+                      <i className="fa fa-plus-circle fa-lg" />
+                      &nbsp; Add Member
+                    </span>
+                    <span className="btn btn-outline-secondary btn-rounded waves-effect">
+                      <i className=" fa fa-edit fa-lg " />
+                      &nbsp; Edit Project
+                    </span>
+                    <span className="btn btn-outline-danger btn-rounded waves-effect">
+                      <i className="fa fa-trash fa-lg" />
+                      Delete Project
+                    </span>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -256,18 +283,20 @@ class Dashboard extends Component {
         <ProjectNav
           quickadd={this.quickadd}
           sidebar={true}
-          onLogout={this.onLogout.bind(this)}
           details={true}
+          projects={true}
+          onLogout={this.onLogout.bind(this)}
           projectid={this.state.project._id}
         />
         <main className="no-pt minheight">
           <div className="container-fluid">
-            <PageHeader title={this.title} /> <br />
+            <PageHeader title={this.title} />
+            <br />
             <div className="row justify-content-center ">
               <div className="col-md-8">
                 <div className="well">
                   {projectDetails}
-                  <div className="text-danger"> </div>
+                  <div className="text-danger" />
                 </div>
               </div>
             </div>

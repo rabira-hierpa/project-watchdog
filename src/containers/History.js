@@ -9,16 +9,16 @@ class History extends Component {
     super(props);
     this.props = props;
     this.state = {
-      id: ""
+      userId: "",
+      history: []
     };
     this.quickadd = "Quick Add";
   }
 
   componentWillMount() {
     this.getUserid();
+    // this.getProjectHistory();
   }
-
-  componentDidMount() {}
 
   // Get the id of the logged in user
   getUserid() {
@@ -30,7 +30,7 @@ class History extends Component {
       .then(response => {
         this.user = response.data;
         this.setState({
-          userId: response.data
+          userId: response.data._id
         });
       })
       .catch(error => {
@@ -53,16 +53,55 @@ class History extends Component {
         console.log(error);
       });
   }
+  // Get project history
+  getProjectHistory(){
+    let id = new URLSearchParams(this.props.location.search).get("id");
+    axios
+    .request({
+      method: "get",
+      url: "/api/history/" + id
+    })
+    .then(response => {
+      this.setState({
+        history: response.data.History
+      });
+      console.log(this.state.history);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
+  componentDidMount() {
+    this.getProjectHistory();
+  }
 
   render() {
+    let allHistory;
+    if(this.state.history.length > 0){
+      allHistory = this.state.history.reverse().map((history,index) => {
+        return (
+        <tr key={index}>
+          <td> {new Date(history.Date).toDateString().substr(0,10)}
+          </td>
+          <td> {history.Event }
+          </td>
+          <td> {history.UserName }
+          </td>
+        </tr>
+          // <li key={index} className="list-group-item">{new Date(history.Date).toDateString().substr(0,10) + " - " + history.Event + " by " + history.UserName }</li>
+        )
+      });
+    }
     return (
       <div>
         <ProjectNav
-          quickadd="Quick Add"
+          quickadd=""
           sidebar={true}
           details={true}
           onLogout={this.onLogout.bind(this)}
-          id={this.state.id}
+          id={this.state.userId}
+          projects={true}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />
@@ -71,7 +110,24 @@ class History extends Component {
             <PageHeader title="Project History" />
             <br />
             <div className="row justify-content-center ">
-              <div className="col-md-8 m-auto" />
+              <div className="col-md-8 m-auto">
+                <table className="table table-stripped">
+                  <thead className="blue darken-3 text-white">
+                      <tr>
+                          <th scope="col">
+                              <i className="fa fa-calendar pr-2" aria-hidden="true" /> Date
+                          </th>
+                          <th scope="col">
+                              <i className="fa fa-edit pr-2" aria-hidden="true" /> Event
+                          </th>
+                          <th scope="col">
+                              <i className="fa fa-user-circle-o pr-2" aria-hidden="true" /> Member
+                          </th>
+                        </tr>
+                    </thead>
+                  <tbody>{allHistory}</tbody>
+              </table>
+              </div>
             </div>
           </div>
         </main>
