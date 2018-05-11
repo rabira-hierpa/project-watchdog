@@ -39,7 +39,7 @@ class ReviewItem extends Component {
   }
   render() {
     return (
-      <div className="grid" onClick={this.openModal.bind(this)}>
+      <div className="grid" onClick={this.openModal.bind(this)} title="Click this to edit or delete">
         <div className="card hoverable item" data-toggle="modal">
           <div className="card-header red darken-2">
             <a className="card-title text-white">

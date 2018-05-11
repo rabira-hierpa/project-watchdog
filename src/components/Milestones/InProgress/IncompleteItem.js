@@ -38,7 +38,7 @@ class IncompleteItem extends Component {
   }
   render() {
     return (
-      <div className="grid" onClick={this.openModal.bind(this)}>
+      <div className="grid" onClick={this.openModal.bind(this)} title="Click this to edit or delete">
         <div
           className="card hoverable item"
           data-toggle="modal"
