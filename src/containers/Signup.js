@@ -7,7 +7,8 @@ const Signup = props => {
   return (
     <div>
       <Navbar />
-      <SignupForm {...this.props} /> <Footer />
+      <SignupForm {...this.props} /> 
+      <Footer />
     </div>
   );
 };

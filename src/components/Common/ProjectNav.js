@@ -170,7 +170,7 @@ class ProjectNav extends Component {
               </form>
               {quickadd}
               {projects}
-              <li className="nav-item">
+              {/*<li className="nav-item">
                 <a className="nav-link">
                   <i className="fa fa-bell fa-lg" />
                   <span className="clearfix d-none d-sm-inline-block">
@@ -178,7 +178,7 @@ class ProjectNav extends Component {
                     <span className="badge red pull-right ml-1">5</span>
                   </span>
                 </a>
-              </li>
+              </li>*/}
               {details}
               <li className="nav-item dropdown">
                 <a

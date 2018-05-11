@@ -23,6 +23,7 @@ class Charts extends Component {
     this.mIncomplete = [];
     this.mReview = [];
     this.mComplete = [];
+    this.line = [];
   }
 
   static defaultProps = {
@@ -71,6 +72,7 @@ class Charts extends Component {
     this.props = nextProps;
     this.task = this.props.task;
     this.milestone = this.props.milestone;
+    this.line = this.props.line;
     this.setTaskData();
     this.setMilestoneData();
     this.taskData = {
@@ -139,7 +141,7 @@ class Charts extends Component {
             position="right"
           />
           <LineChart
-            chartData={this.taskData}
+            chartData={this.line}
             title="Project Progress"
             position="right"
           />

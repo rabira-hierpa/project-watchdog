@@ -7,65 +7,35 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-4">
-            <h5 className="title mb-4 mt-3 font-bold">Footer Content</h5>
+            <h5 className="title mb-4 mt-3 font-bold">Project Watchdog</h5>
             <p>
-              Here you can use rows and columns here to organize your footer
-              content. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+             A project managment system for Addis Ababa University
             </p>
           </div>
           <hr className="clearfix w-100 d-md-none" />
           <div className="col-md-2 mx-auto">
-            <h5 className="title mb-4 mt-3 font-bold">Links</h5>
+            <h5 className="title mb-4 mt-3 font-bold">Useful Links</h5>
             <ul>
               <li>
-                <a href="#!">Link 1</a>
+                <a href="#!">FAQ</a>
               </li>
               <li>
-                <a href="#!">Link 2</a>
+                <a href="#!">Support</a>
               </li>
               <li>
-                <a href="#!">Link 3</a>
+                <a href="#!">Contact Us</a>
               </li>
               <li>
-                <a href="#!">Link 4</a>
+                <a href="#!">About Us</a>
               </li>
             </ul>
           </div>
           <hr className="clearfix w-100 d-md-none" />
           <div className="col-md-2 mx-auto">
-            <h5 className="title mb-4 mt-3 font-bold">Links</h5>
-            <ul>
-              <li>
-                <a href="#!">Link 1</a>
-              </li>
-              <li>
-                <a href="#!">Link 2</a>
-              </li>
-              <li>
-                <a href="#!">Link 3</a>
-              </li>
-              <li>
-                <a href="#!">Link 4</a>
-              </li>
-            </ul>
+
           </div>
           <hr className="clearfix w-100 d-md-none" />
           <div className="col-md-2 mx-auto">
-            <h5 className="title mb-4 mt-3 font-bold ">Links</h5>
-            <ul>
-              <li>
-                <a href="#!">Link 1</a>
-              </li>
-              <li>
-                <a href="#!">Link 2</a>
-              </li>
-              <li>
-                <a href="#!">Link 3</a>
-              </li>
-              <li>
-                <a href="#!">Link 4</a>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
@@ -76,10 +46,10 @@ const Footer = () => {
             <h5 className="mb-1">Register now for free</h5>
           </li>
           <li>
-            <a href="signup.html" className="btn btn-rounded btn-red">
-              <i className="fa fa-sign-in fa-sm" />
+            <NavLink to="signup" className="btn btn-rounded btn-red">
+              <i className="fa fa-sign-in pr-2" />
               Sign up!
-            </a>
+            </NavLink>
           </li>
         </ul>
       </div>
@@ -104,11 +74,6 @@ const Footer = () => {
           <li>
             <a className="btn-floating btn-sm btn-li">
               <i className="fa fa-linkedin" />
-            </a>
-          </li>
-          <li>
-            <a className="btn-floating btn-sm btn-dribbble">
-              <i className="fa fa-dribbble" />
             </a>
           </li>
         </ul>
