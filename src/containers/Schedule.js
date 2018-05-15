@@ -14,7 +14,7 @@ class Schedule extends Component {
     this.quickadd = "Quick Add";
   }
 
-  componentWillMount() {
+  unsafe_componentWillMount() {
     this.getUserid();
   }
 
@@ -58,7 +58,7 @@ class Schedule extends Component {
     return (
       <div>
         <ProjectNav
-          quickadd="Quick Add"
+          quickadd=""
           sidebar={true}
           details={true}
           projects={true}

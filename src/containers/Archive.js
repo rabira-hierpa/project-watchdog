@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
-import ArchiveTemplate from '../components/Archive/ArchiveTemplate';
+import ArchiveTemplate from "../components/Archive/ArchiveTemplate";
 class Archive extends PureComponent {
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ class Archive extends PureComponent {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
   }
 
@@ -54,7 +54,6 @@ class Archive extends PureComponent {
       });
   }
 
-
   componentDidMount() {
     this.getArchiveProjects();
   }
@@ -67,12 +66,10 @@ class Archive extends PureComponent {
         url: "/api/archive"
       })
       .then(response => {
-        this.setState(
-          {
-            projects: response.data,
-            error: false
-          }
-        );
+        this.setState({
+          projects: response.data,
+          error: false
+        });
       })
       .catch(error => {
         this.setState({
@@ -107,11 +104,12 @@ class Archive extends PureComponent {
     return (
       <div>
         <ProjectNav
-          quickadd="Quick Add"
+          quickadd=""
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
           id={this.state.id}
+          projects={true}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />

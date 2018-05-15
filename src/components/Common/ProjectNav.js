@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 import DetailsModal from "./DetailsModal";
 import Sidebar from "./Sidebar";
 import axios from "axios";
@@ -11,9 +11,10 @@ class ProjectNav extends Component {
       username: "",
       id: ""
     };
+    this.keyword = "";
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
   }
 
@@ -27,7 +28,6 @@ class ProjectNav extends Component {
         url: "/api/auth/show/current"
       })
       .then(response => {
-        console.log(response.data._id);
         this.userName(response.data._id);
         this.setState({
           id: response.data._id
@@ -56,6 +56,21 @@ class ProjectNav extends Component {
       });
   };
 
+  onChange(e) {
+    this.keyword = e.target.value;
+  }
+  onSubmit(e) {
+    if (this.keyword !== "") {
+      window.location.href =
+        "http://localhost:3000/search?id=" +
+        new URLSearchParams(this.props.location.search).get("id") +
+        "&keyword=" +
+        this.keyword;
+      e.preventDefault();
+    } else {
+      e.preventDefault();
+    }
+  }
   render() {
     const style = {
       height: "30px; !important"
@@ -123,13 +138,13 @@ class ProjectNav extends Component {
         </li>
       );
     }
-    if (this.props.projects === true) {
+    if (this.props.projects) {
       projects = (
         <li className="nav-item active">
-          <NavLink to={"/projects?id=" + this.state.id} className="nav-link">
+          <a href={"/projects?id=" + this.state.id} className="nav-link">
             <i className="fa fa-home fa-lg" />
             <span className="clearfix d-none d-sm-inline-block">Projects</span>
-          </NavLink>
+          </a>
         </li>
       );
     }
@@ -153,20 +168,21 @@ class ProjectNav extends Component {
               <form
                 className="waves-light wave-effects form-inline search-form mb-0 d-none d-md-inline-block py-0"
                 role="search"
+                onSubmit={this.onSubmit.bind(this)}
               >
-                <span className="form-group ">
-                  <input
-                    id="searchField"
-                    type="text"
-                    className="form-control text-white"
-                    placeholder="Search Projects"
-                    aria-label="Search"
-                  />
-                  <i
-                    className="fa fa-search fa-lg text-white "
-                    aria-hidden="true"
-                  />
-                </span>
+                <input
+                  id="searchField"
+                  type="text"
+                  className="form-control text-white"
+                  placeholder="Search Projects"
+                  aria-label="Search"
+                  onChange={this.onChange.bind(this)}
+                />
+                <i
+                  className="fa fa-search fa-lg text-white "
+                  aria-hidden="true"
+                  onClick={this.onSubmit.bind(this)}
+                />
               </form>
               {quickadd}
               {projects}

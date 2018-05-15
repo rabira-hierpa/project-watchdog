@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Axios from "axios";
 class ProjectTemplate extends PureComponent {
   constructor(props) {
@@ -10,7 +10,7 @@ class ProjectTemplate extends PureComponent {
     this.members = [];
   }
 
-  componentWillMount(nextState) {
+  UNSAFE_componentWillMount(nextState) {
     // console.log(nextState);
     this.props.members.map((member, index) => {
       return this.getUserName(member);
@@ -67,12 +67,9 @@ class ProjectTemplate extends PureComponent {
             {
               //<a href="" className="activator p-3 mr-2"><i className="fa fa-share-alt"></i></a>
             }
-            <NavLink
-              to={"/dashboard?id=" + this.props.id}
-              className="card-title"
-            >
+            <a href={"/dashboard?id=" + this.props.id} className="card-title">
               <h4>{this.props.title}</h4>
-            </NavLink>
+            </a>
             <hr />
             <p className="card-text d-block text-truncate">
               {this.props.description}

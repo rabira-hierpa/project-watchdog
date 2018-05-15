@@ -14,17 +14,17 @@ class AttachedFiles extends Component {
     this.quickadd = "Quick Add";
   }
 
-  componentWillMount() {
+  unsafe_componentWillMount() {
     this.getUserid();
   }
 
   componentDidMount() {}
 
-  componentWillReceiveProps(nextProps) {}
+  unsafe_componentWillReceiveProps(nextProps) {}
 
   shouldComponentUpdate(nextProps, nextState) {}
 
-  componentWillUpdate(nextProps, nextState) {}
+  unsafe_componentWillUpdate(nextProps, nextState) {}
 
   componentDidUpdate(prevProps, prevState) {}
 
@@ -68,11 +68,12 @@ class AttachedFiles extends Component {
     return (
       <div>
         <ProjectNav
-          quickadd="Quick Add"
+          quickadd=""
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
           id={this.state.id}
+          projects={true}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />

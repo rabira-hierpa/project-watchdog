@@ -18,7 +18,7 @@ class Progress extends Component {
     };
   }
 
-  componentWillMount() {
+  unsafe_componentWillMount() {
     this.getChartData();
     this.getProjectData();
   }
@@ -65,12 +65,12 @@ class Progress extends Component {
           "Feb 04 2018",
           "Feb 19 2018",
           "Mar 24 2018",
-          "Apr 07 2018",
+          "Apr 07 2018"
         ],
         datasets: [
           {
             label: "Progress",
-            data: [0, 5, 15, 15, 20,20,30],
+            data: [0, 5, 15, 15, 20, 20, 30],
             backgroundColor: [
               // "rgba(255, 99, 132, 0.6)",
               // "rgba(54, 162, 235, 0.6)",
@@ -125,7 +125,7 @@ class Progress extends Component {
     return (
       <div>
         <ProjectNav
-          quickadd="Quick Add"
+          quickadd=""
           sidebar={true}
           details={true}
           projects={true}

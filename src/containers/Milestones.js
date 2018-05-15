@@ -21,20 +21,13 @@ class Milestones extends PureComponent {
     this.id = "";
   }
 
-  componentWillMount() {
+  unsafe_componentWillMount() {
     this.getUserid();
   }
 
   componentDidMount() {
     this.getMilestones();
   }
-
-  componentWillUpdate(nextProps, nextState) {}
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  componentWillUnmount() {}
-
   // Get the id of the logged in user
   getUserid() {
     axios

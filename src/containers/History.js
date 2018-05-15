@@ -15,7 +15,7 @@ class History extends Component {
     this.quickadd = "Quick Add";
   }
 
-  componentWillMount() {
+  unsafe_componentWillMount() {
     this.getUserid();
     // this.getProjectHistory();
   }
@@ -54,22 +54,22 @@ class History extends Component {
       });
   }
   // Get project history
-  getProjectHistory(){
+  getProjectHistory() {
     let id = new URLSearchParams(this.props.location.search).get("id");
     axios
-    .request({
-      method: "get",
-      url: "/api/history/" + id
-    })
-    .then(response => {
-      this.setState({
-        history: response.data.History
+      .request({
+        method: "get",
+        url: "/api/history/" + id
+      })
+      .then(response => {
+        this.setState({
+          history: response.data.History
+        });
+        console.log(this.state.history);
+      })
+      .catch(error => {
+        console.log(error);
       });
-      console.log(this.state.history);
-    })
-    .catch(error => {
-      console.log(error);
-    });
   }
 
   componentDidMount() {
@@ -78,19 +78,16 @@ class History extends Component {
 
   render() {
     let allHistory;
-    if(this.state.history.length > 0){
-      allHistory = this.state.history.reverse().map((history,index) => {
+    if (this.state.history.length > 0) {
+      allHistory = this.state.history.reverse().map((history, index) => {
         return (
-        <tr key={index}>
-          <td> {new Date(history.Date).toDateString().substr(0,10)}
-          </td>
-          <td> {history.Event }
-          </td>
-          <td> {history.UserName }
-          </td>
-        </tr>
+          <tr key={index}>
+            <td> {new Date(history.Date).toDateString().substr(0, 10)}</td>
+            <td> {history.Event}</td>
+            <td> {history.UserName}</td>
+          </tr>
           // <li key={index} className="list-group-item">{new Date(history.Date).toDateString().substr(0,10) + " - " + history.Event + " by " + history.UserName }</li>
-        )
+        );
       });
     }
     return (
@@ -99,9 +96,9 @@ class History extends Component {
           quickadd=""
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
-          id={this.state.userId}
           projects={true}
+          id={this.state.userId}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />
@@ -113,20 +110,26 @@ class History extends Component {
               <div className="col-md-8 m-auto">
                 <table className="table table-stripped">
                   <thead className="blue darken-3 text-white">
-                      <tr>
-                          <th scope="col">
-                              <i className="fa fa-calendar pr-2" aria-hidden="true" /> Date
-                          </th>
-                          <th scope="col">
-                              <i className="fa fa-edit pr-2" aria-hidden="true" /> Event
-                          </th>
-                          <th scope="col">
-                              <i className="fa fa-user-circle-o pr-2" aria-hidden="true" /> Member
-                          </th>
-                        </tr>
-                    </thead>
+                    <tr>
+                      <th scope="col">
+                        <i className="fa fa-calendar pr-2" aria-hidden="true" />{" "}
+                        Date
+                      </th>
+                      <th scope="col">
+                        <i className="fa fa-edit pr-2" aria-hidden="true" />{" "}
+                        Event
+                      </th>
+                      <th scope="col">
+                        <i
+                          className="fa fa-user-circle-o pr-2"
+                          aria-hidden="true"
+                        />{" "}
+                        Member
+                      </th>
+                    </tr>
+                  </thead>
                   <tbody>{allHistory}</tbody>
-              </table>
+                </table>
               </div>
             </div>
           </div>

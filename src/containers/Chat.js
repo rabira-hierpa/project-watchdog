@@ -6,28 +6,17 @@ import MainFooter from "../components/Common/MainFooter";
 class Chat extends Component {
   constructor(props) {
     super(props);
-    this.props = props;
     this.state = {
       id: ""
     };
     this.quickadd = "Quick Add";
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
   }
 
   componentDidMount() {}
-
-  componentWillReceiveProps(nextProps) {}
-
-  shouldComponentUpdate(nextProps, nextState) {}
-
-  componentWillUpdate(nextProps, nextState) {}
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  componentWillUnmount() {}
 
   // Get the id of the logged in user
   getUserid() {
@@ -67,11 +56,12 @@ class Chat extends Component {
     return (
       <div>
         <ProjectNav
-          quickadd="Quick Add"
+          quickadd=""
           sidebar={true}
           details={true}
-          onLogout={this.onLogout.bind(this)}
           id={this.state.id}
+          projects={true}
+          onLogout={this.onLogout.bind(this)}
           projectid={new URLSearchParams(this.props.location.search).get("id")}
           {...this.props}
         />

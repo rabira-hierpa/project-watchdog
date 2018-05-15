@@ -1,5 +1,5 @@
-import React, { PureComponent } from "react";
 import axios from "axios";
+import React, { PureComponent } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import MainFooter from "../components/Common/MainFooter";
 import PageHeader from "../components/Common/PageHeader";
@@ -22,7 +22,7 @@ class Projects extends PureComponent {
   }
 
   // Called when the component is ready to be mounted
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
     this.getUserName();
   }
@@ -126,14 +126,9 @@ class Projects extends PureComponent {
         // console.log(response.data);
         let allprojects = [...this.state.projects];
         allprojects.push(response.data);
-        this.setState(
-          {
-            projects: allprojects
-          },
-          () => {
-            // console.log(this.state.projects);
-          }
-        );
+        this.setState({
+          projects: allprojects
+        });
       })
       .catch(error => {
         this.setState({
@@ -191,9 +186,10 @@ class Projects extends PureComponent {
         <ProjectNav
           quickadd={this.quickadd}
           sidebar={false}
-          onLogout={this.onLogout.bind(this)}
           details={false}
           id={this.state.id}
+          onLogout={this.onLogout.bind(this)}
+          {...this.props}
         />
         <CreateProject
           title="New Project"

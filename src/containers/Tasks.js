@@ -22,19 +22,13 @@ class Tasks extends PureComponent {
     this.id = "";
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
   }
 
   componentDidMount() {
     this.getTasks();
   }
-
-  componentWillUpdate(nextProps, nextState) {}
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  componentWillUnmount() {}
 
   // Get the id of the logged in user
   getUserid() {
@@ -136,14 +130,9 @@ class Tasks extends PureComponent {
         console.log(response.data);
         let alltasks = this.state.tasks;
         alltasks = response.data.Task;
-        this.setState(
-          {
-            tasks: alltasks
-          },
-          () => {
-            console.log(this.state.tasks);
-          }
-        );
+        this.setState({
+          tasks: alltasks
+        });
       })
       .catch(error => {
         this.setState({
@@ -179,15 +168,8 @@ class Tasks extends PureComponent {
       });
   }
   render() {
-    let todo, incomplete, review, completed, noTasks, tableTasks;
+    let todo, incomplete, review, completed, noTasks;
     if (this.state.tasks.length > 0) {
-      tableTasks = this.state.tasks.reverse().map(tasks => {
-        if (tasks.Catagory === 1) {
-          return null;
-        } else {
-          return null;
-        }
-      });
       todo = this.state.tasks.map(task => {
         if (task.Catagory === 1) {
           return (

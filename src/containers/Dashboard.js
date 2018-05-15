@@ -22,7 +22,7 @@ class Dashboard extends Component {
     this.history = [];
   }
 
-  componentWillMount() {}
+  UNSAFE_componentWillMount() {}
 
   componentDidMount() {
     this.getUserProjects();
@@ -121,18 +121,86 @@ class Dashboard extends Component {
   render() {
     let projectDetails,
       completedMilestone = this.getCompletedMilesStones(),
-      completedTasks = this.getCompletedTasks(),recentActivity;
+      completedTasks = this.getCompletedTasks(),
+      recentActivity,
+      currentDate = new Date();
+    let noActivity = false;
     if (!this.state.project.length) {
-      recentActivity = this.history.reverse().map((activity,index) =>{
-        while(index < 5){
-          if(activity.UserName){
-            return (
-              <li key={index} className="list-group-item"> {new Date(activity.Date).toDateString().substr(0,10) + " - " + activity.Event + " by " + activity.UserName }</li>
-            );
+      if (this.history.length > 0) {
+        recentActivity = this.history.reverse().map((activity, index) => {
+          let calc = currentDate.getTime() - new Date(activity.Date).getTime();
+          while (index < 5) {
+            if (calc < 3600000) {
+              if (activity.Type === "Milestone") {
+                return (
+                  <li key={index} className="list-group-item">
+                    <span className="badge blue pull-right ml-1">
+                      {activity.Type}
+                    </span>
+                    <span className="badge red pull-right ml-1">New</span>
+                    {new Date(activity.Date).toDateString().substr(0, 10) +
+                      " - " +
+                      activity.Event +
+                      " by " +
+                      activity.UserName}
+                  </li>
+                );
+              } else if (activity.Type === "Task") {
+                return (
+                  <li key={index} className="list-group-item">
+                    <span className="badge amber pull-right ml-1">
+                      {activity.Type}
+                    </span>
+                    <span className="badge red pull-right ml-1">New</span>
+                    {new Date(activity.Date).toDateString().substr(0, 10) +
+                      " - " +
+                      activity.Event +
+                      " by " +
+                      activity.UserName}
+                  </li>
+                );
+              } else if (activity.Type === "Progress") {
+                return (
+                  <li key={index} className="list-group-item">
+                    <span className="badge green pull-right ml-1">
+                      {activity.Type}
+                    </span>
+                    <span className="badge red pull-right ml-1">New</span>
+                    {new Date(activity.Date).toDateString().substr(0, 10) +
+                      " - " +
+                      activity.Event +
+                      " by " +
+                      activity.UserName}
+                  </li>
+                );
+              }
+            } else {
+              return (
+                <li key={index} className="list-group-item">
+                  <span className="badge blue pull-right ml-1">
+                    {activity.Type}
+                  </span>
+                  {new Date(activity.Date).toDateString().substr(0, 10) +
+                    " - " +
+                    activity.Event +
+                    " by " +
+                    activity.UserName}
+                </li>
+              );
+            }
           }
-        }
-      })
-
+          return null;
+        });
+        noActivity = false;
+      } else {
+        recentActivity = (
+          <div className="my-3">
+            No activites made yet! Creat a new milestone/task to get started
+            with your project
+          </div>
+        );
+        noActivity = true;
+      }
       projectDetails = (
         <div className="row">
           <div className="col-lg-12 text-center unique-darker h4 mb-5">
@@ -140,7 +208,7 @@ class Dashboard extends Component {
           </div>
           <div className="col-lg-6">
             <div className="row">
-            <div className="h5 align-right">Description</div>
+              <div className="h5 align-right">Description</div>
               <div className="col-lg-12 box">
                 {this.state.project.ProjectDescription}
               </div>
@@ -149,7 +217,19 @@ class Dashboard extends Component {
                 <div>
                   <ul className="list-group w-auto">
                     {recentActivity}
-                    <li className="list-group"><a href={"/history?id=" + new URLSearchParams(this.props.location.search).get("id")}><span className="pull-right">Show More</span></a> </li>
+                    <li className="list-group">
+                      <a
+                        href={
+                          "/history?id=" +
+                          new URLSearchParams(this.props.location.search).get(
+                            "id"
+                          )
+                        }
+                        disabled={noActivity}
+                      >
+                        <span className="pull-right">Show More</span>
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -163,8 +243,7 @@ class Dashboard extends Component {
                     <i className="fa fa-calendar-o " aria-hidden="true" />
                   </span>
                   <span className="label">
-                    <span
-                      className="h6 lighten-3">
+                    <span className="h6 lighten-3">
                       Start Date:
                       <span className="text-primary ml-2">
                         {new Date(this.state.project.StartDate).toDateString()}
@@ -206,7 +285,7 @@ class Dashboard extends Component {
                     <i className="fa fa-compass fa-md " aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Milestones:{" "}
+                    Milestones:
                     {" " +
                       completedMilestone.length +
                       " out of " +
@@ -221,7 +300,7 @@ class Dashboard extends Component {
                     <i className="fa fa-list " aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Tasks:{" "}
+                    Tasks:
                     {" " +
                       completedTasks.length +
                       " out of " +
@@ -236,7 +315,7 @@ class Dashboard extends Component {
                     <i className="fa fa-flag-checkered" aria-hidden="true" />
                   </span>
                   <span className="label h6">
-                    Progress:{" "}
+                    Progress:
                     {" " + this.state.project.Progress + " % completed"}
                   </span>
                 </a>
@@ -281,12 +360,13 @@ class Dashboard extends Component {
     return (
       <div>
         <ProjectNav
-          quickadd={this.quickadd}
+          quickadd=""
           sidebar={true}
           details={true}
           projects={true}
           onLogout={this.onLogout.bind(this)}
           projectid={this.state.project._id}
+          {...this.props}
         />
         <main className="no-pt minheight">
           <div className="container-fluid">

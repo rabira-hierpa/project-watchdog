@@ -14,7 +14,7 @@ const Sidebar = props => {
             </a>
           </div>
         </li>
-        <li className="mt-4">
+        <li className="">
           <hr className="white" />
         </li>
         <ul className="nav flex-column">
