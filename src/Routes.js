@@ -15,6 +15,7 @@ import AttachedFiles from "./containers/AttachedFiles";
 import ErrorPage from "./components/Error/Error";
 import Dashboard from "./containers/Dashboard";
 import AdminDashboard from "./containers/Admin";
+import Search from "./containers/Search";
 
 class Home extends Component {
   render() {
@@ -33,6 +34,7 @@ class Home extends Component {
         <Route path="/schedule" component={Schedule} />
         <Route path="/history" component={History} />
         <Route path="/files" component={AttachedFiles} />
+        <Route paht="/search" component={Search}/>
         <Route path="/admin-dashboard" component={AdminDashboard} />
         <Route component={ErrorPage} />
         {/*
