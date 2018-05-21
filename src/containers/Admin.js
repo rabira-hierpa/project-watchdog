@@ -80,12 +80,12 @@ class AdminDashboard extends Component {
     let allProjects;
     if (this.state.projects.length > 0) {
       allProjects = this.state.projects.map((project, index) => (
-        <tr>
+        <tr key={index}>
           <th scope="row"> {index + 1}</th>
-          <td> {project.ProjectTitle}</td>
-          <td> {project.Member.length}</td>
-          <td> {new Date(project.DeadLine).toString().substr(0, 10)}</td>
-          <td> {project.Progress + "%"}</td>
+          <td>{project.ProjectTitle}</td>
+          <td>{project.Member.length}</td>
+          <td>{new Date(project.DeadLine).toString().substr(0, 10)}</td>
+          <td>{project.Progress + "%"}</td>
           <td>
             <span>
               <a
@@ -123,7 +123,7 @@ class AdminDashboard extends Component {
                 <div className="col-lg-5" />
               </div>
               <div className="col-lg-8 m-auto">
-                <table className="table table-hover w-auto">
+                <table className="table table-hover">
                   <thead className="blue darken-3 text-white">
                     <tr>
                       <th scope="col"> #No </th>
@@ -149,7 +149,7 @@ class AdminDashboard extends Component {
                       </th>
                     </tr>
                   </thead>
-                  <tbody> {allProjects} </tbody>
+                  <tbody>{allProjects}</tbody>
                 </table>
                 <div className="row" />
               </div>
