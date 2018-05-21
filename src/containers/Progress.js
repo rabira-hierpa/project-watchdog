@@ -18,7 +18,7 @@ class Progress extends Component {
     };
   }
 
-  unsafe_componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getChartData();
     this.getProjectData();
   }
@@ -166,7 +166,7 @@ class Progress extends Component {
                     className="col-md-4 text-center text-warning"
                     style={style}
                   >
-                    <div className="display-3 ">{this.progress}%</div>
+                    <div className="display-3 ">{parseInt(this.progress)}%</div>
                     <div className="my-3 display-6 tx-2x">
                       Project Completed
                     </div>
