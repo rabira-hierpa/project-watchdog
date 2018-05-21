@@ -17,7 +17,7 @@ const ArchiveDetails = props => (
       <div className="card-footer">
         <p className="card-text">
           <span className="h5">Date:</span>
-          {" " + props.project.date}
+          {" " + new Date(props.project.date).toDateString()}
         </p>
         <div className="card-text">
           <span className="h5">Files: </span>
