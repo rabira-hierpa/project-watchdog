@@ -16,16 +16,19 @@ class Milestones extends PureComponent {
     this.state = {
       milestones: [],
       userId: "",
+      searchTerm: "",
       type: 0
     };
     this.id = "";
+    this.user = "";
   }
 
-  unsafe_componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
   }
 
   componentDidMount() {
+    // this.getUserid();
     this.getMilestones();
   }
   // Get the id of the logged in user
@@ -38,8 +41,10 @@ class Milestones extends PureComponent {
       .then(response => {
         this.user = response.data._id;
         this.setState({
-          userId: response.data._id
+          userId: response.data._id,
+          type: response.data.Type
         });
+        console.log("User id " + this.state.userId);
       })
       .catch(error => {
         // User is not logged in
@@ -54,13 +59,21 @@ class Milestones extends PureComponent {
         url: "/api/auth/logout"
       })
       .then(response => {
-        console.log(response.data);
         window.location.href = "http://localhost:3000/";
       })
       .catch(error => {
         console.log(error);
       });
   }
+
+  // Get completed milestones
+  getCompletedMilesStones() {
+    let completed = this.state.milestones.filter(milestones => {
+      return milestones.Status === 3;
+    });
+    return completed;
+  }
+
   // Get all milestones of a project
   getMilestones() {
     this.id = new URLSearchParams(this.props.location.search).get("id");
@@ -70,15 +83,9 @@ class Milestones extends PureComponent {
         url: "/api/milestones/all/" + this.id
       })
       .then(response => {
-        console.log(response.data);
-        this.setState(
-          {
-            milestones: response.data.MileStone
-          },
-          () => {
-            console.log(this.state.milestones);
-          }
-        );
+        this.setState({
+          milestones: response.data.MileStone
+        });
       })
       .catch(error => {
         this.setState({
@@ -91,11 +98,11 @@ class Milestones extends PureComponent {
   }
   // Handles the state when new milestone is added
   addMilestone(milestone) {
-    this.id = new URLSearchParams(this.props.location.search).get("id");
+    let id = new URLSearchParams(this.props.location.search).get("id");
     axios
       .request({
         method: "put",
-        url: "/api/milestones/" + this.id + "/" + this.state.userId,
+        url: "/api/milestones/" + id + "/" + this.state.userId,
         data: {
           MileStoneTitle: milestone.title,
           MileStoneDescription: milestone.desc,
@@ -105,7 +112,7 @@ class Milestones extends PureComponent {
         }
       })
       .then(response => {
-        console.log(response.data);
+        console.log(response.data.MileStone);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
         this.setState({
@@ -129,7 +136,13 @@ class Milestones extends PureComponent {
     axios
       .request({
         method: "put",
-        url: "/api/milestones/single/" + this.id + "/" + milestone.id,
+        url:
+          "/api/milestones/single/" +
+          this.id +
+          "/" +
+          milestone.id +
+          "/" +
+          this.state.userId,
         data: {
           MileStoneTitle: milestone.title,
           MileStoneDescription: milestone.desc,
@@ -139,11 +152,44 @@ class Milestones extends PureComponent {
       })
       .then(response => {
         console.log(response.data);
+        if (milestone.status === "3") {
+          this.calcuateProgress();
+        }
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
         this.setState({
           milestones: allmilestones
         });
+      })
+      .catch(error => {
+        this.setState({
+          error: true,
+          erro_mesg:
+            "Some error occured whilet trying to fetch the data! Please try again"
+        });
+        console.log(error);
+      });
+    // Increase project progress when a milestone completes
+  }
+
+  calcuateProgress() {
+    let progress =
+      this.getCompletedMilesStones().length /
+      this.state.milestones.length *
+      100;
+
+    this.id = new URLSearchParams(this.props.location.search).get("id");
+    axios
+      .request({
+        method: "put",
+        url: "/api/projects/progress/" + this.id,
+        data: {
+          Progress: progress
+        }
+      })
+      .then(response => {
+        console.log(response.data);
+        console.log("progress added to " + progress);
       })
       .catch(error => {
         this.setState({
@@ -181,63 +227,102 @@ class Milestones extends PureComponent {
       });
   }
 
+  // Search Milestone
+  searchHandler(e) {
+    this.setState({
+      searchTerm: e.target.value
+    });
+    e.preventDefault();
+  }
+
   render() {
-    let incomplete, review, completed, nomilestones;
+    let incomplete, review, completed, nomilestones, search;
     if (this.state.milestones.length > 0) {
-      incomplete = this.state.milestones.reverse().map(milestone => {
-        if (milestone.Status === 1) {
-          return (
-            <IncompleteItem
-              key={milestone._id}
-              id={milestone._id}
-              title={milestone.MileStoneTitle}
-              desc={milestone.MileStoneDescription}
-              deadline={milestone.DeadLine}
-              status={milestone.Status}
-              onEdit={this.onEditMilestone.bind(this)}
-              onDelete={this.onDeleteMilestone.bind(this)}
+      incomplete = this.state.milestones
+        .filter(searchMilestones(this.state.searchTerm))
+        .map(milestone => {
+          if (milestone.Status === 1) {
+            return (
+              <IncompleteItem
+                key={milestone._id}
+                id={milestone._id}
+                title={milestone.MileStoneTitle}
+                desc={milestone.MileStoneDescription}
+                deadline={milestone.DeadLine}
+                status={milestone.Status}
+                onEdit={this.onEditMilestone.bind(this)}
+                onDelete={this.onDeleteMilestone.bind(this)}
+                advisor={this.state.type}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      review = this.state.milestones
+        .filter(searchMilestones(this.state.searchTerm))
+        .map(milestone => {
+          if (milestone.Status === 2) {
+            return (
+              <ReviewItem
+                key={milestone._id}
+                id={milestone._id}
+                title={milestone.MileStoneTitle}
+                desc={milestone.MileStoneDescription}
+                deadline={milestone.DeadLine}
+                status={milestone.Status}
+                onEdit={this.onEditMilestone.bind(this)}
+                onDelete={this.onDeleteMilestone.bind(this)}
+                advisor={this.state.type}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      completed = this.state.milestones
+        .filter(searchMilestones(this.state.searchTerm))
+        .map(milestone => {
+          if (milestone.Status === 3) {
+            return (
+              <CompletedItem
+                key={milestone._id}
+                id={milestone._id}
+                title={milestone.MileStoneTitle}
+                desc={milestone.MileStoneDescription}
+                deadline={milestone.DeadLine}
+                status={milestone.Status}
+                onEdit={this.onEditMilestone.bind(this)}
+                onDelete={this.onDeleteMilestone.bind(this)}
+                advisor={this.state.type}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      search = (
+        <div className="col-lg-6 col-lg-offset-3">
+          <div className="input-group md-form form-sm">
+            <input
+              id="searchField"
+              type="text"
+              className="form-control form-control-md text-center "
+              placeholder="Search Milestones"
+              aria-label="Search"
+              onChange={this.searchHandler.bind(this)}
             />
-          );
-        } else {
-          return null;
-        }
-      });
-      review = this.state.milestones.reverse().map(milestone => {
-        if (milestone.Status === 2) {
-          return (
-            <ReviewItem
-              key={milestone._id}
-              id={milestone._id}
-              title={milestone.MileStoneTitle}
-              desc={milestone.MileStoneDescription}
-              deadline={milestone.DeadLine}
-              status={milestone.Status}
-              onEdit={this.onEditMilestone.bind(this)}
-              onDelete={this.onDeleteMilestone.bind(this)}
-            />
-          );
-        } else {
-          return null;
-        }
-      });
-      completed = this.state.milestones.reverse().map(milestone => {
-        if (milestone.Status === 3) {
-          return (
-            <CompletedItem
-              key={milestone._id}
-              id={milestone._id}
-              title={milestone.MileStoneTitle}
-              desc={milestone.MileStoneDescription}
-              deadline={milestone.DeadLine}
-              status={milestone.Status}
-              onEdit={this.onEditMilestone.bind(this)}
-              onDelete={this.onDeleteMilestone.bind(this)}
-            />
-          );
-        } else {
-          return null;
-        }
-      });
+            <div className="input-group-append">
+              <span className="form-inline">
+                <i
+                  className="fa fa-search fa-lg text-primary"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      );
     } else {
       nomilestones = (
         <div className="col-lg-12">
@@ -272,8 +357,9 @@ class Milestones extends PureComponent {
           <div className="container-fluid">
             <PageHeader title="Milestones" />
             <br />
-            <div className="row justify-content-center ">
-              <div className="col-md-8 m-auto">
+            <div className="row justify-content-center">
+              {search}
+              <div className="col-lg-8 m-auto py-3">
                 <div className="row">
                   <div className="col-lg-4 col-md-6 mb-3">
                     <div className="text-center primary-text mb-4">
@@ -283,7 +369,7 @@ class Milestones extends PureComponent {
                           aria-hidden="true"
                         />
                         <strong className="fg-warning-dark ml-2">
-                          Incomplete
+                          In progress
                         </strong>
                       </h3>
                     </div>
@@ -328,6 +414,16 @@ class Milestones extends PureComponent {
       </div>
     );
   }
+}
+
+function searchMilestones(term) {
+  return function(x) {
+    return (
+      x.MileStoneTitle.toLowerCase().includes(term.toLowerCase()) ||
+      x.MileStoneDescription.toLowerCase().includes(term.toLowerCase()) ||
+      !term
+    );
+  };
 }
 
 Milestones.propTypes = {};

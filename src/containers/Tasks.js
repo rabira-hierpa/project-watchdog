@@ -17,7 +17,8 @@ class Tasks extends PureComponent {
     this.title = "Tasks";
     this.state = {
       tasks: [],
-      userId: ""
+      userId: "",
+      searchTerm: ""
     };
     this.id = "";
   }
@@ -116,7 +117,13 @@ class Tasks extends PureComponent {
     axios
       .request({
         method: "put",
-        url: "/api/tasks/single/" + this.id + "/" + task.id,
+        url:
+          "/api/tasks/single/" +
+          this.id +
+          "/" +
+          task.id +
+          "/" +
+          this.state.userId,
         data: {
           TaskTitle: task.title,
           TaskDescription: task.desc,
@@ -150,7 +157,16 @@ class Tasks extends PureComponent {
     axios
       .request({
         method: "put",
-        url: "/api/tasks/delete/" + this.id + "/" + task.id
+        url:
+          "/api/tasks/delete/" +
+          this.id +
+          "/" +
+          task.id +
+          "/" +
+          this.state.userId,
+        data: {
+          TaskTitle: task.title
+        }
       })
       .then(response => {
         console.log(response.data);
@@ -167,97 +183,140 @@ class Tasks extends PureComponent {
         console.log(error);
       });
   }
+
+  // Serch task
+  searchHandler(e) {
+    this.setState({
+      searchTerm: e.target.value
+    });
+    e.preventDefault();
+  }
+
   render() {
-    let todo, incomplete, review, completed, noTasks;
+    let todo, incomplete, review, completed, noTasks, search;
     if (this.state.tasks.length > 0) {
-      todo = this.state.tasks.map(task => {
-        if (task.Catagory === 1) {
-          return (
-            <TodoItem
-              key={task._id}
-              id={task._id}
-              title={task.TaskTitle}
-              desc={task.TaskDescription}
-              deadline={task.DeadLine}
-              catagory={task.Catagory}
-              files={task.FileLocation}
-              user={task.AssignedTo}
-              onEdit={this.onEditTask.bind(this)}
-              onDelete={this.onDeleteTask.bind(this)}
-              currentUser={this.state.userId}
-              {...this.props}
+      todo = this.state.tasks
+        .reverse()
+        .filter(searchTask(this.state.searchTerm))
+        .map(task => {
+          if (task.Catagory === 1) {
+            return (
+              <TodoItem
+                key={task._id}
+                id={task._id}
+                title={task.TaskTitle}
+                desc={task.TaskDescription}
+                deadline={task.DeadLine}
+                catagory={task.Catagory}
+                files={task.FileLocation}
+                user={task.AssignedTo}
+                onEdit={this.onEditTask.bind(this)}
+                onDelete={this.onDeleteTask.bind(this)}
+                currentUser={this.state.userId}
+                {...this.props}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      incomplete = this.state.tasks
+        .reverse()
+        .filter(searchTask(this.state.searchTerm))
+        .map(task => {
+          if (task.Catagory === 2) {
+            return (
+              <InProgressItem
+                key={task._id}
+                id={task._id}
+                title={task.TaskTitle}
+                desc={task.TaskDescription}
+                deadline={task.DeadLine}
+                catagory={task.Catagory}
+                files={task.FileLocation}
+                user={task.AssignedTo}
+                onEdit={this.onEditTask.bind(this)}
+                onDelete={this.onDeleteTask.bind(this)}
+                currentUser={this.state.userId}
+                {...this.props}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      review = this.state.tasks
+        .reverse()
+        .filter(searchTask(this.state.searchTerm))
+        .map(task => {
+          if (task.Catagory === 3) {
+            return (
+              <ReviewItem
+                key={task._id}
+                id={task._id}
+                title={task.TaskTitle}
+                desc={task.TaskDescription}
+                deadline={task.DeadLine}
+                catagory={task.Catagory}
+                files={task.FileLocation}
+                user={task.AssignedTo}
+                onEdit={this.onEditTask.bind(this)}
+                onDelete={this.onDeleteTask.bind(this)}
+                currentUser={this.state.userId}
+                {...this.props}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      completed = this.state.tasks
+        .reverse()
+        .filter(searchTask(this.state.searchTerm))
+        .map(task => {
+          if (task.Catagory === 4) {
+            return (
+              <CompletedItem
+                key={task._id}
+                id={task._id}
+                title={task.TaskTitle}
+                desc={task.TaskDescription}
+                deadline={task.DeadLine}
+                catagory={task.Catagory}
+                files={task.FileLocation}
+                user={task.AssignedTo}
+                onEdit={this.onEditTask.bind(this)}
+                onDelete={this.onDeleteTask.bind(this)}
+                currentUser={this.state.userId}
+                {...this.props}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      search = (
+        <div className="col-lg-6 col-lg-offset-3">
+          <div className="input-group md-form form-sm">
+            <input
+              id="searchField"
+              type="text"
+              className="form-control form-control-md text-center "
+              placeholder="Search Tasks"
+              aria-label="Search"
+              onChange={this.searchHandler.bind(this)}
             />
-          );
-        } else {
-          return null;
-        }
-      });
-      incomplete = this.state.tasks.reverse().map(task => {
-        if (task.Catagory === 2) {
-          return (
-            <InProgressItem
-              key={task._id}
-              id={task._id}
-              title={task.TaskTitle}
-              desc={task.TaskDescription}
-              deadline={task.DeadLine}
-              catagory={task.Catagory}
-              files={task.FileLocation}
-              user={task.AssignedTo}
-              onEdit={this.onEditTask.bind(this)}
-              onDelete={this.onDeleteTask.bind(this)}
-              currentUser={this.state.userId}
-              {...this.props}
-            />
-          );
-        } else {
-          return null;
-        }
-      });
-      review = this.state.tasks.reverse().map(task => {
-        if (task.Catagory === 3) {
-          return (
-            <ReviewItem
-              key={task._id}
-              id={task._id}
-              title={task.TaskTitle}
-              desc={task.TaskDescription}
-              deadline={task.DeadLine}
-              catagory={task.Catagory}
-              files={task.FileLocation}
-              user={task.AssignedTo}
-              onEdit={this.onEditTask.bind(this)}
-              onDelete={this.onDeleteTask.bind(this)}
-              currentUser={this.state.userId}
-              {...this.props}
-            />
-          );
-        } else {
-          return null;
-        }
-      });
-      completed = this.state.tasks.reverse().map(task => {
-        if (task.Catagory === 4) {
-          return (
-            <CompletedItem
-              key={task._id}
-              id={task._id}
-              title={task.TaskTitle}
-              desc={task.TaskDescription}
-              deadline={task.DeadLine}
-              catagory={task.Catagory}
-              files={task.FileLocation}
-              user={task.AssignedTo}
-              onEdit={this.onEditTask.bind(this)}
-              onDelete={this.onDeleteTask.bind(this)}
-              currentUser={this.state.userId}
-              {...this.props}
-            />
-          );
-        } else {
-          return null;
-        }
-      });
+            <div className="input-group-append">
+              <span className="form-inline">
+                <i
+                  className="fa fa-search fa-lg text-primary"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      );
     } else {
       noTasks = (
         <div className="col-lg-12">
@@ -294,6 +353,7 @@ class Tasks extends PureComponent {
             <PageHeader title={this.title} />
             <br />
             <div className="row justify-content-center ">
+              {search}
               <div className="col-md-10 m-auto">
                 <div className="row">
                   <div className="col-lg-3 col-md-6 mb-3">
@@ -368,5 +428,14 @@ class Tasks extends PureComponent {
       </div>
     );
   }
+}
+function searchTask(term) {
+  return function(x) {
+    return (
+      x.TaskTitle.toLowerCase().includes(term.toLowerCase()) ||
+      x.TaskDescription.toLowerCase().includes(term.toLowerCase()) ||
+      !term
+    );
+  };
 }
 export default Tasks;
