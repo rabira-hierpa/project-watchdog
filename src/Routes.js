@@ -34,8 +34,8 @@ class Home extends Component {
         <Route path="/schedule" component={Schedule} />
         <Route path="/history" component={History} />
         <Route path="/files" component={AttachedFiles} />
-        <Route paht="/search" component={Search}/>
         <Route path="/admin-dashboard" component={AdminDashboard} />
+        <Route paht="/search" exact component={Search} />
         <Route component={ErrorPage} />
         {/*
             <Route path="/project/view" component={TaskModal} />
