@@ -176,7 +176,7 @@ class Projects extends PureComponent {
             height="600px"
             alt="Desert"
           />
-          <div className="my-3">{errorMsg}</div>
+          <div className="my-3">We run into a problem. Please try again</div>
         </div>
       );
       console.log(errorMsg);
