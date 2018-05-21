@@ -80,14 +80,45 @@ class History extends Component {
     let allHistory;
     if (this.state.history.length > 0) {
       allHistory = this.state.history.reverse().map((history, index) => {
-        return (
-          <tr key={index}>
-            <td> {new Date(history.Date).toDateString().substr(0, 10)}</td>
-            <td> {history.Event}</td>
-            <td> {history.UserName}</td>
-          </tr>
-          // <li key={index} className="list-group-item">{new Date(history.Date).toDateString().substr(0,10) + " - " + history.Event + " by " + history.UserName }</li>
-        );
+        if (history.Type === "Milestone") {
+          return (
+            <tr key={index}>
+              <td> {new Date(history.Date).toDateString().substr(0, 10)}</td>
+              <td> {history.Event}</td>
+              <td>
+                <span className="badge blue ml-1">
+                  {history.Type.toUpperCase()}
+                </span>
+              </td>
+              <td> {history.UserName}</td>
+            </tr>
+          );
+        } else if (history.Type === "Task") {
+          return (
+            <tr key={index}>
+              <td> {new Date(history.Date).toDateString().substr(0, 10)}</td>
+              <td> {history.Event}</td>
+              <td>
+                <span className="badge amber darken-3 fa-lg-4 ml-1">
+                  {history.Type}
+                </span>
+              </td>
+              <td> {history.UserName}</td>
+            </tr>
+          );
+        } else {
+          return (
+            <tr key={index}>
+              <td> {new Date(history.Date).toDateString().substr(0, 10)}</td>
+              <td> {history.Event}</td>
+              <td>
+                <span className="badge amber fa-lg-4 ml-1">{history.Type}</span>
+              </td>
+              <td> {history.UserName}</td>
+            </tr>
+            // <li key={index} className="list-group-item">{new Date(history.Date).toDateString().substr(0,10) + " - " + history.Event + " by " + history.UserName }</li>
+          );
+        }
       });
     }
     return (
@@ -118,6 +149,10 @@ class History extends Component {
                       <th scope="col">
                         <i className="fa fa-edit pr-2" aria-hidden="true" />{" "}
                         Event
+                      </th>
+                      <th scope="col">
+                        <i className="fa fa-edit pr-2" aria-hidden="true" />{" "}
+                        Event Type
                       </th>
                       <th scope="col">
                         <i

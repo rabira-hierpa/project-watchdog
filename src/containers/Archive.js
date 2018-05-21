@@ -12,6 +12,7 @@ class Archive extends PureComponent {
     this.state = {
       projects: [],
       userId: "",
+      searchTerm: "",
       error: false,
       erro_mesg: ""
     };
@@ -81,21 +82,52 @@ class Archive extends PureComponent {
       });
   }
 
+  searchHandler(e) {
+    this.setState({
+      searchTerm: e.target.value
+    });
+    e.preventDefault();
+  }
+
   render() {
-    let allprojects, errorMsg;
-    if (this.state.error === false) {
-      allprojects = this.state.projects.map((project, index) => {
-        return (
-          <ArchiveTemplate
-            key={project._id}
-            title={project.Title}
-            description={project.Description}
-            filelocation={project.FileLocation}
-            date={project.UploadDate}
-            // clicked={() => this.viewProject(index)}
-          />
-        );
-      });
+    let allprojects, errorMsg, search;
+    if (this.state.error === false && this.state.projects.length > 0) {
+      allprojects = this.state.projects
+        .filter(searchArchive(this.state.searchTerm))
+        .map((project, index) => {
+          return (
+            <ArchiveTemplate
+              key={project._id}
+              title={project.Title}
+              description={project.Description}
+              filelocation={project.FileLocation}
+              date={project.UploadDate}
+              // clicked={() => this.viewProject(index)}
+            />
+          );
+        });
+      search = (
+        <div className="col-lg-6 col-lg-offset-3">
+          <div className="input-group md-form form-sm">
+            <input
+              id="searchField"
+              type="text"
+              className="form-control form-control-md text-center "
+              placeholder="Search Archive"
+              aria-label="Search"
+              onChange={this.searchHandler.bind(this)}
+            />
+            <div className="input-group-append">
+              <span className="form-inline">
+                <i
+                  className="fa fa-search fa-lg text-primary"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      );
     } else {
       errorMsg = this.state.erro_mesg;
       allprojects = errorMsg;
@@ -118,6 +150,7 @@ class Archive extends PureComponent {
             <PageHeader title="Project Repository" />
             <br />
             <div className="row justify-content-center ">
+              {search}
               <div className="col-md-10 m-auto">
                 <div className="row"> {allprojects} </div>
               </div>
@@ -128,6 +161,16 @@ class Archive extends PureComponent {
       </div>
     );
   }
+}
+
+function searchArchive(term) {
+  return function(x) {
+    return (
+      x.Title.toLowerCase().includes(term.toLowerCase()) ||
+      x.Description.toLowerCase().includes(term.toLowerCase()) ||
+      !term
+    );
+  };
 }
 
 export default Archive;
