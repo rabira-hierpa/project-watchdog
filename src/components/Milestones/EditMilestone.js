@@ -7,11 +7,12 @@ class EditMilestone extends PureComponent {
     super(props);
     this.state = {
       milestone: {},
-      deadlineError: false
+      deadlineError: false,
+      show: false
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       milestone: this.props.data
     });
@@ -213,7 +214,8 @@ class EditMilestone extends PureComponent {
                         className="btn btn-success"
                         type="submit"
                         onSubmit={this.onSubmit.bind(this)}
-                        disabled={disableStatus}>
+                        disabled={disableStatus}
+                      >
                         <i className="fa fa-check" />
                         Save
                       </button>
@@ -221,8 +223,9 @@ class EditMilestone extends PureComponent {
                         className="btn btn-danger"
                         type="submit"
                         onClick={this.onDelete.bind(this)}
-                        disabled={disableStatus}>
-                        <i className="fa fa-trash-o" aria-hidden="true" />{" "}
+                        disabled={disableStatus}
+                      >
+                        <i className="fa fa-trash-o" aria-hidden="true" />
                         Delete
                       </button>
                     </div>

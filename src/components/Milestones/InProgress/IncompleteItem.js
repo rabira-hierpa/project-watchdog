@@ -10,7 +10,7 @@ class IncompleteItem extends Component {
       milestone: {}
     };
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       milestone: this.props
     });
@@ -36,24 +36,37 @@ class IncompleteItem extends Component {
       />
     );
   }
+
   render() {
+    let openModal;
+    if (this.props.advisor === 3) {
+      openModal = this.openModal.bind(this);
+    } else {
+      openModal = this.openModal.bind(this);
+    }
     return (
-      <div className="grid" onClick={this.openModal.bind(this)} title="Click this to edit or delete">
+      <div
+        className="grid"
+        onClick={openModal}
+        title="Click this to edit or delete"
+      >
         <div
+          draggable
+          onDragStart={e => this.props.onDragStart(e, this.props.id)}
           className="card hoverable item"
           data-toggle="modal"
           data-target="#editMilestoneModal21"
         >
           <div className="card-header peach-gradient">
-            <a className="card-title text-white">
+            <a className="card-title text-white" title="Milestone name">
               {this.props.title}
-              <span className="pull-right">
+              <span className="pull-right" title="Milestone deadline">
                 {new Date(this.props.deadline).toDateString().substr(0, 10)}
               </span>
             </a>
           </div>
           <div className="card-body">
-            <p className="card-text text-truncate">{this.props.desc}</p>
+            <p className="card-text">{this.props.desc}</p>
             <div className="align-self-left" />
           </div>
         </div>

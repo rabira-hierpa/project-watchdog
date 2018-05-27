@@ -127,12 +127,12 @@ class Milestones extends PureComponent {
         });
         console.log(error);
       });
+    this.calcuateProgress();
   }
 
   // Handles the state when milestone is edited
   onEditMilestone(milestone) {
     this.id = new URLSearchParams(this.props.location.search).get("id");
-    console.log(this.id);
     axios
       .request({
         method: "put",
@@ -152,6 +152,7 @@ class Milestones extends PureComponent {
       })
       .then(response => {
         console.log(response.data);
+        // Increase project progress when a milestone completes
         if (milestone.status === "3") {
           this.calcuateProgress();
         }
@@ -169,9 +170,8 @@ class Milestones extends PureComponent {
         });
         console.log(error);
       });
-    // Increase project progress when a milestone completes
   }
-
+  // Calculate progress on new milestone, completed milestone and deleted milestone
   calcuateProgress() {
     let progress =
       this.getCompletedMilesStones().length /
@@ -225,6 +225,7 @@ class Milestones extends PureComponent {
         });
         console.log(error);
       });
+    this.calcuateProgress();
   }
 
   // Search Milestone
@@ -235,10 +236,74 @@ class Milestones extends PureComponent {
     e.preventDefault();
   }
 
+  statusChangeHandler = milestone => {
+    this.id = new URLSearchParams(this.props.location.search).get("id");
+    axios
+      .request({
+        method: "put",
+        url:
+          "/api/milestones/single/" +
+          this.id +
+          "/" +
+          milestone._id +
+          "/" +
+          this.state.userId,
+        data: {
+          MileStoneTitle: milestone.MileStoneTitle,
+          MileStoneDescription: milestone.MileStoneDescription,
+          DeadLine: milestone.DeadLine,
+          Status: milestone.Status
+        }
+      })
+      .then(response => {
+        console.log(response.data);
+        let allmilestones = this.state.milestones;
+        allmilestones = response.data.MileStone;
+        this.setState({
+          milestones: allmilestones
+        });
+      })
+      .catch(error => {
+        this.setState({
+          error: true,
+          erro_mesg:
+            "Some error occured whilet trying to fetch the data! Please try again"
+        });
+        console.log(error);
+      });
+  };
+
+  onDrageOver = e => {
+    e.preventDefault();
+  };
+  onDragStart = (e, id) => {
+    // e.preventDefault();
+    e.dataTransfer.setData("id", id);
+    console.log(id);
+  };
+  onDrop = (e, status) => {
+    let id = e.dataTransfer.getData("id");
+    let milestones = this.state.milestones.filter(milestone => {
+      if (milestone._id === id) {
+        milestone.Status = status;
+        return milestone;
+      }
+      return null;
+    });
+    console.log(milestones[0]);
+    this.statusChangeHandler(milestones[0]);
+    e.preventDefault();
+  };
   render() {
     let incomplete, review, completed, nomilestones, search;
     if (this.state.milestones.length > 0) {
       incomplete = this.state.milestones
+        .sort((first, second) => {
+          return (
+            new Date(second.DeadLine).getTime() -
+            new Date(first.DeadLine).getTime()
+          );
+        })
         .filter(searchMilestones(this.state.searchTerm))
         .map(milestone => {
           if (milestone.Status === 1) {
@@ -252,7 +317,7 @@ class Milestones extends PureComponent {
                 status={milestone.Status}
                 onEdit={this.onEditMilestone.bind(this)}
                 onDelete={this.onDeleteMilestone.bind(this)}
-                advisor={this.state.type}
+                onDragStart={this.onDragStart.bind(this)}
               />
             );
           } else {
@@ -260,6 +325,12 @@ class Milestones extends PureComponent {
           }
         });
       review = this.state.milestones
+        .sort((first, second) => {
+          return (
+            new Date(second.DeadLine).getTime() -
+            new Date(first.DeadLine).getTime()
+          );
+        })
         .filter(searchMilestones(this.state.searchTerm))
         .map(milestone => {
           if (milestone.Status === 2) {
@@ -273,7 +344,7 @@ class Milestones extends PureComponent {
                 status={milestone.Status}
                 onEdit={this.onEditMilestone.bind(this)}
                 onDelete={this.onDeleteMilestone.bind(this)}
-                advisor={this.state.type}
+                onDragStart={this.onDragStart.bind(this)}
               />
             );
           } else {
@@ -281,6 +352,12 @@ class Milestones extends PureComponent {
           }
         });
       completed = this.state.milestones
+        .sort((first, second) => {
+          return (
+            new Date(second.DeadLine).getTime() -
+            new Date(first.DeadLine).getTime()
+          );
+        })
         .filter(searchMilestones(this.state.searchTerm))
         .map(milestone => {
           if (milestone.Status === 3) {
@@ -359,9 +436,13 @@ class Milestones extends PureComponent {
             <br />
             <div className="row justify-content-center">
               {search}
-              <div className="col-lg-8 m-auto py-3">
+              <div className="col-lg-10 m-auto py-3">
                 <div className="row">
-                  <div className="col-lg-4 col-md-6 mb-3">
+                  <div
+                    className="col-lg-4 col-md-6 mb-3"
+                    onDragOver={e => this.onDrageOver(e)}
+                    onDrop={e => this.onDrop(e, 1)}
+                  >
                     <div className="text-center primary-text mb-4">
                       <h3>
                         <i
@@ -376,7 +457,11 @@ class Milestones extends PureComponent {
                     {incomplete}
                     <div className="text-center danger-text" />
                   </div>
-                  <div className="col-lg-4 col-md-6 mb-3">
+                  <div
+                    className="col-lg-4 col-md-6 mb-3"
+                    onDragOver={e => this.onDrageOver(e)}
+                    onDrop={e => this.onDrop(e, 2)}
+                  >
                     <div className="text-center primary-text mb-4">
                       <h3>
                         <i
