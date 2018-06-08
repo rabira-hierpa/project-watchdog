@@ -41,13 +41,22 @@ npm start
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+To deploye the app to your local server you can do
+
+```bash
+git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
+cd watchdog-openday/
+npm install #or yarn start
+npm build
+```
 
 ## Built With
 
 * [React](https://reactjs.org/) - The frontend UI framework used
 * [Yarn](https://yarnpkg.com/en/) - Dependency Management
-* [react-chart-js-2](https://github.com/jerairrest/react-chartjs-2) - Used for drawing project charts
+* [react-chart-js](https://github.com/jerairrest/react-chartjs-2) - Used for drawing project charts
+* Express - Used for building the RESTful API
+* Passport - Used for user authentication
 
 ## License
 
@@ -55,6 +64,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* [TraversyMedia]()
-* Inspiration
-* etc
+* [TraversyMedia](http://twitter.com/traversymedia)
+* Acadaminde
