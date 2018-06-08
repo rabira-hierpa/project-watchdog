@@ -207,7 +207,13 @@ class Milestones extends PureComponent {
     axios
       .request({
         method: "put",
-        url: "/api/milestones/delete/" + this.id + "/" + milestone.id
+        url:
+          "/api/milestones/delete/" +
+          this.id +
+          "/" +
+          milestone.id +
+          "/" +
+          this.state.userId
       })
       .then(response => {
         console.log(response.data);

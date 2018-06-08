@@ -11,6 +11,7 @@ class Dashboard extends Component {
     this.quickadd = "Quick Add";
     this.state = {
       project: {},
+      history: [],
       leaderName: "",
       memberNames: []
     };
@@ -26,7 +27,6 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.getUserProjects();
-    this.getUserName(this.leaderId);
   }
 
   // Logout and reset the cookie session
@@ -55,13 +55,13 @@ class Dashboard extends Component {
         this.tasks = response.data.Task;
         this.members = response.data.Member;
         this.leaderId = response.data.Leader;
-        this.setState({ project: response.data });
-        this.history = response.data.History;
-        console.log(this.history);
-        this.getUserName(response.data.Leader);
-        this.members.map((member, index) => {
-          return this.getMemberNames(member);
+        // this.history = response.data.History.reverse();
+        // console.log(this.history);
+        this.setState({
+          project: response.data,
+          history: response.data.History.reverse()
         });
+        this.getUserName(this.leaderId);
       })
       .catch(error => {
         this.setState({
@@ -88,6 +88,9 @@ class Dashboard extends Component {
       .catch(error => {
         console.log(error);
       });
+    this.members.map((member, index) => {
+      return this.getMemberNames(member);
+    });
   }
 
   // Get group members name
@@ -105,6 +108,8 @@ class Dashboard extends Component {
         console.log(error);
       });
   }
+
+  // Get completed milestones
   getCompletedMilesStones() {
     let completed = this.milestones.filter(milestones => {
       return milestones.Status === 3;
@@ -112,12 +117,93 @@ class Dashboard extends Component {
     return completed;
   }
 
+  // Get completed tasks
   getCompletedTasks() {
     let completed = this.tasks.filter(tasks => {
       return tasks.Catagory === 4;
     });
     return completed;
   }
+  getRecentActivity = () => {
+    let currentDate = new Date();
+    for (let j = 0; j < 5; j++) {
+      const activity = this.state.history[j];
+      let calc = currentDate.getTime() - new Date(activity.Date).getTime();
+      if (calc < 3600000) {
+        if (activity.Type === "Milestone") {
+          return (
+            <li key={j} className="list-group-item">
+              <span className="badge blue pull-right ml-1">
+                {activity.Type}
+              </span>
+              <span className="badge red pull-right ml-1">New</span>
+              {new Date(activity.Date).toDateString().substr(0, 10) +
+                " - " +
+                activity.Event +
+                " by " +
+                activity.UserName}
+            </li>
+          );
+        } else if (activity.Type === "Task") {
+          return (
+            <li key={j} className="list-group-item">
+              <span className="badge amber pull-right ml-1">
+                {activity.Type}
+              </span>
+              <span className="badge red pull-right ml-1">New</span>
+              {new Date(activity.Date).toDateString().substr(0, 10) +
+                " - " +
+                activity.Event +
+                " by " +
+                activity.UserName}
+            </li>
+          );
+        } else if (activity.Type === "Progress") {
+          return (
+            <li key={j} className="list-group-item">
+              <span className="badge green pull-right ml-1">
+                {activity.Type}
+              </span>
+              <span className="badge red pull-right ml-1">New</span>
+              {new Date(activity.Date).toDateString().substr(0, 10) +
+                " - " +
+                activity.Event +
+                " by " +
+                activity.UserName}
+            </li>
+          );
+        }
+      } else {
+        if (activity.Type === "Milestone") {
+          return (
+            <li key={j} className="list-group-item">
+              <span className="badge blue pull-right ml-1">
+                {activity.Type}
+              </span>
+              {new Date(activity.Date).toDateString().substr(0, 10) +
+                " - " +
+                activity.Event +
+                " by " +
+                activity.UserName}
+            </li>
+          );
+        } else if (activity.Type === "Task") {
+          return (
+            <li key={j} className="list-group-item">
+              <span className="badge amber darken-2 pull-right ml-1">
+                {activity.Type}
+              </span>
+              {new Date(activity.Date).toDateString().substr(0, 10) +
+                " - " +
+                activity.Event +
+                " by " +
+                activity.UserName}
+            </li>
+          );
+        }
+      }
+    }
+  };
   render() {
     let projectDetails,
       completedMilestone = this.getCompletedMilesStones(),
@@ -126,71 +212,13 @@ class Dashboard extends Component {
       currentDate = new Date();
     let noActivity = false;
     if (!this.state.project.length) {
-      if (this.history.length > 0) {
-        recentActivity = this.history.reverse().map((activity, index) => {
-          let calc = currentDate.getTime() - new Date(activity.Date).getTime();
-          while (index < 5) {
-            if (calc < 3600000) {
-              if (activity.Type === "Milestone") {
-                return (
-                  <li key={index} className="list-group-item">
-                    <span className="badge blue pull-right ml-1">
-                      {activity.Type}
-                    </span>
-                    <span className="badge red pull-right ml-1">New</span>
-                    {new Date(activity.Date).toDateString().substr(0, 10) +
-                      " - " +
-                      activity.Event +
-                      " by " +
-                      activity.UserName}
-                  </li>
-                );
-              } else if (activity.Type === "Task") {
-                return (
-                  <li key={index} className="list-group-item">
-                    <span className="badge amber pull-right ml-1">
-                      {activity.Type}
-                    </span>
-                    <span className="badge red pull-right ml-1">New</span>
-                    {new Date(activity.Date).toDateString().substr(0, 10) +
-                      " - " +
-                      activity.Event +
-                      " by " +
-                      activity.UserName}
-                  </li>
-                );
-              } else if (activity.Type === "Progress") {
-                return (
-                  <li key={index} className="list-group-item">
-                    <span className="badge green pull-right ml-1">
-                      {activity.Type}
-                    </span>
-                    <span className="badge red pull-right ml-1">New</span>
-                    {new Date(activity.Date).toDateString().substr(0, 10) +
-                      " - " +
-                      activity.Event +
-                      " by " +
-                      activity.UserName}
-                  </li>
-                );
-              }
-            } else {
-              return (
-                <li key={index} className="list-group-item">
-                  <span className="badge blue pull-right ml-1">
-                    {activity.Type}
-                  </span>
-                  {new Date(activity.Date).toDateString().substr(0, 10) +
-                    " - " +
-                    activity.Event +
-                    " by " +
-                    activity.UserName}
-                </li>
-              );
-            }
-          }
-          return null;
-        });
+      let startdate = new Date(this.state.project.StartDate);
+      let deadline = new Date(this.state.project.DeadLine);
+      let timeDiff = Math.abs(deadline - startdate);
+      let daysleft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      let dedlinestatus = daysleft / 100 <= 10 ? "text-danger" : "text-success";
+      if (this.state.history.length > 0) {
+        recentActivity = this.getRecentActivity();
         noActivity = false;
       } else {
         recentActivity = (
@@ -227,7 +255,7 @@ class Dashboard extends Component {
                         }
                         disabled={noActivity}
                       >
-                        <span className="pull-right">Show More</span>
+                        <span className="pull-right"> Show More</span>
                       </a>
                     </li>
                   </ul>
@@ -251,6 +279,9 @@ class Dashboard extends Component {
                     </span>
                   </span>
                 </a>
+                <div className="step-content my-2">
+                  {daysleft + " day(s) left"}
+                </div>
               </li>
               <li className="completed">
                 <a href="#!">
@@ -260,7 +291,7 @@ class Dashboard extends Component {
                   <span className="label">
                     <span className="h6 ">
                       <strong>Deadline:</strong>
-                      <span className="text-success ml-2">
+                      <span className={dedlinestatus + " ml-2"}>
                         {new Date(this.state.project.DeadLine).toDateString()}
                       </span>
                     </span>
@@ -316,7 +347,9 @@ class Dashboard extends Component {
                   </span>
                   <span className="label h6">
                     Progress:
-                    {" " + this.state.project.Progress + " % completed"}
+                    {" " +
+                      parseInt(this.state.project.Progress) +
+                      " % completed"}
                   </span>
                 </a>
               </li>

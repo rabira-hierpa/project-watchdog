@@ -13,7 +13,7 @@ class ReviewItem extends Component {
     this.data = "";
   }
 
-  componentWillMount() {
+  unsafe_componentWillMount() {
     this.data = this.props;
   }
   componentDidMount() {
@@ -26,7 +26,7 @@ class ReviewItem extends Component {
       : false;
   }
 
-  componentWillUpdate(nextProps) {
+  unsafe_componentWillUpdate(nextProps) {
     this.data = nextProps;
   }
   componentDidUpdate(nextProps, nextState) {

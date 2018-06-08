@@ -90,14 +90,14 @@ class ProjectTemplate extends PureComponent {
                 className="progress-bar progress-bar-striped progress-bar-animated bg-success"
                 role="progressbar"
                 style={{
-                  width: this.props.progress + "%",
+                  width: parseInt(this.props.progress) + "%",
                   height: "15px"
                 }}
                 aria-valuenow={this.props.progress}
                 aria-valuemin={0}
                 aria-valuemax={100}
               >
-                {this.props.progress}%
+                {parseInt(this.props.progress)}%
               </div>
             </div>
           </div>

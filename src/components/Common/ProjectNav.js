@@ -9,7 +9,8 @@ class ProjectNav extends Component {
     super(props);
     this.state = {
       username: "",
-      id: ""
+      id: "",
+      error: ""
     };
     this.keyword = "";
   }
@@ -19,7 +20,9 @@ class ProjectNav extends Component {
   }
 
   componentDidMount() {
-    this.userName(this.state.id);
+    // if (this.state.id !== "") {
+    //   this.userName(this.state.id);
+    // }
   }
   getUserid() {
     axios
@@ -28,10 +31,12 @@ class ProjectNav extends Component {
         url: "/api/auth/show/current"
       })
       .then(response => {
-        this.userName(response.data._id);
-        this.setState({
-          id: response.data._id
-        });
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch(error => {
         // User is not logged in
@@ -47,9 +52,13 @@ class ProjectNav extends Component {
       })
       .then(response => {
         console.log(response.data);
-        this.setState({
-          username: response.data.Fname
-        });
+        if (response.data.Fname) {
+          this.setState({
+            username: response.data.Fname
+          });
+        } else {
+          window.location.href = "http://localhost:3000/signin";
+        }
       })
       .catch(error => {
         console.log(error);
@@ -99,7 +108,7 @@ class ProjectNav extends Component {
             data-toggle="modal"
             data-target="#detailsModal"
           >
-            <i className="fa fa-info-circle fa-lg" />
+            <i className="fa fa-info-circle fa-lg" title="Details" />
             <span className="clearfix d-none d-sm-inline-block">Details</span>
           </a>
         </li>
@@ -142,7 +151,7 @@ class ProjectNav extends Component {
       projects = (
         <li className="nav-item active">
           <a href={"/projects?id=" + this.state.id} className="nav-link">
-            <i className="fa fa-home fa-lg" />
+            <i className="fa fa-home fa-lg" title="Projects" />
             <span className="clearfix d-none d-sm-inline-block">Projects</span>
           </a>
         </li>

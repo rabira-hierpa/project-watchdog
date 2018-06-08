@@ -24,6 +24,11 @@ class Charts extends Component {
     this.mReview = [];
     this.mComplete = [];
     this.line = [];
+    // Progress data holders
+    this.progress = [];
+    this.progressDate = [];
+    this.projectProgress = [];
+    this.progressData = {};
   }
 
   static defaultProps = {
@@ -59,8 +64,34 @@ class Charts extends Component {
       return milestones.Status === 3;
     });
   };
+  setProgressLables = () => {
+    this.progressDate = this.progress
+      .filter(history => {
+        if (history.Progress !== undefined) {
+          return history;
+        }
+      })
+      .map(progress => {
+        return new Date(progress.Date)
+          .toDateString()
+          .substr(3, 12)
+          .toString();
+      });
+  };
 
-  componentWillMount() {}
+  setProjectProgress = () => {
+    this.projectProgress = this.progress
+      .filter(history => {
+        if (history.Progress !== undefined) {
+          return history;
+        }
+      })
+      .map(progress => {
+        return parseInt(progress.Progress);
+      });
+  };
+
+  UNSAFE_componentWillMount() {}
 
   componentDidMount() {}
 
@@ -68,15 +99,18 @@ class Charts extends Component {
     return nextProps !== this.props ? true : false;
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
     this.props = nextProps;
     this.task = this.props.task;
     this.milestone = this.props.milestone;
+    this.progress = this.props.progress;
     this.line = this.props.line;
     this.setTaskData();
     this.setMilestoneData();
+    this.setProgressLables();
+    this.setProjectProgress();
     this.taskData = {
-      labels: ["Todo", "Inprogress", "Review", "Completed"],
+      labels: ["Todo", "In progress", "Review", "Completed"],
       datasets: [
         {
           label: "Tasks",
@@ -87,19 +121,16 @@ class Charts extends Component {
             this.completedTask.length
           ],
           backgroundColor: [
-            "rgba(255, 99, 132, 0.6)",
-            "rgba(54, 162, 235, 0.6)",
-            "rgba(255, 206, 86, 0.6)",
-            "rgba(75, 192, 192, 0.6)",
-            "rgba(153, 102, 255, 0.6)",
-            "rgba(255, 159, 64, 0.6)",
-            "rgba(255, 99, 132, 0.6)"
+            "rgba(54, 162, 235, 0.8)",
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(255, 99, 132, 0.8)",
+            "rgba(75, 200, 50, 0.7)"
           ]
         }
       ]
     };
     this.milestoneData = {
-      labels: ["Incomplete", "Review", "Completed"],
+      labels: ["In progress", "Review", "Completed"],
       datasets: [
         {
           label: "Milestones",
@@ -109,13 +140,29 @@ class Charts extends Component {
             this.mComplete.length
           ],
           backgroundColor: [
-            "rgba(255, 99, 132, 0.6)",
-            "rgba(54, 162, 235, 0.6)",
-            "rgba(255, 206, 86, 0.6)",
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(255, 99, 132, 0.8)",
+            "rgba(75, 200, 50, 0.7)"
+          ]
+        }
+      ]
+    };
+    this.progressData = {
+      labels: this.progressDate,
+      datasets: [
+        {
+          label: "Progress",
+          data: [...this.projectProgress],
+          backgroundColor: [
+            "rgba(0, 211, 142, 0.8)",
             "rgba(75, 192, 192, 0.6)",
             "rgba(153, 102, 255, 0.6)",
             "rgba(255, 159, 64, 0.6)",
-            "rgba(255, 99, 132, 0.6)"
+            "rgba(255, 99, 132, 0.6)",
+            "rgba(54, 162, 235, 0.8)",
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(255, 99, 132, 0.8)",
+            "rgba(75, 200, 50, 0.7)"
           ]
         }
       ]
@@ -123,7 +170,7 @@ class Charts extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("compDidUpdate");
+    // console.log("compDidUpdate");
   }
 
   render() {
@@ -141,7 +188,7 @@ class Charts extends Component {
             position="right"
           />
           <LineChart
-            chartData={this.line}
+            chartData={this.progressData}
             title="Project Progress"
             position="right"
           />

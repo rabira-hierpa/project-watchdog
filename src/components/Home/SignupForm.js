@@ -110,7 +110,7 @@ class SignupForm extends Component {
     window.location.href = "/api/auth/google";
   }
 
-  singinUser(user) {
+  signinUser(user) {
     Axios.request({
       method: "post",
       url: "/api/auth/signup/local",
@@ -138,7 +138,7 @@ class SignupForm extends Component {
   }
   onSubmit(e) {
     if (!this.state.emailError && !this.state.passwdError) {
-      this.singinUser(this.state.user);
+      this.signinUser(this.state.user);
     }
     e.preventDefault();
   }

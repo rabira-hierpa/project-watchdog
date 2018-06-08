@@ -11,7 +11,8 @@ class TaskModal extends PureComponent {
       members: [],
       memberNames: [],
       leader: false,
-      completed: false
+      completed: false,
+      deadlinError: false
     };
     this.nextState = {};
     this.oldState = {};
@@ -19,7 +20,7 @@ class TaskModal extends PureComponent {
     this.members = [];
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       task: this.nextState
     });
@@ -37,9 +38,8 @@ class TaskModal extends PureComponent {
     this.oldState = this.state.task;
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
     this.nextState = nextState;
-    // console.log("componentWillUpdate()");
   }
 
   // Get project members
@@ -94,11 +94,13 @@ class TaskModal extends PureComponent {
   }
 
   onSubmit(e) {
-    if (JSON.stringify(this.oldState) !== JSON.stringify(this.state.task)) {
+    if (this.state.deadlinError === false) {
       this.props.data.onEdit(this.state.task);
       this.setState({ task: {} });
       e.preventDefault();
       ModalManager.close();
+    } else {
+      e.preventDefault();
     }
   }
 
@@ -151,7 +153,8 @@ class TaskModal extends PureComponent {
           user: this.state.task.user,
           files: this.state.task.files,
           id: this.state.task.id
-        }
+        },
+        deadlinError: false
       });
     } else {
       this.setState({
@@ -163,7 +166,8 @@ class TaskModal extends PureComponent {
           user: this.state.task.user,
           files: this.state.task.files,
           id: this.state.task.id
-        }
+        },
+        deadlinError: true
       });
     }
   }
@@ -199,7 +203,7 @@ class TaskModal extends PureComponent {
   render() {
     // console.log("Start of render()");
     const { style, data, onRequestClose } = this.props;
-    let allUsers, final;
+    let allUsers, final, notifyDeadlineError;
     this.state.completed === true ? (final = true) : (final = false);
 
     if (this.members.length > 0) {
@@ -255,6 +259,14 @@ class TaskModal extends PureComponent {
       );
     }
 
+    if (this.state.deadlinError) {
+      notifyDeadlineError = (
+        <div className="text-danger">Proper deadline must be set</div>
+      );
+    } else {
+      notifyDeadlineError = null;
+    }
+
     return (
       <Modal
         onRequestClose={onRequestClose}
@@ -271,11 +283,11 @@ class TaskModal extends PureComponent {
         >
           <div className="modal-dialog" role="document">
             <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Task Details</h5>
+              <div className="modal-header bg-primary darken-2">
+                <h5 className="modal-title text-white bold">Task Details</h5>
                 <button
                   type="button"
-                  className="close"
+                  className="close text-white"
                   data-dismiss="modal"
                   aria-label="Close"
                   onClick={ModalManager.close}
@@ -322,6 +334,7 @@ class TaskModal extends PureComponent {
                       onChange={this.onChangeDate.bind(this)}
                       required
                     />
+                    {notifyDeadlineError}
                   </div>
 
                   <div className="">
@@ -335,19 +348,21 @@ class TaskModal extends PureComponent {
                   </div>
                   <div className="text-center mt-4">
                     <button
-                      className="btn btn-success btn-sm"
+                      className="btn btn-success btn"
                       type="submit"
                       onClick={this.onSubmit.bind(this)}
                       disabled={final}
                     >
+                      <i className="fa fa-check" />
                       Save
                     </button>
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-danger btn"
                       type="submit"
                       disabled={final}
                       onClick={this.onDelete.bind(this)}
                     >
+                      <i className="fa fa-trash-o pr-2" aria-hidden="true" />
                       Delete
                     </button>
                   </div>

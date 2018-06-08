@@ -17,7 +17,7 @@ class QuickAddModal extends PureComponent {
     this.oldState = {};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       milestone: this.nextState,
       task: this.nextState
@@ -27,7 +27,7 @@ class QuickAddModal extends PureComponent {
     this.oldState = this.state.milestone;
     this.getProjectMembers();
   }
-  componentWillUpdate(nextState) {
+  UNSAFE_componentWillUpdate(nextState) {
     this.nextState = nextState;
   }
 
@@ -114,7 +114,9 @@ class QuickAddModal extends PureComponent {
   }
 
   onMilestoneSubmit(e) {
-    this.props.onAddMilestone(this.state.milestone);
+    if (this.state.deadlineError === false) {
+      this.props.onAddMilestone(this.state.milestone);
+    }
     e.preventDefault();
   }
 
@@ -173,8 +175,9 @@ class QuickAddModal extends PureComponent {
   }
 
   onTaskSubmit(e) {
-    console.log(this.state.task);
-    this.props.onAddTask(this.state.task);
+    if (!this.state.deadlineError) {
+      this.props.onAddTask(this.state.task);
+    }
     e.preventDefault();
     // $("#quickAddModal").modal("hide");
   }
@@ -327,7 +330,7 @@ class QuickAddModal extends PureComponent {
                     onSubmit={this.onMilestoneSubmit.bind(this)}
                   >
                     <div className="md-form">
-                      <label htmlFor="milestoneTitle">Mielstone Name</label>
+                      <label htmlFor="milestoneTitle">Milestone Name</label>
                       <input
                         type="text"
                         id="milestoneTitle"
@@ -355,6 +358,7 @@ class QuickAddModal extends PureComponent {
                         id="date-picker"
                         className="form-control"
                         onChange={this.onMDeadlineChange.bind(this)}
+                        required
                       />
                       {deadlineError}
                     </div>
