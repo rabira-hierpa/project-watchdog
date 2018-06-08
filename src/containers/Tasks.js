@@ -186,8 +186,9 @@ class Tasks extends PureComponent {
 
   // Serch task
   searchHandler(e) {
+    console.log("[searchHandler] Search Term " + e.target.value.toString());
     this.setState({
-      searchTerm: e.target.value
+      searchTerm: e.target.value.toString()
     });
     e.preventDefault();
   }
@@ -301,7 +302,7 @@ class Tasks extends PureComponent {
             <input
               id="searchField"
               type="text"
-              className="form-control form-control-md text-center "
+              className="form-control form-control-md text-center"
               placeholder="Search Tasks"
               aria-label="Search"
               onChange={this.searchHandler.bind(this)}
@@ -430,6 +431,7 @@ class Tasks extends PureComponent {
   }
 }
 function searchTask(term) {
+  console.log(term);
   return function(x) {
     return (
       x.TaskTitle.toLowerCase().includes(term.toLowerCase()) ||

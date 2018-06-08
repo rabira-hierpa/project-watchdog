@@ -10,6 +10,7 @@ class Progress extends Component {
     this.title = "Progress";
     this.tasks = [];
     this.milestone = [];
+    this.history = [];
     this.progress = 0;
     this.project = {};
     this.state = {
@@ -40,6 +41,8 @@ class Progress extends Component {
         this.milestone = response.data.MileStone;
         this.progress = response.data.Progress;
         this.member = response.data.Member;
+        this.history = response.data.History;
+        console.log(this.history);
         this.setState({
           project: response.data
         });
@@ -101,14 +104,24 @@ class Progress extends Component {
         console.log(error);
       });
   }
-
+  // Handle project progress from its history
+  getProjectHistory() {
+    let progress = this.history.filter((history, index) => {
+      if (!history.Progress === undefined) {
+        return history[index];
+      }
+    });
+    console.log(progress);
+    return progress;
+  }
+  // Handle completed tasks to count
   getCompletedTasks() {
     let completed = this.tasks.filter(tasks => {
       return tasks.Catagory === 4;
     });
     return completed;
   }
-
+  // Handle completed milestones to count
   getCompletedMilestones() {
     let completed = this.milestone.filter(milestone => {
       return milestone.Status === 3;
@@ -121,7 +134,8 @@ class Progress extends Component {
       fontWeight: "100"
     };
     let completedTasks = this.getCompletedTasks(),
-      completedMilestones = this.getCompletedMilestones();
+      completedMilestones = this.getCompletedMilestones(),
+      projectHistory = this.getProjectHistory();
     return (
       <div>
         <ProjectNav
@@ -166,7 +180,9 @@ class Progress extends Component {
                     className="col-md-4 text-center text-warning"
                     style={style}
                   >
-                    <div className="display-3 ">{parseInt(this.progress)}%</div>
+                    <div className="display-3 ">
+                      {parseInt(this.progress).toString()}%
+                    </div>
                     <div className="my-3 display-6 tx-2x">
                       Project Completed
                     </div>
@@ -181,6 +197,7 @@ class Progress extends Component {
                     task={this.tasks}
                     milestone={this.milestone}
                     member={this.member}
+                    progress={this.history}
                     line={this.state.chartData}
                   />
                 </div>
@@ -193,7 +210,5 @@ class Progress extends Component {
     );
   }
 }
-
-Progress.propTypes = {};
 
 export default Progress;
