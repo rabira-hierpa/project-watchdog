@@ -1,4 +1,4 @@
-# Project Watchdog: A project managment system
+![project watchdog logo](./public/img/readme_banner.jpg)
 
 Project Watchdog is a project managment system that helps students and adviosrs to collaborate on a project by tracking each step of their project phase. It has useful features like task assignment, progress report, project archive and project history.
 
@@ -15,7 +15,7 @@ git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
 cd watchdog-openday/
 ```
 
-### Installing
+### Installi
 
 To install all the dependencies
 
