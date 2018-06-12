@@ -8,9 +8,12 @@ const Sidebar = props => {
         <li>
           <div className="logo-wrapper waves-light text-center">
             <div className="" />
-            <a href="/" className="flex-center text-white">
-              <i className="fa fa-slack fa-2x" aria-hidden="true" />
-              <div className=""> ProjectWatchdog</div>
+            <a
+              href="/"
+              className="flex-center text-white"
+              alt="Project Watchdog"
+            >
+              <img src="./img/logo.png" alt="Logo" className="img-fluid" />
             </a>
           </div>
         </li>
