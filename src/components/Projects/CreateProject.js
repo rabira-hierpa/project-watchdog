@@ -18,7 +18,7 @@ class CreateProject extends PureComponent {
     this.oldState = {};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       project: this.nextState
     });
@@ -26,7 +26,7 @@ class CreateProject extends PureComponent {
   componentDidMount() {
     this.oldState = this.state.project;
   }
-  componentWillUpdate(nextState) {
+  UNSAFE_componentWillUpdate(nextState) {
     this.nextState = nextState;
   }
 

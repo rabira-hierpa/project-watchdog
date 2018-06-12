@@ -42,7 +42,6 @@ class Progress extends Component {
         this.progress = response.data.Progress;
         this.member = response.data.Member;
         this.history = response.data.History;
-        console.log(this.history);
         this.setState({
           project: response.data
         });
@@ -109,9 +108,10 @@ class Progress extends Component {
     let progress = this.history.filter((history, index) => {
       if (!history.Progress === undefined) {
         return history[index];
+      } else {
+        return null;
       }
     });
-    console.log(progress);
     return progress;
   }
   // Handle completed tasks to count
@@ -134,8 +134,7 @@ class Progress extends Component {
       fontWeight: "100"
     };
     let completedTasks = this.getCompletedTasks(),
-      completedMilestones = this.getCompletedMilestones(),
-      projectHistory = this.getProjectHistory();
+      completedMilestones = this.getCompletedMilestones();
     return (
       <div>
         <ProjectNav
@@ -181,7 +180,7 @@ class Progress extends Component {
                     style={style}
                   >
                     <div className="display-3 ">
-                      {parseInt(this.progress).toString()}%
+                      {Math.trunc(this.progress).toString()}%
                     </div>
                     <div className="my-3 display-6 tx-2x">
                       Project Completed
