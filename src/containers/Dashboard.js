@@ -4,6 +4,8 @@ import { withRouter } from "react-router-dom";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
+import { ModalManager } from "react-dynamic-modal/lib/Modal";
+import ProjectRequest from "../components/Projects/ProjectRequest";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -13,6 +15,7 @@ class Dashboard extends Component {
       project: {},
       history: [],
       leaderName: "",
+      userId: {},
       memberNames: []
     };
     this.leaderName = "";
@@ -21,14 +24,34 @@ class Dashboard extends Component {
     this.members = [];
     this.memberNames = [];
     this.history = [];
+    this.request = [];
   }
 
-  UNSAFE_componentWillMount() {}
+  UNSAFE_componentWillMount() {
+    this.getUserid();
+  }
 
   componentDidMount() {
-    this.getUserProjects();
+    this.getUserProject();
   }
 
+  getUserid() {
+    axios
+      .request({
+        method: "get",
+        url: "/api/auth/show/current"
+      })
+      .then(response => {
+        console.log(response.data);
+        this.setState({
+          userId: response.data
+        });
+      })
+      .catch(error => {
+        // User is not logged in
+        window.location.href = "http://localhost:3000/signin";
+      });
+  }
   // Logout and reset the cookie session
   onLogout() {
     axios
@@ -42,7 +65,7 @@ class Dashboard extends Component {
   }
 
   // Get projects of a user
-  getUserProjects() {
+  getUserProject() {
     this.user = new URLSearchParams(this.props.location.search).get("id");
     // console.log(this.user);
     axios
@@ -57,9 +80,11 @@ class Dashboard extends Component {
         this.leaderId = response.data.Leader;
         // this.history = response.data.History.reverse();
         // console.log(this.history);
+        this.request = response.data.Request;
         this.setState({
           project: response.data,
-          history: response.data.History.reverse()
+          history: response.data.History.reverse(),
+          leaderId: response.data.Leader
         });
         this.getUserName(this.leaderId);
       })
@@ -116,7 +141,6 @@ class Dashboard extends Component {
     });
     return completed;
   }
-
   // Get completed tasks
   getCompletedTasks() {
     let completed = this.tasks.filter(tasks => {
@@ -204,13 +228,113 @@ class Dashboard extends Component {
       }
     }
   };
+  addMemberHandler(userID, reqId) {
+    let id = new URLSearchParams(this.props.location.search).get("id");
+    console.log(userID);
+    axios
+      .request({
+        method: "put",
+        url: "/api/projects/member/" + id + "/" + userID
+      })
+      .then(response => {
+        this.removeRequestMember(reqId);
+      })
+      .catch(error => {
+        this.setState({
+          error: true,
+          erro_mesg:
+            "Some error occured whilet trying to fetch the data! Please try again"
+        });
+        console.log(error);
+      });
+    this.getUserProject();
+  }
+  removeRequestMember(reqId) {
+    let id = new URLSearchParams(this.props.location.search).get("id");
+    console.log(reqId);
+    axios
+      .request({
+        method: "delete",
+        url: "/api/requests/" + id + "/" + reqId
+      })
+      .then(response => {})
+      .catch(error => {
+        this.setState({
+          error: true,
+          erro_mesg:
+            "Some error occured whilet trying to fetch the data! Please try again"
+        });
+        console.log(error);
+      });
+    this.getUserProject();
+  }
+  openModal = e => {
+    let modalStyle = {
+      content: {
+        position: "relative",
+        margin: "0% auto",
+        width: "28.5%",
+        background: "rgba(255, 255, 255, 0)",
+        boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
+        overflow: "auto",
+        borderRadius: "4px",
+        outline: "none"
+      }
+    };
+    ModalManager.open(
+      <ProjectRequest
+        style={modalStyle}
+        data={this.state.projectId}
+        allMemberNames={this.state.memberNames}
+        requestList={this.request}
+        addMember={this.addMemberHandler.bind(this)}
+        removeRequest={this.removeRequestMember.bind(this)}
+        onRequestClose={() => true}
+      />
+    );
+    e.preventDefault();
+  };
+
   render() {
+    let notification, adminAccess;
     let projectDetails,
       completedMilestone = this.getCompletedMilesStones(),
       completedTasks = this.getCompletedTasks(),
-      recentActivity,
-      currentDate = new Date();
+      recentActivity;
     let noActivity = false;
+    if (this.state.leaderId === this.state.userId._id) {
+      adminAccess = (
+        <div className="py-3">
+          <span
+            className="btn btn-outline-success btn-rounded waves-effect"
+            onClick={event => this.openModal(event)}
+          >
+            <i className="fa fa-plus-circle fa-lg" />
+            &nbsp; Add Member &nbsp;
+            {notification}
+          </span>
+          <span className="btn btn-outline-secondary btn-rounded waves-effect">
+            <i className=" fa fa-edit fa-lg " />
+            &nbsp; Edit Project
+          </span>
+          <span className="btn btn-outline-danger btn-rounded waves-effect">
+            <i className="fa fa-trash fa-lg" />
+            &nbsp; Delete Project
+          </span>
+        </div>
+      );
+    } else {
+      adminAccess = null;
+    }
+    if (this.request.length > 0) {
+      notification = (
+        <span className="badge badge-danger badge-pill">
+          {this.request.length}
+        </span>
+      );
+    } else {
+      notification = null;
+    }
     if (!this.state.project.length) {
       let startdate = new Date(this.state.project.StartDate);
       let deadline = new Date(this.state.project.DeadLine);
@@ -348,7 +472,7 @@ class Dashboard extends Component {
                   <span className="label h6">
                     Progress:
                     {" " +
-                      parseInt(this.state.project.Progress) +
+                      Math.trunc(this.state.project.Progress) +
                       " % completed"}
                   </span>
                 </a>
@@ -369,20 +493,7 @@ class Dashboard extends Component {
                       </div>
                     );
                   })}
-                  <div className="py-3">
-                    <span className="btn btn-outline-success btn-rounded waves-effect">
-                      <i className="fa fa-plus-circle fa-lg" />
-                      &nbsp; Add Member
-                    </span>
-                    <span className="btn btn-outline-secondary btn-rounded waves-effect">
-                      <i className=" fa fa-edit fa-lg " />
-                      &nbsp; Edit Project
-                    </span>
-                    <span className="btn btn-outline-danger btn-rounded waves-effect">
-                      <i className="fa fa-trash fa-lg" />
-                      Delete Project
-                    </span>
-                  </div>
+                  {adminAccess}
                 </div>
               </li>
             </ul>

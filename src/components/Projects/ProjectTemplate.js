@@ -12,9 +12,9 @@ class ProjectTemplate extends PureComponent {
 
   UNSAFE_componentWillMount(nextState) {
     // console.log(nextState);
-    this.props.members.map((member, index) => {
-      return this.getUserName(member);
-    });
+    // this.props.members.map((member, index) => {
+    //   return this.getUserName(member);
+    // });
     // console.log("called compWillMount in project Template");
   }
 
@@ -44,20 +44,7 @@ class ProjectTemplate extends PureComponent {
   }
 
   render() {
-    let allmembers;
-    // console.log("called render in project Template");
     if (this.state.memberNames.length > 0) {
-      // console.log(this.state.memberNames);
-      allmembers = this.state.memberNames.map((member, index) => {
-        return (
-          <span key={index}>
-            <i className="fa fa-user-circle fa-lg" aria-hidden="true" />
-            &nbsp;
-            {this.state.memberNames[index]}
-            &nbsp; &nbsp;
-          </span>
-        );
-      });
     }
     return (
       <div className="col-md-4">
@@ -74,7 +61,10 @@ class ProjectTemplate extends PureComponent {
             <p className="card-text d-block text-truncate">
               {this.props.description}
             </p>
-            {allmembers}
+            <span>
+              <i className="fa fa-user-circle fa-lg" aria-hidden="true" />{" "}
+              {this.props.members.length} member(s)
+            </span>
             <a href={"/dashboard?id=" + this.props.id} className="link-text">
               <h5 className="pull-right">
                 Open Project <i className="fa fa-chevron-right" />
@@ -90,14 +80,14 @@ class ProjectTemplate extends PureComponent {
                 className="progress-bar progress-bar-striped progress-bar-animated bg-success"
                 role="progressbar"
                 style={{
-                  width: parseInt(this.props.progress) + "%",
+                  width: Math.trunc(this.props.progress) + "%",
                   height: "15px"
                 }}
                 aria-valuenow={this.props.progress}
                 aria-valuemin={0}
                 aria-valuemax={100}
               >
-                {parseInt(this.props.progress)}%
+                {Math.trunc(this.props.progress)}%
               </div>
             </div>
           </div>

@@ -1,23 +1,26 @@
 import React, { PureComponent } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import Axios from "axios";
+import JoinProject from "../Projects/JoinProject";
+import { ModalManager } from "react-dynamic-modal/lib/Modal";
+
 class SearchTemeplate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      memberNames: []
+      projectId: ""
     };
-    this.members = [];
   }
 
   UNSAFE_componentWillMount(nextState) {
     // console.log(nextState);
-    this.props.members.map((member, index) => {
-      return this.getUserName(member);
-    });
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({
+      projectId: this.props.id
+    });
+  }
 
   getUserName(member) {
     Axios.request({
@@ -36,44 +39,90 @@ class SearchTemeplate extends PureComponent {
       });
   }
 
+  disableClick = event => {
+    event.preventDefault();
+  };
+
+  openModal = e => {
+    let modalStyle = {
+      content: {
+        position: "relative",
+        margin: "0% auto",
+        width: "28.5%",
+        background: "rgba(255, 255, 255, 0)",
+        boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
+        overflow: "auto",
+        borderRadius: "4px",
+        outline: "none"
+      }
+    };
+    ModalManager.open(
+      <JoinProject
+        style={modalStyle}
+        data={this.state.projectId}
+        projectTitle={this.props.title}
+        projectId={this.props.id}
+        sendRequest={this.props.sendRequest.bind(this)}
+        onRequestClose={() => true}
+      />
+    );
+    e.preventDefault();
+  };
+
   render() {
-    let allmembers;
-    if (this.state.memberNames.length > 0) {
-      allmembers = this.state.memberNames.map((member, index) => {
-        return (
-          <span key={index}>
-            <i className="fa fa-user-circle fa-lg" aria-hidden="true" />
-            &nbsp;
-            {this.state.memberNames[index]}
-            &nbsp; &nbsp;
-          </span>
-        );
-      });
+    let joinStatus;
+    if (this.props.members.indexOf(this.props.userid) !== -1) {
+      joinStatus = (
+        <a className="grey-text">
+          <h5 className="pull-right">
+            Joined <i className="fa fa-chevron-right" />
+          </h5>
+        </a>
+      );
+    } else if (this.props.request.find(id => id.UserID === this.props.userid)) {
+      joinStatus = (
+        <a onClick={() => this.disableClick} className="grey-text">
+          <h5 className="pull-right ">
+            Pending <i className="fa fa-chevron-right" />
+          </h5>
+        </a>
+      );
+    } else {
+      joinStatus = (
+        <a href="#!" onClick={event => this.openModal(event)}>
+          <h5 className="pull-right">
+            Join Project <i className="fa fa-chevron-right" />
+          </h5>
+        </a>
+      );
     }
     return (
-      <div className="col-md-4">
+      <div className="col-md-4" data-toggle="modal">
         <div className="card hoverable">
           <div className="view overlay" />
           <div className="card-body">
             {
               //<a href="" className="activator p-3 mr-2"><i className="fa fa-share-alt"></i></a>
             }
-            <NavLink
-              to={"/dashboard?id=" + this.props.id}
+            <a
+              onClick={() => this.disableClick}
+              href="#!"
               className="card-title"
             >
               <h4>{this.props.title}</h4>
-            </NavLink>
+            </a>
             <hr />
             <p className="card-text d-block text-truncate">
               {this.props.description}
             </p>
-            {allmembers}
-            <a href="#!" className="link-text">
-              <h5 className="pull-right">
-                Join Project <i className="fa fa-chevron-right" />
-              </h5>
-            </a>
+            <span className="card-text">
+              <i className="fa fa-user-circle fa-lg" aria-hidden="true" />
+              &nbsp;
+              {this.props.members.length > 1
+                ? this.props.members.length + " Members"
+                : this.props.members.length + " Memeber"}
+            </span>
+            {joinStatus}
             <br />
             <div
               className="progress"
@@ -84,14 +133,14 @@ class SearchTemeplate extends PureComponent {
                 className="progress-bar progress-bar-striped progress-bar-animated bg-success"
                 role="progressbar"
                 style={{
-                  width: this.props.progress + "%",
+                  width: Math.trunc(this.props.progress) + "%",
                   height: "15px"
                 }}
-                aria-valuenow={this.props.progress}
+                aria-valuenow={Math.trunc(this.props.progress)}
                 aria-valuemin={0}
                 aria-valuemax={100}
               >
-                {this.props.progress}%
+                {Math.trunc(this.props.progress)}%
               </div>
             </div>
           </div>

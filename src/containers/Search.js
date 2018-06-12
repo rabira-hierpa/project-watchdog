@@ -10,7 +10,7 @@ class Search extends Component {
     super(props);
     this.keyword = "";
     this.state = {
-      id: "",
+      userId: "",
       results: []
     };
   }
@@ -70,10 +70,31 @@ class Search extends Component {
         this.setState({
           results: response.data
         });
+        console.log(response.data);
       })
       .catch(error => {
         console.log(error);
       });
+  }
+
+  sendRequest(projectID) {
+    console.log(projectID);
+    axios
+      .request({
+        method: "put",
+        url: "/api/requests/" + projectID,
+        data: {
+          UserID: this.state.userId._id,
+          Date: Date.now()
+        }
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    this.getSerchResults();
   }
 
   render() {
@@ -90,6 +111,9 @@ class Search extends Component {
             deadline={project.DeadLine}
             progress={project.Progress}
             members={project.Member}
+            request={project.Request}
+            userid={this.state.userId._id}
+            sendRequest={this.sendRequest.bind(this)}
           />
         );
       });
