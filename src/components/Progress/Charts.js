@@ -87,7 +87,7 @@ class Charts extends Component {
         }
       })
       .map(progress => {
-        return parseInt(progress.Progress);
+        return Math.trunc(progress.Progress);
       });
   };
 
