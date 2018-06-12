@@ -20,14 +20,17 @@ const Slider = props => {
         <div className="carousel-item active">
           <img
             className="d-block w-100 img-fluid"
-            src="holder.js/520x150?random=yes&auto=yes&text=First slide"
-            alt="First slide"
+            src="./img/landing_projects.png"
+            alt="Manage your projects"
           />
+          <p className="text-align-right" style={{ margin: "-25px" }}>
+            Manage your projects
+          </p>
         </div>
         <div className="carousel-item">
           <img
             className="d-block w-100 img-fluid"
-            src="holder.js/520x150?random=yes&auto=yes&text=Second slide"
+            src="./img/landing_milestones.bmp"
             alt="Second slide"
           />
         </div>
