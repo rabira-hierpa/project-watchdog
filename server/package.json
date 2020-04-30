@@ -1,0 +1,31 @@
+{
+  "name": "projectwatchdog",
+  "version": "1.0.0",
+  "description": "A project management system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Kirubel Solomon",
+  "license": "UNLICENCED",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-messages": "^1.0.1",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.1.2",
+    "method-override": "^2.3.10",
+    "mongodb": "^3.0.6",
+    "mongoose": "^5.0.11",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-local": "^1.0.0"
+  }
+}
