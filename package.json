@@ -2,15 +2,34 @@
   "name": "project-watchdog-dev",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/api/*": {
+      "target": "http://localhost:4500"
+    }
+  },
   "dependencies": {
+    "axios": "^0.18.0",
+    "babel-eslint": "^8.2.3",
+    "bootstrap": "^4.1.0",
+    "chart.js": "^2.7.2",
+    "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-flowtype": "^2.46.3",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.8.2",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3",
     "prettier": "^1.12.1",
     "react": "^16.3.2",
+    "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.3.2",
+    "react-dynamic-modal": "^1.1.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "sweetalert-react": "^0.4.11"
   },
   "scripts": {
     "start": "react-scripts start",

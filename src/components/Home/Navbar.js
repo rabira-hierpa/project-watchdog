@@ -1,10 +1,19 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 const Navbar = props => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-primary">
-      <a className="navbar-brand text-white" href="/">
-        ProjectWatchdog
-      </a>
+    <nav className="navbar navbar-expand-lg navbar-light unique-color">
+      <NavLink to="/" className="navbar-brand text-white">
+        <img
+          src="./img/logo.png"
+          alt="Project Watchdog"
+          className="img-fluid ml-2"
+          style={{
+            height: "50px",
+            width: "100px"
+          }}
+        />
+      </NavLink>
       <button
         className="navbar-toggler text-white"
         type="button"
@@ -23,14 +32,14 @@ const Navbar = props => {
         <ul className="navbar-nav ml-auto">
           <li className="nav-item" />
         </ul>
-        <a href="/signin" className="btn btn-md btn-indigo text-white">
+        <NavLink to="/signin" className="btn btn-md btn-indigo text-white">
           <i className="fa fa-lock" aria-hidden="true" />
           <span className="pl-1">Log In</span>
-        </a>
-        <a href="/signup" className="btn btn-md  btn-green text-white">
+        </NavLink>
+        <NavLink to="/signup" className="btn btn-md  btn-green text-white">
           <i className="fa fa-sign-in" aria-hidden="true" />
           <span className="pl-1">Sign Up </span>
-        </a>
+        </NavLink>
       </div>
     </nav>
   );
