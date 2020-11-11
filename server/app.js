@@ -16,29 +16,32 @@ const history = require('./routes/history');
 const chats = require('./routes/chats');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
-const keys = require('./config/keys');
+// const keys = require('./config/keys');
 const ServerIP = require('./routes/ServerIP');
 
 app.use(cors());
 
 // BodyParser Middleware
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Method-Override Middleware
 app.use(methodOverride('_method'));
 
 // Routing to '/'
-app.get('/',(req,res) => {
-   res.send("HELLO PROJECTWATCHDOG");
+app.get('/', (req, res) => {
+	res.send('HELLO PROJECTWATCHDOG');
 });
 
 // Intializing mongodb and connecting
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/pwd-db').then(()=> {
-//projectModel.createIndexes({"ProjectTitle":"text","ProjectDescription":"text"});
-console.log('MongoDB Connected ....');
-}).catch(err => console.log(err));
+mongoose
+	.connect('mongodb://localhost/pwd-db')
+	.then(() => {
+		//projectModel.createIndexes({"ProjectTitle":"text","ProjectDescription":"text"});
+		console.log('MongoDB Connected ....');
+	})
+	.catch((err) => console.log(err));
 
 // /api/archive route to routes/archive.js
 app.use('/api/archive', archive);
@@ -68,9 +71,9 @@ app.use('/api/chats', chats);
 app.use('/api/auth', auth);
 
 // Listening to port 4500
-const port = 4500;
-app.listen(port, ()=>{
-    console.log(`Server Started on port ${port}`);
+const port = process.env.PORT || 4500;
+app.listen(port, () => {
+	console.log(`Server Started on port ${port}`);
 });
 
 // Loading Model
