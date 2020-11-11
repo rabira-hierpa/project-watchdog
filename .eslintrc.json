@@ -1,8 +1,10 @@
 {
-  "extends": ["react-app", "plugin:prettier/recommended"],
-  "rules": {
-    "semi": "warn",
-    "no-unused-vars": "warn",
-    "no-console": "warn"
-  }
+	"extends": ["react-app", "plugin:prettier/recommended"],
+	"rules": {
+		"semi": "warn",
+		"no-unused-vars": "warn",
+		"no-console": "warn",
+		"indent": ["error", "tab"],
+		"quotes": ["error", { "singleQuotes": false }]
+	}
 }

@@ -1,0 +1,9 @@
+{
+	"plugins": ["prettier"],
+	"rules": {
+		"generator-star-spacing": "off",
+		"prettier/prettier": "error",
+		"indent": ["error", "tab"],
+		"quotes": ["error", { "singleQuotes": true }]
+	}
+}
