@@ -129,8 +129,8 @@ router.get('/login/fail', (req, res) => {
 // Login route
 router.post('/login/local', (req, res, next) => {
 	passport.authenticate('local', {
-		successRedirect: 'http://localhost:4500/api/auth/login',
-		failureRedirect: 'http://localhost:4500/api/auth/login/fail',
+		successRedirect: ServerIp.ipAddress + '/api/auth/login',
+		failureRedirect: ServerIp.ipAddress + '/api/auth/login/fail',
 		failureFlash: false,
 	})(req, res, next);
 });
