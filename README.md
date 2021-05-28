@@ -15,10 +15,10 @@ To get started clone the repo
 
 ```bash
 git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
-cd watchdog-openday/
+cd project-watchdog/
 ```
 
-### Installi
+### Install dependencies
 
 To install all the dependencies
 
@@ -38,7 +38,7 @@ Or you can do
 ```bash
 git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
 cd watchdog-openday/
-npm install #or yarn start
+npm install # or yarn start
 npm start
 ```
 
@@ -48,7 +48,7 @@ To deploye the app to your local server you can do
 
 ```bash
 git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
-cd watchdog-openday/
+cd project-watchdog/
 npm install #or yarn start
 npm build
 ```
