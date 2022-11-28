@@ -3,7 +3,7 @@
 Project Watchdog is a project managment system that helps students and adviosrs to collaborate on a project by tracking each step of their project phase. It has useful features like task assignment, progress report, project archive and project history.
 
 ## See it in action 
-[Project Watchdog YouTube](https://www.youtube.com/watch?v=kAUCX6LbpnY)
+[Project Watchdog YouTube](https://www.youtube.com/watch?v=N5oyiKK3oA4)
 
 ## Getting Started
 
