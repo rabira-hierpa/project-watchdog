@@ -22,7 +22,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.1.2",
     "joi": "^17.3.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "jwt-simple": "^0.5.6",
     "method-override": "^2.3.10",
     "mongodb": "^3.6.3",
