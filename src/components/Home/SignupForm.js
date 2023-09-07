@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import Axios from "axios";
+import { Navigate } from "react-router";
 
 class SignupForm extends Component {
   constructor(props) {
@@ -8,7 +9,8 @@ class SignupForm extends Component {
     this.state = {
       user: {},
       emailError: false,
-      passwdError: false
+      passwdError: false,
+      loginSuccess: false,
     };
   }
 
@@ -16,12 +18,8 @@ class SignupForm extends Component {
     this.setState({
       user: {
         fname: e.target.value,
-        lname: this.state.user.lname,
-        email: this.state.user.email,
-        passwd: this.state.user.passwd,
-        bio: this.state.user.bio,
-        dep: this.state.user.dep
-      }
+        ...this.state.user,
+      },
     });
   }
   onLnameChange(e) {
@@ -32,13 +30,14 @@ class SignupForm extends Component {
         email: this.state.user.email,
         passwd: this.state.user.passwd,
         bio: this.state.user.bio,
-        dep: this.state.user.dep
-      }
+        dep: this.state.user.dep,
+      },
     });
   }
 
   onEmailChange(e) {
-    let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+    let re =
+      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
 
     if (re.test(String(e.target.value).toLowerCase())) {
       this.setState({
@@ -49,8 +48,8 @@ class SignupForm extends Component {
           email: e.target.value,
           passwd: this.state.user.passwd,
           bio: this.state.user.bio,
-          dep: this.state.user.dep
-        }
+          dep: this.state.user.dep,
+        },
       });
     } else if (e.target.value === "") {
       this.setState({ emailError: false });
@@ -61,7 +60,6 @@ class SignupForm extends Component {
   onPasswordChange(e) {
     let re = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/gm;
     if (re.test(String(e.target.value))) {
-      console.log(e.target.value);
       this.setState({
         passwdError: false,
         user: {
@@ -70,8 +68,8 @@ class SignupForm extends Component {
           email: this.state.user.email,
           passwd: e.target.value,
           bio: this.state.user.bio,
-          dep: this.state.user.dep
-        }
+          dep: this.state.user.dep,
+        },
       });
     } else if (e.target.value === "") {
       this.setState({ passwdError: false });
@@ -88,8 +86,8 @@ class SignupForm extends Component {
         email: this.state.user.email,
         passwd: this.state.user.passwd,
         bio: e.target.value,
-        dep: this.state.user.dep
-      }
+        dep: this.state.user.dep,
+      },
     });
   }
 
@@ -101,8 +99,8 @@ class SignupForm extends Component {
         email: this.state.user.email,
         passwd: this.state.user.passwd,
         bio: this.state.user.bio,
-        dep: e.target.value
-      }
+        dep: e.target.value,
+      },
     });
   }
 
@@ -120,19 +118,20 @@ class SignupForm extends Component {
         Email: user.email,
         Password: user.passwd,
         Department: user.dep,
-        OtherDescription: user.bio
-      }
+        OtherDescription: user.bio,
+      },
     })
-      .then(response => {
-        console.log(response.data);
-        window.location.href = "http://localhost:3000/signin";
+      .then((response) => {
+        if (response.status === 201) {
+          this.setState({ loginSuccess: true });
+          window.location.href = "http://localhost:3000/signin";
+        }
       })
-      .catch(error => {
-        console.log(error);
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
       });
   }
@@ -154,6 +153,9 @@ class SignupForm extends Component {
           character length
         </div>
       );
+    }
+    if (this.state.loginSuccess) {
+      return <Navigate to="/signin" />;
     }
     return (
       <div className="container mt-5">
@@ -248,7 +250,7 @@ class SignupForm extends Component {
                         value="0"
                         disabled
                         style={{
-                          color: "grey"
+                          color: "grey",
                         }}
                       >
                         Choose Your Department
