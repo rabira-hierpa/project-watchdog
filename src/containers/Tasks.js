@@ -18,7 +18,7 @@ class Tasks extends PureComponent {
     this.state = {
       tasks: [],
       userId: "",
-      searchTerm: ""
+      searchTerm: "",
     };
     this.id = "";
   }
@@ -35,11 +35,11 @@ class Tasks extends PureComponent {
   getUserid() {
     axios
       .request({ method: "get", url: "/api/auth/show/current" })
-      .then(response => {
+      .then((response) => {
         this.user = response.data._id;
         this.setState({ userId: response.data._id });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -48,11 +48,11 @@ class Tasks extends PureComponent {
   onLogout() {
     axios
       .request({ method: "get", url: "/api/auth/logout" })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -63,18 +63,18 @@ class Tasks extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/tasks/all/" + this.id
+        url: "/api/tasks/all/" + this.id,
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data.Task);
         this.setState({ tasks: response.data.Task });
         console.log(this.state.tasks);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -92,19 +92,19 @@ class Tasks extends PureComponent {
           DeadLine: task.deadline,
           AssignedTo: task.assignedTo,
           FileLocation: "",
-          Catagory: 1
-        }
+          Catagory: 1,
+        },
       })
-      .then(response => {
+      .then((response) => {
         let alltasks = this.state.tasks;
         alltasks = response.data.Task;
         this.setState({ tasks: alltasks });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -130,22 +130,22 @@ class Tasks extends PureComponent {
           DeadLine: task.deadline,
           AssignedTo: task.assignedTo,
           Catagory: task.catagory,
-          FileLocation: task.files
-        }
+          FileLocation: task.files,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         let alltasks = this.state.tasks;
         alltasks = response.data.Task;
         this.setState({
-          tasks: alltasks
+          tasks: alltasks,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -165,20 +165,20 @@ class Tasks extends PureComponent {
           "/" +
           this.state.userId,
         data: {
-          TaskTitle: task.title
-        }
+          TaskTitle: task.title,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         let alltasks = this.state.tasks;
         alltasks = response.data.Task;
         this.setState({ tasks: alltasks });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -188,7 +188,7 @@ class Tasks extends PureComponent {
   searchHandler(e) {
     console.log("[searchHandler] Search Term " + e.target.value.toString());
     this.setState({
-      searchTerm: e.target.value.toString()
+      searchTerm: e.target.value.toString(),
     });
     e.preventDefault();
   }
@@ -199,7 +199,7 @@ class Tasks extends PureComponent {
       todo = this.state.tasks
         .reverse()
         .filter(searchTask(this.state.searchTerm))
-        .map(task => {
+        .map((task) => {
           if (task.Catagory === 1) {
             return (
               <TodoItem
@@ -224,7 +224,7 @@ class Tasks extends PureComponent {
       incomplete = this.state.tasks
         .reverse()
         .filter(searchTask(this.state.searchTerm))
-        .map(task => {
+        .map((task) => {
           if (task.Catagory === 2) {
             return (
               <InProgressItem
@@ -249,7 +249,7 @@ class Tasks extends PureComponent {
       review = this.state.tasks
         .reverse()
         .filter(searchTask(this.state.searchTerm))
-        .map(task => {
+        .map((task) => {
           if (task.Catagory === 3) {
             return (
               <ReviewItem
@@ -274,7 +274,7 @@ class Tasks extends PureComponent {
       completed = this.state.tasks
         .reverse()
         .filter(searchTask(this.state.searchTerm))
-        .map(task => {
+        .map((task) => {
           if (task.Catagory === 4) {
             return (
               <CompletedItem
@@ -432,7 +432,7 @@ class Tasks extends PureComponent {
 }
 function searchTask(term) {
   console.log(term);
-  return function(x) {
+  return function (x) {
     return (
       x.TaskTitle.toLowerCase().includes(term.toLowerCase()) ||
       x.TaskDescription.toLowerCase().includes(term.toLowerCase()) ||

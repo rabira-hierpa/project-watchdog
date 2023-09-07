@@ -9,7 +9,7 @@ class QuickAddModal extends PureComponent {
       members: [],
       memberNames: [],
       deadlineError: false,
-      done: false
+      done: false,
     };
     this.memberNames = [];
     this.members = [];
@@ -20,7 +20,7 @@ class QuickAddModal extends PureComponent {
   UNSAFE_componentWillMount() {
     this.setState({
       milestone: this.nextState,
-      task: this.nextState
+      task: this.nextState,
     });
   }
   componentDidMount() {
@@ -38,18 +38,18 @@ class QuickAddModal extends PureComponent {
         method: "get",
         url:
           "/api/projects/" +
-          new URLSearchParams(this.props.location.search).get("id")
+          new URLSearchParams(this.props.location.search).get("id"),
       })
-      .then(response => {
+      .then((response) => {
         this.members = response.data.Member;
         this.setState({
-          members: response.data.Member
+          members: response.data.Member,
         });
         this.state.members.map((member, index) => {
           return this.getMemberNames(member);
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -59,16 +59,16 @@ class QuickAddModal extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + member
+        url: "/api/users/name/" + member,
       })
-      .then(response => {
+      .then((response) => {
         this.memberNames.push(response.data.Fname + " " + response.data.Lname);
         this.setState({
-          memberNames: this.memberNames
+          memberNames: this.memberNames,
         });
         console.log(this.state.memberNames);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -79,8 +79,8 @@ class QuickAddModal extends PureComponent {
       milestone: {
         title: e.target.value,
         desc: this.state.milestone.desc,
-        deadline: this.state.milestone.deadline
-      }
+        deadline: this.state.milestone.deadline,
+      },
     });
   }
 
@@ -89,8 +89,8 @@ class QuickAddModal extends PureComponent {
       milestone: {
         title: this.state.milestone.title,
         desc: e.target.value,
-        deadline: this.state.milestone.deadline
-      }
+        deadline: this.state.milestone.deadline,
+      },
     });
   }
 
@@ -102,13 +102,13 @@ class QuickAddModal extends PureComponent {
         milestone: {
           title: this.state.milestone.title,
           desc: this.state.milestone.desc,
-          deadline: deadline
+          deadline: deadline,
         },
-        deadlineError: false
+        deadlineError: false,
       });
     } else if (e.target.value === "" || e.target.value) {
       this.setState({
-        deadlineError: true
+        deadlineError: true,
       });
     }
   }
@@ -128,8 +128,8 @@ class QuickAddModal extends PureComponent {
         title: e.target.value,
         desc: this.state.task.desc,
         deadline: this.state.task.deadline,
-        assignedTo: this.state.task.assignedTo
-      }
+        assignedTo: this.state.task.assignedTo,
+      },
     });
   }
 
@@ -139,8 +139,8 @@ class QuickAddModal extends PureComponent {
         title: this.state.task.title,
         desc: e.target.value,
         deadline: this.state.task.deadline,
-        assignedTo: this.state.task.assignedTo
-      }
+        assignedTo: this.state.task.assignedTo,
+      },
     });
   }
 
@@ -152,13 +152,13 @@ class QuickAddModal extends PureComponent {
           title: this.state.task.title,
           desc: this.state.task.desc,
           deadline: deadline,
-          assignedTo: this.state.task.assignedTo
+          assignedTo: this.state.task.assignedTo,
         },
-        deadlineError: false
+        deadlineError: false,
       });
     } else if (e.target.value === "" || e.target.value) {
       this.setState({
-        deadlineError: true
+        deadlineError: true,
       });
     }
   }
@@ -169,8 +169,8 @@ class QuickAddModal extends PureComponent {
         title: this.state.task.title,
         desc: this.state.task.desc,
         deadline: this.state.task.deadline,
-        assignedTo: e.target.value
-      }
+        assignedTo: e.target.value,
+      },
     });
   }
 

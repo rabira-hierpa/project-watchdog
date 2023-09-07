@@ -12,7 +12,7 @@ class TaskModal extends PureComponent {
       memberNames: [],
       leader: false,
       completed: false,
-      deadlinError: false
+      deadlinError: false,
     };
     this.nextState = {};
     this.oldState = {};
@@ -22,17 +22,17 @@ class TaskModal extends PureComponent {
 
   UNSAFE_componentWillMount() {
     this.setState({
-      task: this.nextState
+      task: this.nextState,
     });
   }
   componentDidMount() {
     this.getProjectMembers();
     this.setState({
-      task: this.props.data
+      task: this.props.data,
     });
     if (this.props.catagory === 4) {
       this.setState({
-        completed: true
+        completed: true,
       });
     }
     this.oldState = this.state.task;
@@ -49,27 +49,27 @@ class TaskModal extends PureComponent {
         method: "get",
         url:
           "/api/projects/" +
-          new URLSearchParams(this.props.data.location.search).get("id")
+          new URLSearchParams(this.props.data.location.search).get("id"),
       })
-      .then(response => {
+      .then((response) => {
         this.members = response.data.Member;
         if (response.data.Leader === this.props.data.currentUser) {
           this.setState({
-            leader: true
+            leader: true,
           });
         } else {
           this.setState({
-            leader: false
+            leader: false,
           });
         }
         this.setState({
-          members: response.data.Member
+          members: response.data.Member,
         });
         this.members.map((member, index) => {
           return this.getMemberNames(member);
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -79,16 +79,16 @@ class TaskModal extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + member
+        url: "/api/users/name/" + member,
       })
-      .then(response => {
+      .then((response) => {
         this.memberNames.push(response.data.Fname + " " + response.data.Lname);
         this.setState({
-          memberNames: this.memberNames
+          memberNames: this.memberNames,
         });
         console.log(this.state.memberNames);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -119,8 +119,8 @@ class TaskModal extends PureComponent {
         catagory: this.state.task.catagory,
         user: this.state.task.user,
         files: this.state.task.files,
-        id: this.state.task.id
-      }
+        id: this.state.task.id,
+      },
     });
   }
 
@@ -134,8 +134,8 @@ class TaskModal extends PureComponent {
         catagory: this.state.task.catagory,
         user: this.state.task.user,
         files: this.state.task.files,
-        id: this.state.task.id
-      }
+        id: this.state.task.id,
+      },
     });
   }
   // When the date changes
@@ -152,9 +152,9 @@ class TaskModal extends PureComponent {
           catagory: this.state.task.catagory,
           user: this.state.task.user,
           files: this.state.task.files,
-          id: this.state.task.id
+          id: this.state.task.id,
         },
-        deadlinError: false
+        deadlinError: false,
       });
     } else {
       this.setState({
@@ -165,9 +165,9 @@ class TaskModal extends PureComponent {
           catagory: this.state.task.catagory,
           user: this.state.task.user,
           files: this.state.task.files,
-          id: this.state.task.id
+          id: this.state.task.id,
         },
-        deadlinError: true
+        deadlinError: true,
       });
     }
   }
@@ -181,8 +181,8 @@ class TaskModal extends PureComponent {
         catagory: e.target.value,
         user: this.state.task.user,
         files: this.state.task.files,
-        id: this.state.task.id
-      }
+        id: this.state.task.id,
+      },
     });
   }
   // When assigned is changed
@@ -195,8 +195,8 @@ class TaskModal extends PureComponent {
         catagory: this.state.task.catagory,
         user: e.target.value,
         files: this.state.task.files,
-        id: this.state.task.id
-      }
+        id: this.state.task.id,
+      },
     });
   }
 

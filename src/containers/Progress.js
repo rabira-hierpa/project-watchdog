@@ -15,7 +15,7 @@ class Progress extends Component {
     this.project = {};
     this.state = {
       chartData: {},
-      project: {}
+      project: {},
     };
   }
 
@@ -34,24 +34,24 @@ class Progress extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/projects/" + this.id
+        url: "/api/projects/" + this.id,
       })
-      .then(response => {
+      .then((response) => {
         this.tasks = response.data.Task;
         this.milestone = response.data.MileStone;
         this.progress = response.data.Progress;
         this.member = response.data.Member;
         this.history = response.data.History;
         this.setState({
-          project: response.data
+          project: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
       });
   }
@@ -67,7 +67,7 @@ class Progress extends Component {
           "Feb 04 2018",
           "Feb 19 2018",
           "Mar 24 2018",
-          "Apr 07 2018"
+          "Apr 07 2018",
         ],
         datasets: [
           {
@@ -80,11 +80,11 @@ class Progress extends Component {
               "rgba(75, 192, 192, 0.6)",
               "rgba(153, 102, 255, 0.6)",
               "rgba(255, 159, 64, 0.6)",
-              "rgba(255, 99, 132, 0.6)"
-            ]
-          }
-        ]
-      }
+              "rgba(255, 99, 132, 0.6)",
+            ],
+          },
+        ],
+      },
     });
   }
 
@@ -93,13 +93,13 @@ class Progress extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -116,14 +116,14 @@ class Progress extends Component {
   }
   // Handle completed tasks to count
   getCompletedTasks() {
-    let completed = this.tasks.filter(tasks => {
+    let completed = this.tasks.filter((tasks) => {
       return tasks.Catagory === 4;
     });
     return completed;
   }
   // Handle completed milestones to count
   getCompletedMilestones() {
-    let completed = this.milestone.filter(milestone => {
+    let completed = this.milestone.filter((milestone) => {
       return milestone.Status === 3;
     });
     return completed;
@@ -131,7 +131,7 @@ class Progress extends Component {
   render() {
     let style = {
       fontFamily: "Archivo Black",
-      fontWeight: "100"
+      fontWeight: "100",
     };
     let completedTasks = this.getCompletedTasks(),
       completedMilestones = this.getCompletedMilestones();

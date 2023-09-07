@@ -7,12 +7,12 @@ class CompletedItem extends Component {
     super(props);
     this.deadline = new Date(this.props.deadline);
     this.state = {
-      milestone: {}
+      milestone: {},
     };
   }
   UNSAFE_componentWillMount() {
     this.setState({
-      milestone: this.props
+      milestone: this.props,
     });
   }
   openModal() {
@@ -25,15 +25,15 @@ class CompletedItem extends Component {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <EditMilestone
         style={modalStyle}
         data={this.state.milestone}
         onRequestClose={() => true}
-      />
+      />,
     );
   }
   render() {

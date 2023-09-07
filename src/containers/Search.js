@@ -11,14 +11,14 @@ class Search extends Component {
     this.keyword = "";
     this.state = {
       userId: "",
-      results: []
+      results: [],
     };
   }
 
   UNSAFE_componentWillMount() {
     this.getUserid();
     this.keyword = new URLSearchParams(this.props.history.location).get(
-      "keyword"
+      "keyword",
     );
   }
 
@@ -31,15 +31,15 @@ class Search extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         this.setState({
-          userId: response.data
+          userId: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -49,13 +49,13 @@ class Search extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -64,15 +64,15 @@ class Search extends Component {
     axios
       .get(
         "/api/projects/search/" +
-          new URLSearchParams(this.props.location.search).get("keyword")
+          new URLSearchParams(this.props.location.search).get("keyword"),
       )
-      .then(response => {
+      .then((response) => {
         this.setState({
-          results: response.data
+          results: response.data,
         });
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -85,13 +85,13 @@ class Search extends Component {
         url: "/api/requests/" + projectID,
         data: {
           UserID: this.state.userId._id,
-          Date: Date.now()
-        }
+          Date: Date.now(),
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     this.getSerchResults();
@@ -100,7 +100,7 @@ class Search extends Component {
   render() {
     let searchResults;
     if (this.state.results.length > 0) {
-      searchResults = this.state.results.map(project => {
+      searchResults = this.state.results.map((project) => {
         return (
           <SearchTemplate
             key={project._id}

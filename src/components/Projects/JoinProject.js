@@ -6,20 +6,20 @@ class JoinProject extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectId: ""
+      projectId: "",
     };
   }
 
   UNSAFE_componentWillMount() {
     this.setState({
-      projectId: this.props.projectId
+      projectId: this.props.projectId,
     });
   }
   componentDidMount() {}
 
   onSubmit(e) {
     this.setState({
-      projectId: this.props.projectId
+      projectId: this.props.projectId,
     });
     console.log(this.state.projectId);
     this.props.sendRequest(this.state.projectId);
@@ -42,7 +42,7 @@ class JoinProject extends Component {
           aria-labelledby="joinProjectModalLabel"
           aria-hidden="true"
           style={{
-            height: "150px !important"
+            height: "150px !important",
           }}
         >
           <div className="modal-dialog" role="document">
@@ -103,7 +103,7 @@ class JoinProject extends Component {
 
 JoinProject.propTypes = {
   title: PropTypes.string,
-  leader: PropTypes.string
+  leader: PropTypes.string,
 };
 
 export default JoinProject;

@@ -1,15 +1,15 @@
 import React from "react";
 
-const ArchiveDetails = props => (
+const ArchiveDetails = (props) => (
   <div>
     {props.project.key}
     <div className="card hoverable">
       <div className="view overlay" />
       <div className="card-body">
-        <a href="" className="activator p-3 mr-2">
+        <span href="#" className="activator p-3 mr-2">
           <i className="fa fa-paperclip" />
           {props.project.filelocation.length}
-        </a>
+        </span>
         <h4 className="card-title">{props.project.title}</h4>
         <hr />
         <p className="card-text d-block">{props.project.description}</p>
@@ -21,20 +21,20 @@ const ArchiveDetails = props => (
         </p>
         <div className="card-text">
           <span className="h5">Files: </span>
-          {props.project.filelocation.map(data => {
+          {props.project.filelocation.map((data) => {
             return (
               <div>
-                <a>{data + " "}</a>
+                <span>{data + " "}</span>
               </div>
             );
           })}
         </div>
       </div>
-      <a onClick={props.collapse} className="link-text">
+      <span onClick={props.collapse} className="link-text">
         <h6 className="pull-right mr-2">
           Show Less <i className="fa fa-chevron-up" />
         </h6>
-      </a>
+      </span>
       <br />
     </div>
     <br />

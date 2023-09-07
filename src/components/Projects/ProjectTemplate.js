@@ -1,11 +1,10 @@
 import React, { PureComponent } from "react";
-import { withRouter } from "react-router-dom";
 import Axios from "axios";
 class ProjectTemplate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      memberNames: []
+      memberNames: [],
     };
     this.members = [];
   }
@@ -27,18 +26,18 @@ class ProjectTemplate extends PureComponent {
     // console.log("[ProjectTemplate.js] Inside getUserName");
     Axios.request({
       method: "get",
-      url: "/api/users/name/" + member
+      url: "/api/users/name/" + member,
     })
-      .then(response => {
+      .then((response) => {
         // console.log(response.data.Fname);
         let currentMembers = [...this.state.memberNames];
         currentMembers.push(response.data.Fname);
         this.setState({
-          memberNames: currentMembers
+          memberNames: currentMembers,
         });
         // this.members.push(response.data.Fname);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -81,7 +80,7 @@ class ProjectTemplate extends PureComponent {
                 role="progressbar"
                 style={{
                   width: Math.trunc(this.props.progress) + "%",
-                  height: "15px"
+                  height: "15px",
                 }}
                 aria-valuenow={this.props.progress}
                 aria-valuemin={0}
@@ -98,4 +97,4 @@ class ProjectTemplate extends PureComponent {
   }
 }
 
-export default withRouter(ProjectTemplate);
+export default ProjectTemplate;

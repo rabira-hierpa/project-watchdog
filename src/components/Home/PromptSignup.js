@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const PromptSignup = props => {
+const PromptSignup = (props) => {
   return (
     <div className="jumbotron marginRow">
       <div className="container-fluid text-center">

@@ -8,8 +8,8 @@ class AddItem extends Component {
         title: "",
         desc: "",
         deadline: "",
-        assignedTo: ""
-      }
+        assignedTo: "",
+      },
     };
   }
 
@@ -18,8 +18,8 @@ class AddItem extends Component {
       this.props.onAddTask(this.state.task);
       this.setState({
         task: {
-          title: ""
-        }
+          title: "",
+        },
       });
       e.target.value = "";
     }
@@ -34,8 +34,8 @@ class AddItem extends Component {
         title: e.target.value,
         desc: "",
         deadline: date,
-        assignedTo: this.props.currentUser
-      }
+        assignedTo: this.props.currentUser,
+      },
     });
   }
 

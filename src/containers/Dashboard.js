@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
@@ -16,7 +15,7 @@ class Dashboard extends Component {
       history: [],
       leaderName: "",
       userId: {},
-      memberNames: []
+      memberNames: [],
     };
     this.leaderName = "";
     this.milestones = [];
@@ -39,15 +38,15 @@ class Dashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         this.setState({
-          userId: response.data
+          userId: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -56,10 +55,10 @@ class Dashboard extends Component {
   onLogout() {
     axios
       .request({ method: "get", url: "/api/auth/logout" })
-      .then(response => {
+      .then((response) => {
         window.location.href = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -71,9 +70,9 @@ class Dashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/projects/" + this.user
+        url: "/api/projects/" + this.user,
       })
-      .then(response => {
+      .then((response) => {
         this.milestones = response.data.MileStone;
         this.tasks = response.data.Task;
         this.members = response.data.Member;
@@ -84,15 +83,15 @@ class Dashboard extends Component {
         this.setState({
           project: response.data,
           history: response.data.History.reverse(),
-          leaderId: response.data.Leader
+          leaderId: response.data.Leader,
         });
         this.getUserName(this.leaderId);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -103,14 +102,14 @@ class Dashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + userId
+        url: "/api/users/name/" + userId,
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
-          leaderName: response.data.Fname + " " + response.data.Lname
+          leaderName: response.data.Fname + " " + response.data.Lname,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     this.members.map((member, index) => {
@@ -123,27 +122,27 @@ class Dashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + member
+        url: "/api/users/name/" + member,
       })
-      .then(response => {
+      .then((response) => {
         this.memberNames.push(response.data.Fname + " " + response.data.Lname);
         this.setState({ memberNames: this.memberNames });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   // Get completed milestones
   getCompletedMilesStones() {
-    let completed = this.milestones.filter(milestones => {
+    let completed = this.milestones.filter((milestones) => {
       return milestones.Status === 3;
     });
     return completed;
   }
   // Get completed tasks
   getCompletedTasks() {
-    let completed = this.tasks.filter(tasks => {
+    let completed = this.tasks.filter((tasks) => {
       return tasks.Catagory === 4;
     });
     return completed;
@@ -234,16 +233,16 @@ class Dashboard extends Component {
     axios
       .request({
         method: "put",
-        url: "/api/projects/member/" + id + "/" + userID
+        url: "/api/projects/member/" + id + "/" + userID,
       })
-      .then(response => {
+      .then((response) => {
         this.removeRequestMember(reqId);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -255,20 +254,20 @@ class Dashboard extends Component {
     axios
       .request({
         method: "delete",
-        url: "/api/requests/" + id + "/" + reqId
+        url: "/api/requests/" + id + "/" + reqId,
       })
-      .then(response => {})
-      .catch(error => {
+      .then((response) => {})
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
     this.getUserProject();
   }
-  openModal = e => {
+  openModal = (e) => {
     let modalStyle = {
       content: {
         position: "relative",
@@ -278,8 +277,8 @@ class Dashboard extends Component {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <ProjectRequest
@@ -307,7 +306,7 @@ class Dashboard extends Component {
         <div className="py-3">
           <span
             className="btn btn-outline-success btn-rounded waves-effect"
-            onClick={event => this.openModal(event)}
+            onClick={(event) => this.openModal(event)}
           >
             <i className="fa fa-plus-circle fa-lg" />
             &nbsp; Add Member &nbsp;
@@ -532,4 +531,4 @@ class Dashboard extends Component {
   }
 }
 
-export default withRouter(Dashboard);
+export default Dashboard;

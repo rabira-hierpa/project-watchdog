@@ -1,7 +1,7 @@
 import React from "react";
 import { HorizontalBar } from "react-chartjs-2";
 
-const HorizontalChart = props => {
+const HorizontalChart = (props) => {
   return (
     <div className="col-md-6">
       <HorizontalBar
@@ -12,15 +12,15 @@ const HorizontalChart = props => {
           title: {
             display: true,
             text: props.title,
-            fontSize: 25
+            fontSize: 25,
           },
           legend: {
             display: true,
             position: props.position,
             labels: {
-              fontColor: "#000"
-            }
-          }
+              fontColor: "#000",
+            },
+          },
         }}
         redraw
       />

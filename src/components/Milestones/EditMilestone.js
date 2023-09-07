@@ -8,13 +8,13 @@ class EditMilestone extends PureComponent {
     this.state = {
       milestone: {},
       deadlineError: false,
-      show: false
+      show: false,
     };
   }
 
   UNSAFE_componentWillMount() {
     this.setState({
-      milestone: this.props.data
+      milestone: this.props.data,
     });
   }
 
@@ -25,8 +25,8 @@ class EditMilestone extends PureComponent {
         title: e.target.value,
         desc: this.state.milestone.desc,
         deadline: this.state.milestone.deadline,
-        status: this.state.milestone.status
-      }
+        status: this.state.milestone.status,
+      },
     });
   }
 
@@ -37,9 +37,9 @@ class EditMilestone extends PureComponent {
         title: this.state.milestone.title,
         desc: e.target.value,
         deadline: this.state.milestone.deadline,
-        status: this.state.milestone.status
+        status: this.state.milestone.status,
       },
-      deadlineError: false
+      deadlineError: false,
     });
   }
   onStatusChange(e) {
@@ -49,9 +49,9 @@ class EditMilestone extends PureComponent {
         title: this.state.milestone.title,
         desc: this.state.milestone.desc,
         deadline: this.state.milestone.deadline,
-        status: e.target.value
+        status: e.target.value,
       },
-      deadlineError: false
+      deadlineError: false,
     });
   }
 
@@ -65,13 +65,13 @@ class EditMilestone extends PureComponent {
           title: this.state.milestone.title,
           desc: this.state.milestone.desc,
           deadline: deadline,
-          status: this.state.milestone.status
+          status: this.state.milestone.status,
         },
-        deadlineError: false
+        deadlineError: false,
       });
     } else if (e.target.value === "" || e.target.value) {
       this.setState({
-        deadlineError: true
+        deadlineError: true,
       });
     }
   }
@@ -84,7 +84,7 @@ class EditMilestone extends PureComponent {
     } else {
       console.log("Form not submitted");
       this.setState({
-        deadlineError: true
+        deadlineError: true,
       });
       e.preventDefault();
     }
@@ -122,7 +122,7 @@ class EditMilestone extends PureComponent {
           aria-labelledby="editMilestoneModalLabel"
           aria-hidden="true"
           style={{
-            height: "150px !important"
+            height: "150px !important",
           }}
         >
           <div className="modal-dialog" role="document">
@@ -199,7 +199,7 @@ class EditMilestone extends PureComponent {
                           value="0"
                           disabled
                           style={{
-                            color: "grey"
+                            color: "grey",
                           }}
                         >
                           Choose Milestone status
@@ -242,7 +242,7 @@ class EditMilestone extends PureComponent {
 
 EditMilestone.propTypes = {
   title: PropTypes.string,
-  leader: PropTypes.string
+  leader: PropTypes.string,
 };
 
 export default EditMilestone;

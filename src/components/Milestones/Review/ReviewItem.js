@@ -7,13 +7,13 @@ class ReviewItem extends Component {
     super(props);
     this.deadline = new Date(this.props.deadline);
     this.state = {
-      milestone: {}
+      milestone: {},
     };
   }
 
   UNSAFE_componentWillMount() {
     this.setState({
-      milestone: this.props
+      milestone: this.props,
     });
   }
   openModal() {
@@ -26,8 +26,8 @@ class ReviewItem extends Component {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <EditMilestone
@@ -48,7 +48,7 @@ class ReviewItem extends Component {
           className="card hoverable item"
           data-toggle="modal"
           draggable
-          onDragStart={e => this.props.onDragStart(e, this.props.id)}
+          onDragStart={(e) => this.props.onDragStart(e, this.props.id)}
         >
           <div className="card-header red darken-2">
             <a className="card-title text-white">

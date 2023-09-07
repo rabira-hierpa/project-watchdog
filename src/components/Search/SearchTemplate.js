@@ -8,7 +8,7 @@ class SearchTemeplate extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      projectId: ""
+      projectId: "",
     };
   }
 
@@ -18,32 +18,32 @@ class SearchTemeplate extends PureComponent {
 
   componentDidMount() {
     this.setState({
-      projectId: this.props.id
+      projectId: this.props.id,
     });
   }
 
   getUserName(member) {
     Axios.request({
       method: "get",
-      url: "/api/users/name/" + member
+      url: "/api/users/name/" + member,
     })
-      .then(response => {
+      .then((response) => {
         let currentMembers = [...this.state.memberNames];
         currentMembers.push(response.data.Fname);
         this.setState({
-          memberNames: currentMembers
+          memberNames: currentMembers,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
-  disableClick = event => {
+  disableClick = (event) => {
     event.preventDefault();
   };
 
-  openModal = e => {
+  openModal = (e) => {
     let modalStyle = {
       content: {
         position: "relative",
@@ -53,8 +53,8 @@ class SearchTemeplate extends PureComponent {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <JoinProject
@@ -64,7 +64,7 @@ class SearchTemeplate extends PureComponent {
         projectId={this.props.id}
         sendRequest={this.props.sendRequest.bind(this)}
         onRequestClose={() => true}
-      />
+      />,
     );
     e.preventDefault();
   };
@@ -79,7 +79,9 @@ class SearchTemeplate extends PureComponent {
           </h5>
         </a>
       );
-    } else if (this.props.request.find(id => id.UserID === this.props.userid)) {
+    } else if (
+      this.props.request.find((id) => id.UserID === this.props.userid)
+    ) {
       joinStatus = (
         <a onClick={() => this.disableClick} className="grey-text">
           <h5 className="pull-right ">
@@ -89,7 +91,7 @@ class SearchTemeplate extends PureComponent {
       );
     } else {
       joinStatus = (
-        <a href="#!" onClick={event => this.openModal(event)}>
+        <a href="#!" onClick={(event) => this.openModal(event)}>
           <h5 className="pull-right">
             Join Project <i className="fa fa-chevron-right" />
           </h5>
@@ -134,7 +136,7 @@ class SearchTemeplate extends PureComponent {
                 role="progressbar"
                 style={{
                   width: Math.trunc(this.props.progress) + "%",
-                  height: "15px"
+                  height: "15px",
                 }}
                 aria-valuenow={Math.trunc(this.props.progress)}
                 aria-valuemin={0}
@@ -151,4 +153,4 @@ class SearchTemeplate extends PureComponent {
   }
 }
 
-export default withRouter(SearchTemeplate);
+export default SearchTemeplate;

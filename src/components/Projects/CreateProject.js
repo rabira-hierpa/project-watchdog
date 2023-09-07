@@ -7,20 +7,20 @@ class CreateProject extends PureComponent {
     this.state = {
       project: {
         leader: "",
-        memeber: ""
+        memeber: "",
       },
-      deadlineError: false
+      deadlineError: false,
     };
     this.nextState = {
       leader: this.props.leader_id,
-      member: this.props.leader_id
+      member: this.props.leader_id,
     };
     this.oldState = {};
   }
 
   UNSAFE_componentWillMount() {
     this.setState({
-      project: this.nextState
+      project: this.nextState,
     });
   }
   componentDidMount() {
@@ -37,8 +37,8 @@ class CreateProject extends PureComponent {
         desc: this.state.project.desc,
         leader: this.state.project.leader,
         member: this.state.project.member,
-        deadline: this.state.deadline
-      }
+        deadline: this.state.deadline,
+      },
     });
   }
 
@@ -49,9 +49,9 @@ class CreateProject extends PureComponent {
         desc: e.target.value,
         leader: this.state.project.leader,
         member: this.state.project.member,
-        deadline: this.state.deadline
+        deadline: this.state.deadline,
       },
-      deadlineError: true
+      deadlineError: true,
     });
   }
 
@@ -65,13 +65,13 @@ class CreateProject extends PureComponent {
           desc: this.state.project.desc,
           leader: this.state.project.leader,
           member: this.state.project.member,
-          deadline: deadline
+          deadline: deadline,
         },
-        deadlineError: false
+        deadlineError: false,
       });
     } else if (e.target.value === "" || e.target.value) {
       this.setState({
-        deadlineError: true
+        deadlineError: true,
       });
     }
   }
@@ -83,7 +83,7 @@ class CreateProject extends PureComponent {
     } else {
       console.log("Form not submitted");
       this.setState({
-        deadlineError: true
+        deadlineError: true,
       });
       e.preventDefault();
     }
@@ -181,7 +181,7 @@ class CreateProject extends PureComponent {
 
 CreateProject.propTypes = {
   title: PropTypes.string,
-  leader: PropTypes.string
+  leader: PropTypes.string,
 };
 
 export default CreateProject;

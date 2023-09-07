@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const MainFooter = props => {
+const MainFooter = (props) => {
   return (
     <footer className="container-fluid">
       <div className="row">
