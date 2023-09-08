@@ -20,11 +20,11 @@ cd project-watchdog/
 
 ### Install dependencies
 
-To install all the dependencies
+To install all the dependencies for both the backend and front-end
 
 ```bash
-npm install  #or
-yarn install
+npm run install-all  #or
+yarn run install-all
 ```
 
 To get the development server started
@@ -37,14 +37,23 @@ Or you can do
 
 ```bash
 git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
-cd watchdog-openday/
+cd project_watchdog/
 npm install # or yarn start
-npm start
+npm start # starts the front-end 
+```
+
+To run the backend (express app)
+
+```bash
+git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
+cd project_watchdog/server
+npm install # or yarn start
+npm start # starts the backend
 ```
 
 ## Deployment
 
-To deploye the app to your local server you can do
+To deploy the app to your local server you can do
 
 ```bash
 git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
