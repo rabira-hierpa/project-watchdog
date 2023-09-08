@@ -7,12 +7,12 @@ class IncompleteItem extends Component {
     super(props);
     this.deadline = new Date(this.props.deadline);
     this.state = {
-      milestone: {}
+      milestone: {},
     };
   }
   UNSAFE_componentWillMount() {
     this.setState({
-      milestone: this.props
+      milestone: this.props,
     });
   }
   openModal() {
@@ -25,15 +25,15 @@ class IncompleteItem extends Component {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <EditMilestone
         style={modalStyle}
         data={this.state.milestone}
         onRequestClose={() => true}
-      />
+      />,
     );
   }
 
@@ -52,7 +52,7 @@ class IncompleteItem extends Component {
       >
         <div
           draggable
-          onDragStart={e => this.props.onDragStart(e, this.props.id)}
+          onDragStart={(e) => this.props.onDragStart(e, this.props.id)}
           className="card hoverable item"
           data-toggle="modal"
           data-target="#editMilestoneModal21"

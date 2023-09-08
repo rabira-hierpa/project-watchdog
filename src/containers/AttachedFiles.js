@@ -9,41 +9,29 @@ class AttachedFiles extends Component {
     super(props);
     this.props = props;
     this.state = {
-      id: ""
+      id: "",
     };
     this.quickadd = "Quick Add";
   }
 
-  unsafe_componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
   }
-
-  componentDidMount() {}
-
-  unsafe_componentWillReceiveProps(nextProps) {}
-
-  shouldComponentUpdate(nextProps, nextState) {}
-
-  unsafe_componentWillUpdate(nextProps, nextState) {}
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  componentWillUnmount() {}
 
   // Get the id of the logged in user
   getUserid() {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         this.setState({
-          userId: response.data
+          userId: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -53,13 +41,13 @@ class AttachedFiles extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }

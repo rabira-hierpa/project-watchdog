@@ -8,34 +8,33 @@ class ProjectRequest extends Component {
     super(props);
     this.state = {
       projectId: "",
-      memberNames: []
+      memberNames: [],
     };
     this.memberNames = [];
   }
 
   UNSAFE_componentWillMount() {
-    this.props.requestList.map(member => {
+    this.props.requestList.map((member) => {
       this.getMemberNames(member.UserID, member._id);
       return null;
     });
-    console.log(this.props.requestList);
   }
   componentDidMount() {}
   // Get group members name
   getMemberNames(member, reqId) {
     Axios.request({
       method: "get",
-      url: "/api/users/name/" + member
+      url: "/api/users/name/" + member,
     })
-      .then(response => {
+      .then((response) => {
         this.memberNames.push({
           name: response.data.Fname + " " + response.data.Lname,
           id: member,
-          reqId: reqId // request Id
+          reqId: reqId, // request Id
         });
         this.setState({ memberNames: this.memberNames });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -66,14 +65,18 @@ class ProjectRequest extends Component {
         return (
           <li key={index} className="list-group-item">
             {member.name}
-            <a onClick={e => this.onDenyRequest(e, member.reqId)}>
+            <a onClick={(e) => this.onDenyRequest(e, member.reqId)}>
               <span className="pull-right btn btn-sm btn-danger">
-                <i className="fa fa-trash-o" aria-hidden="true" />Deny
+                <i className="fa fa-trash-o" aria-hidden="true" />
+                Deny
               </span>
             </a>
-            <a onClick={e => this.onAcceptRequest(e, member.id, member.reqId)}>
+            <a
+              onClick={(e) => this.onAcceptRequest(e, member.id, member.reqId)}
+            >
               <span className="pull-right btn btn-sm btn-success">
-                <i className="fa fa-check" aria-hidden="true" />Accept
+                <i className="fa fa-check" aria-hidden="true" />
+                Accept
               </span>
             </a>
           </li>
@@ -94,7 +97,7 @@ class ProjectRequest extends Component {
           aria-labelledby="joinProjectModalLabel"
           aria-hidden="true"
           style={{
-            height: "250px !important"
+            height: "250px !important",
           }}
         >
           <div className="modal-dialog" role="document">
@@ -135,7 +138,7 @@ class ProjectRequest extends Component {
 
 ProjectRequest.propTypes = {
   title: PropTypes.string,
-  leader: PropTypes.string
+  leader: PropTypes.string,
 };
 
 export default ProjectRequest;

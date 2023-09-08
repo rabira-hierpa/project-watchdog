@@ -20,15 +20,15 @@ class BarChart extends Component {
             title: {
               display: true,
               text: this.props.title,
-              fontSize: 25
+              fontSize: 25,
             },
             legend: {
               display: true,
               position: this.props.position,
               labels: {
-                fontColor: "#000"
-              }
-            }
+                fontColor: "#000",
+              },
+            },
           }}
           redraw
         />

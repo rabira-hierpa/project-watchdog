@@ -1,7 +1,7 @@
 import React from "react";
 // import { NavLink } from "react-router-dom";
 
-const Sidebar = props => {
+const Sidebar = (props) => {
   return (
     <div id="slide-out" className="blue darken-3 side-nav">
       <ul className="custom-scrollbar list-unstyled">

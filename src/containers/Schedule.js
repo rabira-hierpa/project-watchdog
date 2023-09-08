@@ -11,7 +11,7 @@ class Schedule extends Component {
     this.state = {
       userId: "",
       milestones: [],
-      tasks: []
+      tasks: [],
     };
     this.quickadd = "Quick Add";
   }
@@ -31,15 +31,15 @@ class Schedule extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         this.setState({
-          userId: response.data
+          userId: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -49,13 +49,13 @@ class Schedule extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -66,18 +66,18 @@ class Schedule extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/milestones/all/" + this.id
+        url: "/api/milestones/all/" + this.id,
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
-          milestones: response.data.MileStone
+          milestones: response.data.MileStone,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -89,16 +89,16 @@ class Schedule extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/tasks/all/" + this.id
+        url: "/api/tasks/all/" + this.id,
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ tasks: response.data.Task });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });

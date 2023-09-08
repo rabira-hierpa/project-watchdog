@@ -1,6 +1,6 @@
 import React from "react";
 
-const PageHeader = props => {
+const PageHeader = (props) => {
   return (
     <div>
       <h3 className="mt-5 mb-0 ml-5 primary-darker-hover">

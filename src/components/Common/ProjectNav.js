@@ -10,7 +10,7 @@ class ProjectNav extends Component {
     this.state = {
       username: "",
       id: "",
-      error: ""
+      error: "",
     };
     this.keyword = "";
   }
@@ -28,41 +28,38 @@ class ProjectNav extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         if (response.data._id) {
           this.setState({
-            id: response.data._id
+            id: response.data._id,
           });
           this.userName(response.data._id);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
   }
 
-  userName = userid => {
+  userName = (userid) => {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + userid
+        url: "/api/users/name/" + userid,
       })
-      .then(response => {
-        console.log(response.data);
+      .then((response) => {
         if (response.data.Fname) {
           this.setState({
-            username: response.data.Fname
+            username: response.data.Fname,
           });
         } else {
           window.location.href = "http://localhost:3000/signin";
         }
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   onChange(e) {
@@ -82,7 +79,7 @@ class ProjectNav extends Component {
   }
   render() {
     const style = {
-      height: "30px; !important"
+      height: "30px; !important",
     };
     let sidebar, icon, details, quickadd, projects;
 
@@ -227,7 +224,8 @@ class ProjectNav extends Component {
                     className="dropdown-item"
                     onClick={() => this.props.onLogout()}
                   >
-                    <i className="fa fa-sign-out fa-sm fa-fw" />Logout
+                    <i className="fa fa-sign-out fa-sm fa-fw" />
+                    Logout
                   </a>
                 </div>
               </li>

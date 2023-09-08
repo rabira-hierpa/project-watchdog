@@ -17,7 +17,7 @@ class Milestones extends PureComponent {
       milestones: [],
       userId: "",
       searchTerm: "",
-      type: 0
+      type: 0,
     };
     this.id = "";
     this.user = "";
@@ -36,17 +36,17 @@ class Milestones extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data._id;
         this.setState({
           userId: response.data._id,
-          type: response.data.Type
+          type: response.data.Type,
         });
         console.log("User id " + this.state.userId);
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -56,19 +56,19 @@ class Milestones extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         window.location.href = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   // Get completed milestones
   getCompletedMilesStones() {
-    let completed = this.state.milestones.filter(milestones => {
+    let completed = this.state.milestones.filter((milestones) => {
       return milestones.Status === 3;
     });
     return completed;
@@ -80,18 +80,18 @@ class Milestones extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/milestones/all/" + this.id
+        url: "/api/milestones/all/" + this.id,
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
-          milestones: response.data.MileStone
+          milestones: response.data.MileStone,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -108,22 +108,22 @@ class Milestones extends PureComponent {
           MileStoneDescription: milestone.desc,
           DeadLine: milestone.deadline, // Change the file gets uploaded
           FileLocation: "",
-          Status: 1
-        }
+          Status: 1,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data.MileStone);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
         this.setState({
-          milestones: allmilestones
+          milestones: allmilestones,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -147,10 +147,10 @@ class Milestones extends PureComponent {
           MileStoneTitle: milestone.title,
           MileStoneDescription: milestone.desc,
           DeadLine: milestone.deadline,
-          Status: milestone.status
-        }
+          Status: milestone.status,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         // Increase project progress when a milestone completes
         if (milestone.status === "3") {
@@ -159,14 +159,14 @@ class Milestones extends PureComponent {
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
         this.setState({
-          milestones: allmilestones
+          milestones: allmilestones,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured while trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -174,8 +174,7 @@ class Milestones extends PureComponent {
   // Calculate progress on new milestone, completed milestone and deleted milestone
   calcuateProgress() {
     let progress =
-      this.getCompletedMilesStones().length /
-      this.state.milestones.length *
+      (this.getCompletedMilesStones().length / this.state.milestones.length) *
       100;
 
     this.id = new URLSearchParams(this.props.location.search).get("id");
@@ -184,18 +183,18 @@ class Milestones extends PureComponent {
         method: "put",
         url: "/api/projects/progress/" + this.id,
         data: {
-          Progress: progress
-        }
+          Progress: progress,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         console.log("progress added to " + progress);
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -213,21 +212,21 @@ class Milestones extends PureComponent {
           "/" +
           milestone.id +
           "/" +
-          this.state.userId
+          this.state.userId,
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
         this.setState({
-          milestones: allmilestones
+          milestones: allmilestones,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -237,12 +236,12 @@ class Milestones extends PureComponent {
   // Search Milestone
   searchHandler(e) {
     this.setState({
-      searchTerm: e.target.value
+      searchTerm: e.target.value,
     });
     e.preventDefault();
   }
 
-  statusChangeHandler = milestone => {
+  statusChangeHandler = (milestone) => {
     this.id = new URLSearchParams(this.props.location.search).get("id");
     axios
       .request({
@@ -258,28 +257,28 @@ class Milestones extends PureComponent {
           MileStoneTitle: milestone.MileStoneTitle,
           MileStoneDescription: milestone.MileStoneDescription,
           DeadLine: milestone.DeadLine,
-          Status: milestone.Status
-        }
+          Status: milestone.Status,
+        },
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         let allmilestones = this.state.milestones;
         allmilestones = response.data.MileStone;
         this.setState({
-          milestones: allmilestones
+          milestones: allmilestones,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
   };
 
-  onDrageOver = e => {
+  onDrageOver = (e) => {
     e.preventDefault();
   };
   onDragStart = (e, id) => {
@@ -289,7 +288,7 @@ class Milestones extends PureComponent {
   };
   onDrop = (e, status) => {
     let id = e.dataTransfer.getData("id");
-    let milestones = this.state.milestones.filter(milestone => {
+    let milestones = this.state.milestones.filter((milestone) => {
       if (milestone._id === id) {
         milestone.Status = status;
         return milestone;
@@ -311,7 +310,7 @@ class Milestones extends PureComponent {
           );
         })
         .filter(searchMilestones(this.state.searchTerm))
-        .map(milestone => {
+        .map((milestone) => {
           if (milestone.Status === 1) {
             return (
               <IncompleteItem
@@ -338,7 +337,7 @@ class Milestones extends PureComponent {
           );
         })
         .filter(searchMilestones(this.state.searchTerm))
-        .map(milestone => {
+        .map((milestone) => {
           if (milestone.Status === 2) {
             return (
               <ReviewItem
@@ -365,7 +364,7 @@ class Milestones extends PureComponent {
           );
         })
         .filter(searchMilestones(this.state.searchTerm))
-        .map(milestone => {
+        .map((milestone) => {
           if (milestone.Status === 3) {
             return (
               <CompletedItem
@@ -446,8 +445,8 @@ class Milestones extends PureComponent {
                 <div className="row">
                   <div
                     className="col-lg-4 col-md-6 mb-3"
-                    onDragOver={e => this.onDrageOver(e)}
-                    onDrop={e => this.onDrop(e, 1)}
+                    onDragOver={(e) => this.onDrageOver(e)}
+                    onDrop={(e) => this.onDrop(e, 1)}
                   >
                     <div className="text-center primary-text mb-4">
                       <h3>
@@ -465,8 +464,8 @@ class Milestones extends PureComponent {
                   </div>
                   <div
                     className="col-lg-4 col-md-6 mb-3"
-                    onDragOver={e => this.onDrageOver(e)}
-                    onDrop={e => this.onDrop(e, 2)}
+                    onDragOver={(e) => this.onDrageOver(e)}
+                    onDrop={(e) => this.onDrop(e, 2)}
                   >
                     <div className="text-center primary-text mb-4">
                       <h3>
@@ -508,7 +507,7 @@ class Milestones extends PureComponent {
 }
 
 function searchMilestones(term) {
-  return function(x) {
+  return function (x) {
     return (
       x.MileStoneTitle.toLowerCase().includes(term.toLowerCase()) ||
       x.MileStoneDescription.toLowerCase().includes(term.toLowerCase()) ||

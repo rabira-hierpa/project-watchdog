@@ -10,12 +10,12 @@ class History extends Component {
     this.props = props;
     this.state = {
       userId: "",
-      history: []
+      history: [],
     };
     this.quickadd = "Quick Add";
   }
 
-  unsafe_componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getUserid();
     // this.getProjectHistory();
   }
@@ -25,15 +25,15 @@ class History extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         this.setState({
-          userId: response.data._id
+          userId: response.data._id,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -43,13 +43,13 @@ class History extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -59,15 +59,15 @@ class History extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/history/" + id
+        url: "/api/history/" + id,
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
-          history: response.data.History
+          history: response.data.History,
         });
         console.log(this.state.history);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }

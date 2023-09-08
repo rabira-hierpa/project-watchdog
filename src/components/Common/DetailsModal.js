@@ -2,7 +2,7 @@ import React from "react";
 
 const DetailsModal = () => {
   const style = {
-    width: "45%"
+    width: "45%",
   };
   return (
     <div
@@ -39,19 +39,22 @@ const DetailsModal = () => {
                   <i
                     className="fa fa-user-circle-o fa-lg "
                     aria-hidden="true"
-                  />&nbsp;
+                  />
+                  &nbsp;
                 </a>
                 <a href="#!">
                   <i
                     className="fa fa-user-circle-o fa-lg "
                     aria-hidden="true"
-                  />&nbsp;
+                  />
+                  &nbsp;
                 </a>
                 <a href="#!">
                   <i
                     className="fa fa-user-circle-o fa-lg "
                     aria-hidden="true"
-                  />&nbsp;
+                  />
+                  &nbsp;
                 </a>
                 <a href="#!">
                   <i className="fa fa-user-plus fa-lg " aria-hidden="true" />

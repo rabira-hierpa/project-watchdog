@@ -8,7 +8,7 @@ class ArchiveTemplate extends PureComponent {
     this.props = props;
     this.state = {
       project: this.props,
-      showDetail: false
+      showDetail: false,
     };
   }
 

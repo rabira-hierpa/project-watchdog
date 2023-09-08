@@ -7,13 +7,13 @@ class ReviewItem extends Component {
     super(props);
     this.state = {
       username: "",
-      view: {}
+      view: {},
     };
     this.deadline = new Date(this.props.deadline);
     this.data = "";
   }
 
-  unsafe_componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.data = this.props;
   }
   componentDidMount() {
@@ -26,7 +26,7 @@ class ReviewItem extends Component {
       : false;
   }
 
-  unsafe_componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     this.data = nextProps;
   }
   componentDidUpdate(nextProps, nextState) {
@@ -37,19 +37,19 @@ class ReviewItem extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + this.props.user
+        url: "/api/users/name/" + this.props.user,
       })
-      .then(response => {
+      .then((response) => {
         this.setState(
           {
-            username: response.data
+            username: response.data,
           },
           () => {
             // console.log(this.state.username);
           }
         );
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -64,8 +64,8 @@ class ReviewItem extends Component {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <TaskModal

@@ -8,7 +8,7 @@ class Charts extends Component {
     super(props);
     this.state = {
       project: {},
-      tasks: {}
+      tasks: {},
     };
     this.taskData = {};
     this.milestoneData = {};
@@ -35,58 +35,55 @@ class Charts extends Component {
     displayTitle: true,
     displayLedgend: true,
     ledgendPosition: "right",
-    displayText: ""
+    displayText: "",
   };
 
   setTaskData = () => {
     // let todo, inprogress, review, completed;
-    this.todoTask = this.task.filter(tasks => {
+    this.todoTask = this.task.filter((tasks) => {
       return tasks.Catagory === 1;
     });
-    this.inprogressTask = this.task.filter(tasks => {
+    this.inprogressTask = this.task.filter((tasks) => {
       return tasks.Catagory === 2;
     });
-    this.reviewTask = this.task.filter(tasks => {
+    this.reviewTask = this.task.filter((tasks) => {
       return tasks.Catagory === 3;
     });
-    this.completedTask = this.task.filter(tasks => {
+    this.completedTask = this.task.filter((tasks) => {
       return tasks.Catagory === 4;
     });
   };
   setMilestoneData = () => {
-    this.mIncomplete = this.milestone.filter(milestones => {
+    this.mIncomplete = this.milestone.filter((milestones) => {
       return milestones.Status === 1;
     });
-    this.mReview = this.milestone.filter(milestones => {
+    this.mReview = this.milestone.filter((milestones) => {
       return milestones.Status === 2;
     });
-    this.mComplete = this.milestone.filter(milestones => {
+    this.mComplete = this.milestone.filter((milestones) => {
       return milestones.Status === 3;
     });
   };
   setProgressLables = () => {
     this.progressDate = this.progress
-      .filter(history => {
+      .filter((history) => {
         if (history.Progress !== undefined) {
           return history;
         }
       })
-      .map(progress => {
-        return new Date(progress.Date)
-          .toDateString()
-          .substr(3, 12)
-          .toString();
+      .map((progress) => {
+        return new Date(progress.Date).toDateString().substr(3, 12).toString();
       });
   };
 
   setProjectProgress = () => {
     this.projectProgress = this.progress
-      .filter(history => {
+      .filter((history) => {
         if (history.Progress !== undefined) {
           return history;
         }
       })
-      .map(progress => {
+      .map((progress) => {
         return Math.trunc(progress.Progress);
       });
   };
@@ -118,16 +115,16 @@ class Charts extends Component {
             this.todoTask.length,
             this.inprogressTask.length,
             this.reviewTask.length,
-            this.completedTask.length
+            this.completedTask.length,
           ],
           backgroundColor: [
             "rgba(54, 162, 235, 0.8)",
             "rgba(255, 206, 86, 0.8)",
             "rgba(255, 99, 132, 0.8)",
-            "rgba(75, 200, 50, 0.7)"
-          ]
-        }
-      ]
+            "rgba(75, 200, 50, 0.7)",
+          ],
+        },
+      ],
     };
     this.milestoneData = {
       labels: ["In progress", "Review", "Completed"],
@@ -137,15 +134,15 @@ class Charts extends Component {
           data: [
             this.mIncomplete.length,
             this.mReview.length,
-            this.mComplete.length
+            this.mComplete.length,
           ],
           backgroundColor: [
             "rgba(255, 206, 86, 0.8)",
             "rgba(255, 99, 132, 0.8)",
-            "rgba(75, 200, 50, 0.7)"
-          ]
-        }
-      ]
+            "rgba(75, 200, 50, 0.7)",
+          ],
+        },
+      ],
     };
     this.progressData = {
       labels: this.progressDate,
@@ -162,10 +159,10 @@ class Charts extends Component {
             "rgba(54, 162, 235, 0.8)",
             "rgba(255, 206, 86, 0.8)",
             "rgba(255, 99, 132, 0.8)",
-            "rgba(75, 200, 50, 0.7)"
-          ]
-        }
-      ]
+            "rgba(75, 200, 50, 0.7)",
+          ],
+        },
+      ],
     };
   }
 

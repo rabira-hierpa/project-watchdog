@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Landing from "./containers/Landing";
 import Signin from "./containers/Signin";
 import Signup from "./containers/Signup";
@@ -20,28 +20,28 @@ import Search from "./containers/Search";
 class Home extends Component {
   render() {
     return (
-      <Switch>
-        <Route path="/" exact component={Landing} />
-        <Route path="/signin" component={Signin} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/projects" component={Projects} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/tasks" component={Tasks} />
-        <Route path="/milestones" component={Milestones} />
-        <Route path="/repository" component={Archive} />
-        <Route path="/progress" component={Progress} />
-        <Route path="/chat" component={Chat} />
-        <Route path="/schedule" component={Schedule} />
-        <Route path="/history" component={History} />
-        <Route path="/files" component={AttachedFiles} />
-        <Route path="/admin-dashboard" component={AdminDashboard} />
-        <Route paht="/search" exact component={Search} />
-        <Route component={ErrorPage} />
+      <Routes>
+        <Route path="/" exact element={<Landing />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/milestones" element={<Milestones />} />
+        <Route path="/repository" element={<Archive />} />
+        <Route path="/progress" element={<Progress />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/schedule" element={<Schedule />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/files" element={<AttachedFiles />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route paht="/search" exact element={<Search />} />
+        <Route element={<ErrorPage />} />
         {/*
             <Route path="/project/view" component={TaskModal} />
             <Route path="/repository-view/" component={ArchiveDetails} />
         */}
-      </Switch>
+      </Routes>
     );
   }
 }

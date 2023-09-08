@@ -10,7 +10,7 @@ class AdminDashboard extends Component {
     this.props = props;
     this.state = {
       projects: [],
-      userId: ""
+      userId: "",
     };
     this.quickadd = "Quick Add";
   }
@@ -28,15 +28,15 @@ class AdminDashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         this.setState({
-          userId: response.data
+          userId: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -46,13 +46,13 @@ class AdminDashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -62,15 +62,15 @@ class AdminDashboard extends Component {
     axios
       .request({
         method: "get",
-        url: "/api/projects"
+        url: "/api/projects",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         this.setState({
-          projects: response.data
+          projects: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });

@@ -7,7 +7,7 @@ class InprogressItem extends PureComponent {
     super(props);
     this.state = {
       username: "",
-      view: {}
+      view: {},
     };
     this.deadline = new Date(this.props.deadline);
     this.data = "";
@@ -30,14 +30,14 @@ class InprogressItem extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/users/name/" + this.props.user
+        url: "/api/users/name/" + this.props.user,
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
-          username: response.data
+          username: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -52,8 +52,8 @@ class InprogressItem extends PureComponent {
         boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 0px",
         overflow: "auto",
         borderRadius: "4px",
-        outline: "none"
-      }
+        outline: "none",
+      },
     };
     ModalManager.open(
       <TaskModal
@@ -61,7 +61,7 @@ class InprogressItem extends PureComponent {
         data={this.props}
         onRequestClose={() => true}
         {...this.props}
-      />
+      />,
     );
   }
   render() {

@@ -14,7 +14,7 @@ class Archive extends PureComponent {
       userId: "",
       searchTerm: "",
       error: false,
-      erro_mesg: ""
+      erro_mesg: "",
     };
   }
 
@@ -27,14 +27,14 @@ class Archive extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
-          userId: response.data._id
+          userId: response.data._id,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -44,13 +44,13 @@ class Archive extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -64,19 +64,19 @@ class Archive extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/archive"
+        url: "/api/archive",
       })
-      .then(response => {
+      .then((response) => {
         this.setState({
           projects: response.data,
-          error: false
+          error: false,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again."
+            "Some error occured whilet trying to fetch the data! Please try again.",
         });
         console.log(error);
       });
@@ -84,7 +84,7 @@ class Archive extends PureComponent {
 
   searchHandler(e) {
     this.setState({
-      searchTerm: e.target.value
+      searchTerm: e.target.value,
     });
     e.preventDefault();
   }
@@ -164,7 +164,7 @@ class Archive extends PureComponent {
 }
 
 function searchArchive(term) {
-  return function(x) {
+  return function (x) {
     return (
       x.Title.toLowerCase().includes(term.toLowerCase()) ||
       x.Description.toLowerCase().includes(term.toLowerCase()) ||

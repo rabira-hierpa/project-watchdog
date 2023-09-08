@@ -17,7 +17,7 @@ class Projects extends PureComponent {
       projects: [],
       erro_mesg: "",
       error: false,
-      id: ""
+      id: "",
     };
   }
 
@@ -37,15 +37,15 @@ class Projects extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/auth/show/current"
+        url: "/api/auth/show/current",
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         this.setState({
-          id: response.data
+          id: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         // User is not logged in
         window.location.href = "http://localhost:3000/signin";
       });
@@ -58,13 +58,13 @@ class Projects extends PureComponent {
         method: "get",
         url:
           "/api/users/name/" +
-          new URLSearchParams(this.props.location.search).get("id")
+          new URLSearchParams(this.props.location.search).get("id"),
       })
-      .then(response => {
+      .then((response) => {
         this.userName = response.data.Fname;
         // this.members.push(response.data.Fname);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -73,13 +73,13 @@ class Projects extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/auth/logout"
+        url: "/api/auth/logout",
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         window.location.href = "http://localhost:3000/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -91,19 +91,19 @@ class Projects extends PureComponent {
     axios
       .request({
         method: "get",
-        url: "/api/projects/user/" + this.user
+        url: "/api/projects/user/" + this.user,
       })
-      .then(response => {
+      .then((response) => {
         console.log(response.data);
         this.setState({
-          projects: response.data
+          projects: response.data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -119,22 +119,22 @@ class Projects extends PureComponent {
           ProjectDescription: newProject.desc,
           DeadLine: newProject.deadline,
           Leader: newProject.leader,
-          Member: newProject.member
-        }
+          Member: newProject.member,
+        },
       })
-      .then(response => {
+      .then((response) => {
         // console.log(response.data);
         let allprojects = [...this.state.projects];
         allprojects.push(response.data);
         this.setState({
-          projects: allprojects
+          projects: allprojects,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again"
+            "Some error occured whilet trying to fetch the data! Please try again",
         });
         console.log(error);
       });
@@ -142,7 +142,7 @@ class Projects extends PureComponent {
   render() {
     let allprojects, errorMsg;
     if (this.state.projects.length > 0 && this.state.error === false) {
-      allprojects = this.state.projects.map(project => {
+      allprojects = this.state.projects.map((project) => {
         return (
           <ProjectTemplate
             key={project._id}
