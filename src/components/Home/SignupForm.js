@@ -122,7 +122,7 @@ class SignupForm extends Component {
       },
     })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           this.setState({ loginSuccess: true });
           window.location.href = "http://localhost:3000/signin";
         }
