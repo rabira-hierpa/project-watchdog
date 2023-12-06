@@ -5,7 +5,7 @@
   "proxy": "http://localhost:4500",
   "dependencies": {
     "@nicolo-ribaudo/semver-v6": "^6.3.3",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "babel-eslint": "^8.2.3",
     "bootstrap": "^5.3.0",
     "chart.js": "^4.3.0",
