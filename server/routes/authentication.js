@@ -118,26 +118,36 @@ passport.use(
   )
 );
 
-// Login route  auth/login
-router.get("/login", (req, res) => {
-  res.send({ message: "success" });
-});
 router.get("/login/fail", (req, res) => {
   res.send({ message: "fail" });
 });
 
 // Login route
 router.post("/login/local", (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: ServerIp.ipAddress + "/api/auth/login",
-    failureRedirect: ServerIp.ipAddress + "/api/auth/login/fail",
-    failureFlash: false,
+  return passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.redirect(ServerIp.ipAddress + "/api/auth/login/fail");
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      // Exclude password and other sensitive data before sending the user object
+      const { Password, ...userWithoutPassword } = user._doc;
+      return res.send(userWithoutPassword);
+    });
   })(req, res, next);
 });
 
 // Show currently loged in user
 router.get("/show/current", (req, res) => {
-  res.send(req.user);
+  const { user } = req;
+  const { Password, ...rest } = user["_doc"];
+
+  res.send(rest);
 });
 
 // Registor route

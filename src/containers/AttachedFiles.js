@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class AttachedFiles extends Component {
   constructor(props) {
@@ -82,4 +83,4 @@ class AttachedFiles extends Component {
 
 AttachedFiles.propTypes = {};
 
-export default AttachedFiles;
+export default withNavigation(AttachedFiles);

@@ -5,6 +5,9 @@ import MainFooter from "../components/Common/MainFooter";
 import PageHeader from "../components/Common/PageHeader";
 import ProjectTemplate from "../components/Projects/ProjectTemplate";
 import CreateProject from "../components/Projects/CreateProject";
+import withNavigation from "../utils/wrapper/withNavigator";
+import { httpService } from "../utils/helpers";
+import { BASE_URL } from "../utils/constants";
 
 class Projects extends PureComponent {
   constructor(props) {
@@ -53,13 +56,12 @@ class Projects extends PureComponent {
 
   // Get fname of a user
   getUserName() {
-    axios
-      .request({
-        method: "get",
-        url:
-          "/api/users/name/" +
-          new URLSearchParams(this.props.location.search).get("id"),
-      })
+    httpService
+      .get(
+        `${BASE_URL}/api/users/name/
+        ${new URLSearchParams(this.props.location.search).get("id")}
+    `
+      )
       .then((response) => {
         this.userName = response.data.Fname;
         // this.members.push(response.data.Fname);
@@ -110,17 +112,13 @@ class Projects extends PureComponent {
   }
 
   addNewProject(newProject) {
-    axios
-      .request({
-        method: "post",
-        url: "/api/projects/",
-        data: {
-          ProjectTitle: newProject.title,
-          ProjectDescription: newProject.desc,
-          DeadLine: newProject.deadline,
-          Leader: newProject.leader,
-          Member: newProject.member,
-        },
+    httpService
+      .post(`${BASE_URL}/api/projects`, {
+        ProjectTitle: newProject.title,
+        ProjectDescription: newProject.desc,
+        DeadLine: newProject.deadline,
+        Leader: newProject.leader,
+        Member: newProject.member,
       })
       .then((response) => {
         // console.log(response.data);
@@ -213,4 +211,4 @@ class Projects extends PureComponent {
   }
 }
 
-export default Projects;
+export default withNavigation(Projects);

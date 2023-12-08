@@ -9,6 +9,7 @@ import AddItem from "../components/Tasks/AddItem";
 import TodoItem from "../components/Tasks/Todo/TodoItem";
 import ReviewItem from "../components/Tasks/Review/ReviewItem";
 import CompletedItem from "../components/Tasks/Completed/CompletedItem";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Tasks extends PureComponent {
   constructor(props) {
@@ -440,4 +441,4 @@ function searchTask(term) {
     );
   };
 }
-export default Tasks;
+export default withNavigation(Tasks);

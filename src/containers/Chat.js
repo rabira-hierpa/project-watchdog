@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
+import withNavigation from "../utils/wrapper/withNavigator";
 class Chat extends Component {
   constructor(props) {
     super(props);
@@ -82,4 +83,4 @@ class Chat extends Component {
 
 Chat.propTypes = {};
 
-export default Chat;
+export default withNavigation(Chat);

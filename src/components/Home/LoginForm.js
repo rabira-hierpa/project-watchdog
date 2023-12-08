@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { NavLink, Navigate, Route } from "react-router-dom";
-import Axios from "axios";
+import { NavLink } from "react-router-dom";
+import { BASE_URL } from "../../utils/constants";
+import { httpService } from "../../utils/helpers";
+import withNavigation from "../../utils/wrapper/withNavigator";
 
 class LoginForm extends Component {
   constructor(props) {
@@ -63,55 +65,19 @@ class LoginForm extends Component {
     }
   }
 
-  getUserid() {
-    Axios.request({
-      method: "get",
-      url: "/api/auth/show/current",
-    })
-      .then((response) => {
-        this.user = response.data;
-        console.log(response.data.type);
-        if (response.data.Type === "1") {
-          this.props.history.push("/admin-dashboard?id" + response.data._id);
-        } else if (response.data.Type === "3") {
-          this.props.history.push("/projects?id=" + response.data._id);
-        }
-      })
-      .catch((error) => {
-        // User is not logged in
-        <Route exact path="/projects">
-          {this.state.loginError ? <LoginForm /> : <Navigate to="/projects" />}
-        </Route>;
-      });
-  }
-
   signinUser(user) {
-    Axios.request({
-      method: "post",
-      url: "/api/auth/login/local",
-      // mode: 'no-cors',
-      // headers: {
-      // 	'Access-Control-Allow-Origin': '*',
-      // 	'Content-Type': 'application/json',
-      // },
-      // withCredentials: true,
-      // supportsCredentials: true,
-      // credentials: 'same-origin',
-      data: {
+    httpService
+      .post(`${BASE_URL}/api/auth/login/local`, {
         Email: user.email,
         Password: user.passwd,
-      },
-    })
+      })
       .then((response) => {
-        if (response.data.message === "success") {
-          this.getUserid();
-          <Route exact path="/projects">
-            {!this.state.loginError ? (
-              <Navigate to="/projects" />
-            ) : (
-              <LoginForm />
-            )}
-          </Route>;
+        if (response.status === 200) {
+          if (response.data.Type === "1") {
+            this.props.navigate("/admin-dashboard?id" + response.data._id);
+          } else if (response.data.Type === "3") {
+            this.props.navigate("/projects?id=" + response.data._id);
+          }
         } else {
           this.setState({
             loginError: true,
@@ -137,6 +103,7 @@ class LoginForm extends Component {
     }
     e.preventDefault();
   }
+
   render() {
     // console.log(this.props.history);
     let emailError, passwdError, loginError, connError;
@@ -268,4 +235,6 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+const LoginFormWithHook = withNavigation(LoginForm);
+
+export default LoginFormWithHook;

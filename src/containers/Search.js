@@ -4,6 +4,7 @@ import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
 import SearchTemplate from "../components/Search/SearchTemplate";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Search extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Search extends Component {
   UNSAFE_componentWillMount() {
     this.getUserid();
     this.keyword = new URLSearchParams(this.props.history.location).get(
-      "keyword",
+      "keyword"
     );
   }
 
@@ -64,7 +65,7 @@ class Search extends Component {
     axios
       .get(
         "/api/projects/search/" +
-          new URLSearchParams(this.props.location.search).get("keyword"),
+          new URLSearchParams(this.props.location.search).get("keyword")
       )
       .then((response) => {
         this.setState({
@@ -158,4 +159,4 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default withNavigation(Search);

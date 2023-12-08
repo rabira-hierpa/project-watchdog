@@ -4,6 +4,7 @@ import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
 import ArchiveTemplate from "../components/Archive/ArchiveTemplate";
+import withNavigation from "../utils/wrapper/withNavigator";
 class Archive extends PureComponent {
   constructor(props) {
     super(props);
@@ -36,7 +37,7 @@ class Archive extends PureComponent {
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
   // Logout and reset the cookie session
@@ -173,4 +174,4 @@ function searchArchive(term) {
   };
 }
 
-export default Archive;
+export default withNavigation(Archive);

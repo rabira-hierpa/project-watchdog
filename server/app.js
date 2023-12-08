@@ -1,9 +1,10 @@
 // importing important modules
 const express = require("express");
 const mongoose = require("mongoose");
-const passport = require("passport");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override"); // to change post request to put
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const app = express();
 const auth = require("./routes/authentication");
 const users = require("./routes/users");
@@ -69,6 +70,21 @@ app.use("/api/chats", chats);
 
 // /api/auth route to routes/authentication.js
 app.use("/api/auth", auth);
+
+// Passport Middleware
+app.use(
+  session({
+    secret: "pwd-secret-app",
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: "mongodb://localhost/pwd-db" }),
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      maxAge: 100 * 60 * 60 * 24,
+    },
+  })
+);
 
 // Listening to port 4500
 const port = process.env.PORT || 4500;

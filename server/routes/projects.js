@@ -1,34 +1,31 @@
 // Including important modules
+const { re } = require("@nicolo-ribaudo/semver-v6");
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
 // Fetching all Projects from mongodb | Routing to get '/api/projects'
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   var query = projectModel.find({});
-
-  query.exec(function(err, docs) {
-    if (err) {
-      res.send(err);
-    } else {
-      let no_projs = docs.length;
-      console.log(`${no_projs} Projects Sent...`);
-      res.json(docs);
-    }
-  });
+  try {
+    const docs = await query.exec();
+    let no_projs = docs.length;
+    console.log(`${no_projs} Projects Sent...`);
+    res.json(docs);
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 // Fetching all Projects of a user from mongodb | Routing to get '/api/projects/user/:id'
-router.get("/user/:id", (req, res) => {
+router.get("/user/:id", async (req, res) => {
   var query = projectModel.find({ Member: req.params.id });
-
-  query.exec(function(err, docs) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(docs);
-    }
-  });
+  try {
+    const docs = await query.exec();
+    res.json(docs);
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 // Searching projects by title and description from mongodb get '/api/projects/search/:keyword'
@@ -40,7 +37,7 @@ router.get("/search/:keyword", (req, res) => {
     )
     .sort({ score: { $meta: "textScore" } });
 
-  query.exec(function(err, doc) {
+  query.exec(function (err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -50,27 +47,26 @@ router.get("/search/:keyword", (req, res) => {
 });
 
 // Fetching a single project from mongodb get '/api/projects/:id'
-router.get("/:id", (req, res) => {
-  var query = projectModel.findOne({ _id: req.params.id });
-
-  query.exec(function(err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.get("/:id", async (req, res) => {
+  const query = projectModel.findOne({ _id: req.params.id });
+  try {
+    const docs = await query.exec();
+    res.json(docs);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Inserting a new project to mongodb post '/api/projects/'
-router.post("/", (req, res) => {
-  new projectModel(req.body).save(function(err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.post("/", async (req, res) => {
+  let newProject = new projectModel(req.body);
+
+  try {
+    let saveProject = await newProject.save();
+    res.json(saveProject);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Update Project by ID put '/api/projects/:id'
@@ -82,11 +78,11 @@ router.put("/:id", (req, res) => {
         ProjectTitle: req.body.ProjectTitle,
         ProjectDescription: req.body.ProjectDescription,
         DeadLine: req.body.DeadLine,
-      }
+      },
     }
   );
 
-  query.exec(function(err, doc) {
+  query.exec(function (err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -100,12 +96,12 @@ router.put("/block/:id", (req, res) => {
     { _id: req.params.id },
     {
       $set: {
-        Status:req.body.Status
-      }
+        Status: req.body.Status,
+      },
     }
   );
 
-  query.exec(function(err, doc) {
+  query.exec(function (err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -121,24 +117,24 @@ router.put("/progress/:id", (req, res) => {
       { _id: req.params.id },
       {
         $set: {
-          Progress: req.body.Progress
-        }
+          Progress: req.body.Progress,
+        },
       }
     )
-    .then(Projects => {
+    .then((Projects) => {
       var query = projectModel.update(
         { _id: req.params.id },
         {
           $push: {
             History: {
               Event: "Project Progress Increased to " + req.body.Progress,
-              Progress: req.body.Progress
-            }
-          }
+              Progress: req.body.Progress,
+            },
+          },
         }
       );
 
-      query.exec(function(err, doc) {
+      query.exec(function (err, doc) {
         if (err) {
           res.send(err);
         } else {
@@ -146,7 +142,7 @@ router.put("/progress/:id", (req, res) => {
         }
       });
     })
-    .catch(error => {
+    .catch((error) => {
       res.send(error);
     });
 });
@@ -155,7 +151,7 @@ router.put("/progress/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   var query = projectModel.remove({ _id: req.params.id });
 
-  query.exec(function(err, doc) {
+  query.exec(function (err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -170,12 +166,12 @@ router.put("/member/:id/:memberID", (req, res) => {
     { _id: req.params.id },
     {
       $push: {
-        Member: req.params.memberID
-      }
+        Member: req.params.memberID,
+      },
     }
   );
 
-  query.exec(function(err, doc) {
+  query.exec(function (err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -190,11 +186,11 @@ router.delete("/member/:id/:memberID", (req, res) => {
     { _id: req.params.id },
     {
       $pull: {
-        Member: req.params.memberID
-      }
+        Member: req.params.memberID,
+      },
     }
   );
-  query.exec(function(err, doc) {
+  query.exec(function (err, doc) {
     if (err) {
       res.send(err);
     } else {
