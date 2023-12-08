@@ -26,10 +26,13 @@ passport.serializeUser((user, done) => {
 });
 
 // To decode user from a cookie
-passport.deserializeUser((id, done) => {
-  userModel.findById(id).then((user) => {
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await userModel.findById(id);
     done(null, user);
-  });
+  } catch (error) {
+    done(error, null);
+  }
 });
 
 // Using google passport strategy
@@ -94,26 +97,25 @@ passport.use(
       usernameField: "Email",
       passwordField: "Password",
     },
-    (Email, Password, done) => {
-      userModel
-        .findOne({
-          Email: Email,
-        })
-        .then((user) => {
-          if (!user) {
-            return done(null, false, { message: "Incorrect Email." });
+    async (Email, Password, done) => {
+      try {
+        const user = await userModel.findOne({ Email: Email });
+        if (!user) {
+          return done(null, false, { message: "Incorrect Email." });
+        }
+        // Check if password is correct
+        bcrypt.compare(Password, user.Password, (err, isMatch) => {
+          if (err) throw err;
+          if (isMatch) {
+            return done(null, user);
+          } else {
+            console.log("Incorrect Password");
+            return done(null, false, { message: "Incorrect Password." });
           }
-          // Check if password is correct
-          bcrypt.compare(Password, user.Password, (err, isMatch) => {
-            if (err) throw err;
-            if (isMatch) {
-              return done(null, user);
-            } else {
-              console.log("Incorrect Password");
-              return done(null, false, { message: "Incorrect Password." });
-            }
-          });
         });
+      } catch (error) {
+        done(error, null);
+      }
     }
   )
 );
@@ -124,7 +126,7 @@ router.get("/login/fail", (req, res) => {
 
 // Login route
 router.post("/login/local", (req, res, next) => {
-  return passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
     }
@@ -151,8 +153,9 @@ router.get("/show/current", (req, res) => {
 });
 
 // Registor route
-router.post("/signup/local", (req, res) => {
-  userModel.findOne({ Email: req.body.Email }).then((user) => {
+router.post("/signup/local", async (req, res) => {
+  try {
+    const user = await userModel.findOne({ Email: req.body.Email });
     if (user) {
       res.json({ error: "User Already Exist" });
     } else {
@@ -177,7 +180,9 @@ router.post("/signup/local", (req, res) => {
         });
       });
     }
-  });
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 router.get("/logout", (req, res) => {
