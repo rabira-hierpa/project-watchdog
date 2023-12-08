@@ -5,6 +5,8 @@ import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
 import ArchiveTemplate from "../components/Archive/ArchiveTemplate";
 import withNavigation from "../utils/wrapper/withNavigator";
+import { httpService } from "../utils/helpers";
+import { BASE_URL } from "../utils/constants";
 class Archive extends PureComponent {
   constructor(props) {
     super(props);
@@ -25,15 +27,15 @@ class Archive extends PureComponent {
 
   // Get the id of the logged in user
   getUserid() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
-        this.setState({
-          userId: response.data._id,
-        });
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id,
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch((error) => {
         // User is not logged in
