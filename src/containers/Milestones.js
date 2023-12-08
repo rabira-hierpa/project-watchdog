@@ -8,6 +8,8 @@ import IncompleteItem from "../components/Milestones/InProgress/IncompleteItem";
 import ReviewItem from "../components/Milestones/Review/ReviewItem";
 import CompletedItem from "../components/Milestones/Completed/CompletedItem";
 import withNavigation from "../utils/wrapper/withNavigator";
+import { httpService } from "../utils/helpers";
+import { BASE_URL } from "../utils/constants";
 
 class Milestones extends PureComponent {
   constructor(props) {
@@ -34,22 +36,19 @@ class Milestones extends PureComponent {
   }
   // Get the id of the logged in user
   getUserid() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
-        this.user = response.data._id;
-        this.setState({
-          userId: response.data._id,
-          type: response.data.Type,
-        });
-        console.log("User id " + this.state.userId);
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id,
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
   // Logout and reset the cookie session
