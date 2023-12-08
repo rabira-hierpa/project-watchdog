@@ -3,6 +3,11 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
+// Loading Model
+require("../models/DBComponents");
+const projectModel = mongoose.model("Project");
+const userModel = mongoose.model("User");
+
 // Fetching all MileStones from a project get '/api/milestones/all/:id' id is the projectID
 router.get("/all/:id", async (req, res) => {
   try {
@@ -129,10 +134,11 @@ router.put("/single/:id/:milestoneID/:userId", async (req, res) => {
 
 // Delete MileStone in a Project by updating Project
 // put 'api/milestones/delete/:id/:milestoneId/:userId' id is the projectID , milestoneId is milestoneID
-router.put("/delete/:id/:milestoneId/:userId", (req, res) => {
-  var mTitle = req.body.MileStoneTitle;
-  var query = projectModel
-    .update(
+router.put("/delete/:id/:milestoneId/:userId", async (req, res) => {
+  try {
+    const mTitle = req.body.MileStoneTitle;
+
+    await projectModel.updateOne(
       { _id: req.params.id, "MileStone._id": req.params.milestoneId },
       {
         $pull: {
@@ -142,45 +148,32 @@ router.put("/delete/:id/:milestoneId/:userId", (req, res) => {
         },
       },
       { multi: true }
-    )
-    .then(() => {
-      var query = userModel.findOne({ _id: req.params.userId }).then((User) => {
-        var query = projectModel
-          .update(
-            { _id: req.params.id },
-            {
-              $push: {
-                History: {
-                  UserName: User.Fname + " " + User.Lname,
-                  Event: mTitle + " was Deleted ",
-                  Type: "Milestone",
-                },
-              },
-            }
-          )
-          .then(() => {
-            var query = projectModel.findOne(
-              { _id: req.params.id },
-              { MileStone: 1 }
-            );
-            query.exec(function (err, docs) {
-              if (err) {
-                res.send(err);
-              } else {
-                res.json(docs);
-              }
-            });
-          });
-      });
-    })
-    .catch((error) => {
-      res.send(error);
-    });
-});
+    );
 
-// Loading Model
-require("../models/DBComponents");
-const projectModel = mongoose.model("Project");
-const userModel = mongoose.model("User");
+    const user = await userModel.findOne({ _id: req.params.userId });
+
+    await projectModel.updateOne(
+      { _id: req.params.id },
+      {
+        $push: {
+          History: {
+            UserName: user.Fname + " " + user.Lname,
+            Event: mTitle + " was Deleted ",
+            Type: "Milestone",
+          },
+        },
+      }
+    );
+
+    const docs = await projectModel.findOne(
+      { _id: req.params.id },
+      { MileStone: 1 }
+    );
+
+    res.json(docs);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = router;
