@@ -3,11 +3,14 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
+// Loading Model
+require("../models/DBComponents");
+const archiveModel = mongoose.model("Archive");
+
 // Fetching all Projects from the Archive in mongodb | Routing to get '/archive'
 router.get("/", async (req, res) => {
-  var query = archiveModel.find({});
   try {
-    const docs = await query.exec();
+    const docs = await archiveModel.find({});
     return res.json(docs);
   } catch (error) {
     res.send(error);
@@ -15,92 +18,84 @@ router.get("/", async (req, res) => {
 });
 
 // Searching projects from the archive by title from mongodb get '/archive/search/:title'
-router.get("/search/:title", (req, res) => {
-  var query = archiveModel.find({ Title: req.params.title });
-
-  query.exec(function (err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.get("/search/:title", async (req, res) => {
+  try {
+    const docs = await archiveModel.find({ Title: req.params.title }).exec();
+    res.json(docs);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Fetching a single project from the Archive get '/archive/:id'
-router.get("/:id", (req, res) => {
-  var query = archiveModel.findOne({ _id: req.params.id });
-
-  query.exec(function (err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.get("/:id", async (req, res) => {
+  try {
+    const doc = await archiveModel.findOne({ _id: req.params.id }).exec();
+    res.json(doc);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Inserting a new project to the archive post '/archive/'
-router.post("/", (req, res) => {
-  new archiveModel(req.body).save(function (err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.post("/", async (req, res) => {
+  try {
+    const doc = await new archiveModel(req.body).save();
+    res.json(doc);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Update Project in the archive by ID put '/archive/:id'
-router.put("/:id", (req, res) => {
-  var query = archiveModel.update(
-    { _id: req.params.id },
-    {
-      $set: {
-        Title: req.body.Title,
-        Description: req.body.Description,
-        UploadDate: req.body.UploadDate,
-        FileLocation: req.body.FileLocation,
-      },
-    }
-  );
-
-  query.exec(function (err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.put("/:id", async (req, res) => {
+  try {
+    const doc = await archiveModel
+      .updateOne(
+        { _id: req.params.id },
+        {
+          $set: {
+            Title: req.body.Title,
+            Description: req.body.Description,
+            UploadDate: req.body.UploadDate,
+            FileLocation: req.body.FileLocation,
+          },
+        }
+      )
+      .exec();
+    res.json(doc);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Delete a Project from the archive by ID delete '/projects/:id'
-router.delete("/:id", (req, res) => {
-  var query = archiveModel.remove({ _id: req.params.id });
-
-  query.exec(function (err, doc) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(doc);
-    }
-  });
+router.delete("/:id", async (req, res) => {
+  try {
+    const doc = await archiveModel.deleteOne({ _id: req.params.id });
+    res.json(doc);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 // Insert Filelocation to the archive put '/archive/file/:id' id is the archive project ID
-router.put("/file/:id", (req, res) => {
-  var query = archiveModel.update(
-    { _id: req.params.id },
-    {
-      $push: {
-        FileLocation: req.body.FileLocation,
-      },
-    }
-  );
+router.put("/file/:id", async (req, res) => {
+  try {
+    const doc = await archiveModel
+      .updateOne(
+        { _id: req.params.id },
+        {
+          $push: {
+            FileLocation: req.body.FileLocation,
+          },
+        }
+      )
+      .exec();
+    res.json(doc);
+  } catch (error) {
+    res.send(error);
+  }
 });
-
-// Loading Model
-require("../models/DBComponents");
-const archiveModel = mongoose.model("Archive");
 
 module.exports = router;

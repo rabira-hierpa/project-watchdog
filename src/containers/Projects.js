@@ -37,20 +37,19 @@ class Projects extends PureComponent {
 
   // Get the id of the logged in user
   getUserid() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
-        this.user = response.data;
-        this.setState({
-          id: response.data,
-        });
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id,
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
 

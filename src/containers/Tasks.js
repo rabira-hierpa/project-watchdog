@@ -10,6 +10,8 @@ import TodoItem from "../components/Tasks/Todo/TodoItem";
 import ReviewItem from "../components/Tasks/Review/ReviewItem";
 import CompletedItem from "../components/Tasks/Completed/CompletedItem";
 import withNavigation from "../utils/wrapper/withNavigator";
+import { httpService } from "../utils/helpers";
+import { BASE_URL } from "../utils/constants";
 
 class Tasks extends PureComponent {
   constructor(props) {
@@ -34,15 +36,19 @@ class Tasks extends PureComponent {
 
   // Get the id of the logged in user
   getUserid() {
-    axios
-      .request({ method: "get", url: "/api/auth/show/current" })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
-        this.user = response.data._id;
-        this.setState({ userId: response.data._id });
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id,
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
   // Logout and reset the cookie session
