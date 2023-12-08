@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import DetailsModal from "./DetailsModal";
 import Sidebar from "./Sidebar";
 import axios from "axios";
+import { httpService } from "../../utils/helpers";
+import { BASE_URL } from "../../utils/constants";
 
 class ProjectNav extends Component {
   constructor(props) {
@@ -25,11 +27,8 @@ class ProjectNav extends Component {
     // }
   }
   getUserid() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
         if (response.data._id) {
           this.setState({
@@ -40,7 +39,7 @@ class ProjectNav extends Component {
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
 
