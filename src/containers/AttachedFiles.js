@@ -4,6 +4,8 @@ import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
 import withNavigation from "../utils/wrapper/withNavigator";
+import { httpService } from "../utils/helpers";
+import { BASE_URL } from "../utils/constants";
 
 class AttachedFiles extends Component {
   constructor(props) {
@@ -21,20 +23,19 @@ class AttachedFiles extends Component {
 
   // Get the id of the logged in user
   getUserid() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
-        this.user = response.data;
-        this.setState({
-          userId: response.data,
-        });
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id,
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
   // Logout and reset the cookie session
