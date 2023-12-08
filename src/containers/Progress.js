@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import MainFooter from "../components/Common/MainFooter";
 import Charts from "../components/Progress/Charts";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Progress extends Component {
   constructor(props) {
@@ -210,4 +211,4 @@ class Progress extends Component {
   }
 }
 
-export default Progress;
+export default withNavigation(Progress);

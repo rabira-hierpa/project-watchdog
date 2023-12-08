@@ -5,6 +5,7 @@ import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
 import { ModalManager } from "react-dynamic-modal/lib/Modal";
 import ProjectRequest from "../components/Projects/ProjectRequest";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -531,4 +532,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default withNavigation(Dashboard);

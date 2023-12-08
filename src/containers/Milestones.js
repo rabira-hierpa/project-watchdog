@@ -7,6 +7,7 @@ import PageHeader from "../components/Common/PageHeader";
 import IncompleteItem from "../components/Milestones/InProgress/IncompleteItem";
 import ReviewItem from "../components/Milestones/Review/ReviewItem";
 import CompletedItem from "../components/Milestones/Completed/CompletedItem";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Milestones extends PureComponent {
   constructor(props) {
@@ -518,4 +519,4 @@ function searchMilestones(term) {
 
 Milestones.propTypes = {};
 
-export default Milestones;
+export default withNavigation(Milestones);

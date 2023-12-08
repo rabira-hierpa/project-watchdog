@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Schedule extends Component {
   constructor(props) {
@@ -317,4 +318,4 @@ class Schedule extends Component {
 
 Schedule.propTypes = {};
 
-export default Schedule;
+export default withNavigation(Schedule);

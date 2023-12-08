@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class AdminDashboard extends Component {
   constructor(props) {
@@ -162,4 +163,4 @@ class AdminDashboard extends Component {
   }
 }
 
-export default AdminDashboard;
+export default withNavigation(AdminDashboard);

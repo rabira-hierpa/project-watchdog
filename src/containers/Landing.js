@@ -4,6 +4,7 @@ import Features from "../components/Home/Features";
 import Footer from "../components/Home/Footer";
 import PromptSignup from "../components/Home/PromptSignup";
 import Slider from "../components/Home/Slider";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class Landing extends Component {
   render() {
@@ -20,4 +21,4 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+export default withNavigation(Landing);

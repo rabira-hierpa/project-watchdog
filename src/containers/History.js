@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProjectNav from "../components/Common/ProjectNav";
 import PageHeader from "../components/Common/PageHeader";
 import MainFooter from "../components/Common/MainFooter";
+import withNavigation from "../utils/wrapper/withNavigator";
 
 class History extends Component {
   constructor(props) {
@@ -177,4 +178,4 @@ class History extends Component {
 
 History.propTypes = {};
 
-export default History;
+export default withNavigation(History);
