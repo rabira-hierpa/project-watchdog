@@ -6,6 +6,8 @@ import MainFooter from "../components/Common/MainFooter";
 import { ModalManager } from "react-dynamic-modal/lib/Modal";
 import ProjectRequest from "../components/Projects/ProjectRequest";
 import withNavigation from "../utils/wrapper/withNavigator";
+import { httpService } from "../utils/helpers";
+import { BASE_URL } from "../utils/constants";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -36,20 +38,19 @@ class Dashboard extends Component {
   }
 
   getUserid() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/show/current",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/show/current`)
       .then((response) => {
-        console.log(response.data);
-        this.setState({
-          userId: response.data,
-        });
+        if (response.data._id) {
+          this.setState({
+            id: response.data._id,
+          });
+          this.userName(response.data._id);
+        }
       })
       .catch((error) => {
         // User is not logged in
-        window.location.href = "http://localhost:3000/signin";
+        this.props.navigate("/signin");
       });
   }
   // Logout and reset the cookie session
