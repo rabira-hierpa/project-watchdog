@@ -16,9 +16,10 @@ const requests = require("./routes/requests");
 const history = require("./routes/history");
 const chats = require("./routes/chats");
 const cors = require("cors");
-const cookieSession = require("cookie-session");
 // const keys = require('./config/keys');
 const ServerIP = require("./routes/ServerIP");
+const passport = require("passport");
+const cookieParser = require("cookie-parser");
 
 app.use(cors());
 
@@ -28,18 +29,22 @@ app.use(bodyParser.json());
 
 // Method-Override Middleware
 app.use(methodOverride("_method"));
+app.use(cookieParser());
 
 // Routing to '/'
 app.get("/", (req, res) => {
   res.send("HELLO PROJECT WATCHDOG");
 });
 
-// Intializing mongodb and connecting
+// Initializing mongodb and connecting
 mongoose.Promise = global.Promise;
 mongoose
   .connect("mongodb://localhost/pwd-db")
   .then(() => {
-    //projectModel.createIndexes({"ProjectTitle":"text","ProjectDescription":"text"});
+    projectModel.createIndexes({
+      ProjectTitle: "text",
+      ProjectDescription: "text",
+    });
     console.log("MongoDB Connected ....");
   })
   .catch((err) => console.log(err));
@@ -69,22 +74,23 @@ app.use("/api/history", history);
 app.use("/api/chats", chats);
 
 // /api/auth route to routes/authentication.js
-app.use("/api/auth", auth);
+const sessionOptions = {
+  secret: "pwdsecretapp",
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: "mongodb://localhost/pwd-db" }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    httpOnly: false,
+  },
+};
 
 // Passport Middleware
-app.use(
-  session({
-    secret: "pwd-secret-app",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: "mongodb://localhost/pwd-db" }),
-    cookie: {
-      secure: true,
-      httpOnly: true,
-      maxAge: 100 * 60 * 60 * 24,
-    },
-  })
-);
+app.use(session(sessionOptions));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/api/auth", auth);
 
 // Listening to port 4500
 const port = process.env.PORT || 4500;

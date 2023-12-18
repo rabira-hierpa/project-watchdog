@@ -5,24 +5,16 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20");
 // const keys = require('../config/keys');
-const bcrypt = require("bcryptjs");
 const LocalStrategy = require("passport-local").Strategy;
-const cookieSession = require("cookie-session");
-const ServerIp = require("../routes/ServerIP");
-
-router.use(
-  cookieSession({
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: ["simpleKey"],
-  })
-);
-
-router.use(passport.initialize());
-router.use(passport.session());
+const ServerIp = require("./ServerIP");
+const {
+  comparePassword,
+  hashPassword,
+} = require("../utils/helpers/comparePassword");
 
 // To encode user into a cookie
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user["_id"]);
 });
 
 // To decode user from a cookie
@@ -90,7 +82,8 @@ passport.deserializeUser(async (id, done) => {
 // 	}
 // );
 
-// Using pasport-local strategy
+// Using passport-local strategy
+
 passport.use(
   new LocalStrategy(
     {
@@ -99,20 +92,34 @@ passport.use(
     },
     async (Email, Password, done) => {
       try {
-        const user = await userModel.findOne({ Email: Email });
+        if (!Email || !Password) {
+          done(
+            {
+              status: 404,
+              message: "Email and password required!",
+            },
+            null
+          );
+        }
+        const user = await userModel.findOne({ Email });
         if (!user) {
-          return done(null, false, { message: "Incorrect Email." });
+          done(
+            {
+              status: 404,
+              message: `${Email} not found! Make sure you have an account associated with your email.`,
+            },
+            null
+          );
         }
         // Check if password is correct
-        bcrypt.compare(Password, user.Password, (err, isMatch) => {
-          if (err) throw err;
-          if (isMatch) {
-            return done(null, user);
-          } else {
-            console.log("Incorrect Password");
-            return done(null, false, { message: "Incorrect Password." });
-          }
-        });
+        const isValid = comparePassword(Password, user.Password);
+        if (!isValid) {
+          done({
+            status: 401,
+            message: "Invalid credentials!",
+          });
+        }
+        return done(null, user);
       } catch (error) {
         done(error, null);
       }
@@ -120,65 +127,53 @@ passport.use(
   )
 );
 
-router.get("/login/fail", (req, res) => {
-  res.send({ message: "fail" });
-});
-
 // Login route
 router.post("/login/local", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", (err, user) => {
     if (err) {
-      return next(err);
+      return res.status(err.status).json({ error: err });
     }
     if (!user) {
-      return res.redirect(ServerIp.ipAddress + "/api/auth/login/fail");
+      return res.status(404).json({ message: "Login failed" });
     }
-    req.logIn(user, (err) => {
+    req.logIn(user, async (err) => {
       if (err) {
         return next(err);
       }
-      // Exclude password and other sensitive data before sending the user object
       const { Password, ...userWithoutPassword } = user._doc;
       return res.send(userWithoutPassword);
     });
   })(req, res, next);
 });
 
-// Show currently loged in user
+// Show currently logged in user
 router.get("/show/current", (req, res) => {
-  const { user } = req;
-  const { Password, ...rest } = user["_doc"];
-
-  res.send(rest);
+  if (req.isAuthenticated()) {
+    const { password, ...userWithoutPassword } = req.user._doc;
+    res.json(userWithoutPassword);
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
+  }
 });
 
-// Registor route
+// Register route
 router.post("/signup/local", async (req, res) => {
   try {
     const user = await userModel.findOne({ Email: req.body.Email });
     if (user) {
-      res.json({ error: "User Already Exist" });
+      res.json({ error: "User already exists!" });
     } else {
       const newUser = new userModel({
         Fname: req.body.Fname,
         Lname: req.body.Lname,
         Email: req.body.Email,
-        Password: req.body.Password,
+        Password: hashPassword(req.body.Password),
         Department: req.body.Department,
         OtherDescription: req.body.OtherDescription,
       });
 
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.Password, salt, async (err, hash) => {
-          newUser.Password = hash;
-          try {
-            const user = await newUser.save();
-            res.json(user);
-          } catch (error) {
-            res.send(error);
-          }
-        });
-      });
+      const user = await newUser.save();
+      res.json(user);
     }
   } catch (error) {
     res.send(error);
