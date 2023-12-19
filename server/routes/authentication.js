@@ -149,7 +149,7 @@ router.post("/login/local", (req, res, next) => {
 // Show currently logged in user
 router.get("/show/current", (req, res) => {
   if (req.isAuthenticated()) {
-    const { password, ...userWithoutPassword } = req.user._doc;
+    const { Password, ...userWithoutPassword } = req.user["_doc"];
     res.json(userWithoutPassword);
   } else {
     res.status(401).json({ message: "Not authenticated" });
