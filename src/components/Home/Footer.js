@@ -7,14 +7,14 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-4">
-            <h5 className="title mb-4 mt-3 font-bold">
+            <h5 className=" font-bold">
               <img
                 src="./img/logo.png"
                 alt="Project Watchdog"
                 className="img-fluid"
               />
             </h5>
-            <p>A project managment system for Addis Ababa University</p>
+            <p>A project management system for Addis Ababa University</p>
           </div>
           <hr className="clearfix w-100 d-md-none" />
           <div className="col-md-2 mx-auto">

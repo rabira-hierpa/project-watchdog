@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import Axios from "axios";
+import { httpService } from "../../utils/helpers";
 import { Navigate } from "react-router";
+import { BASE_URL } from "../../utils/constants";
 
 class SignupForm extends Component {
   constructor(props) {
@@ -109,25 +110,23 @@ class SignupForm extends Component {
   }
 
   signinUser(user) {
-    Axios.request({
-      method: "post",
-      url: "/api/auth/signup/local",
-      data: {
+    httpService
+      .post(`${BASE_URL}/api/auth/signup/local`, {
         Fname: user.fname,
         Lname: user.lname,
         Email: user.email,
         Password: user.passwd,
         Department: user.dep,
         OtherDescription: user.bio,
-      },
-    })
+      })
       .then((response) => {
         if (response.status === 200) {
           this.setState({ loginSuccess: true });
-          window.location.href = "http://localhost:3000/signin";
+          this.props.navigate("/signin");
         }
       })
       .catch((error) => {
+        console.log({ error });
         this.setState({
           error: true,
           erro_mesg:
@@ -294,7 +293,10 @@ class SignupForm extends Component {
                 <div className="modal-footer mx-5 pt-3 mb-1">
                   <p className="font-small grey-text d-flex justify-content-end">
                     Already signed up!
-                    <NavLink to="/signin" className="blue-text ml-1">
+                    <NavLink
+                      to="/signin"
+                      className="text-blue-400 ml-1 cursor-pointer"
+                    >
                       Sign In
                     </NavLink>
                   </p>

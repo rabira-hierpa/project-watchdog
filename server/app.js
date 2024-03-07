@@ -21,6 +21,17 @@ const ServerIP = require("./routes/ServerIP");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 
+const sessionOptions = {
+  secret: "pwdsecretapp",
+  resave: true,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: "mongodb://localhost/pwd-db" }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    httpOnly: false,
+  },
+};
+
 app.use(cors());
 
 // BodyParser Middleware
@@ -30,6 +41,11 @@ app.use(bodyParser.json());
 // Method-Override Middleware
 app.use(methodOverride("_method"));
 app.use(cookieParser());
+
+// Passport Middleware
+app.use(session(sessionOptions));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routing to '/'
 app.get("/", (req, res) => {
@@ -74,22 +90,6 @@ app.use("/api/history", history);
 app.use("/api/chats", chats);
 
 // /api/auth route to routes/authentication.js
-const sessionOptions = {
-  secret: "pwdsecretapp",
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: "mongodb://localhost/pwd-db" }),
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    httpOnly: false,
-  },
-};
-
-// Passport Middleware
-app.use(session(sessionOptions));
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use("/api/auth", auth);
 
 // Listening to port 4500

@@ -7,10 +7,7 @@ const GoogleStrategy = require("passport-google-oauth20");
 // const keys = require('../config/keys');
 const LocalStrategy = require("passport-local").Strategy;
 const ServerIp = require("./ServerIP");
-const {
-  comparePassword,
-  hashPassword,
-} = require("../utils/helpers/comparePassword");
+const { comparePassword } = require("../utils/helpers/comparePassword");
 
 // To encode user into a cookie
 passport.serializeUser((user, done) => {
@@ -147,36 +144,22 @@ router.post("/login/local", (req, res, next) => {
 });
 
 // Show currently logged in user
-router.get("/show/current", (req, res) => {
-  if (req.isAuthenticated()) {
-    const { password, ...userWithoutPassword } = req.user._doc;
-    res.json(userWithoutPassword);
-  } else {
-    res.status(401).json({ message: "Not authenticated" });
-  }
-});
-
-// Register route
 router.post("/signup/local", async (req, res) => {
   try {
-    const user = await userModel.findOne({ Email: req.body.Email });
-    if (user) {
-      res.json({ error: "User already exists!" });
-    } else {
-      const newUser = new userModel({
-        Fname: req.body.Fname,
-        Lname: req.body.Lname,
-        Email: req.body.Email,
-        Password: hashPassword(req.body.Password),
-        Department: req.body.Department,
-        OtherDescription: req.body.OtherDescription,
-      });
-
-      const user = await newUser.save();
-      res.json(user);
+    const existingUser = await userModel.findOne({ Email: req.body.Email });
+    if (existingUser) {
+      return res.status(409).json({ error: "User already exists!" });
     }
+
+    const { ...data } = req.body;
+    const newUser = new userModel({
+      ...data,
+    });
+
+    const savedUser = await newUser.save();
+    return res.json(savedUser);
   } catch (error) {
-    res.send(error);
+    return res.status(500).send(error.message);
   }
 });
 

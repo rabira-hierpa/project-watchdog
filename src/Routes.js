@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { Component, useContext } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Landing from "./containers/Landing";
 import Signin from "./containers/Signin";
 import Signup from "./containers/Signup";
@@ -16,7 +16,20 @@ import ErrorPage from "./components/Error/Error";
 import Dashboard from "./containers/Dashboard";
 import AdminDashboard from "./containers/Admin";
 import Search from "./containers/Search";
+import { AuthContext } from "./context/auth.context";
+import ProjectNav from "./components/Common/ProjectNav";
 
+const AuthLayout = ({ children }) => {
+  const { isAuthenticated, authState } = useContext(AuthContext);
+  return isAuthenticated() ? (
+    <div>
+      <ProjectNav authState={authState} />
+      {children}
+    </div>
+  ) : (
+    <Navigate to="/signin" />
+  );
+};
 class Home extends Component {
   render() {
     return (
