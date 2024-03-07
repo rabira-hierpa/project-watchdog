@@ -6,7 +6,7 @@ import PageHeader from "../components/Common/PageHeader";
 import ProjectTemplate from "../components/Projects/ProjectTemplate";
 import CreateProject from "../components/Projects/CreateProject";
 import withNavigation from "../utils/wrapper/withNavigator";
-import { httpService } from "../utils/helpers";
+import { httpService, storage } from "../utils/helpers";
 import { BASE_URL } from "../utils/constants";
 
 class Projects extends PureComponent {
@@ -26,31 +26,12 @@ class Projects extends PureComponent {
 
   // Called when the component is ready to be mounted
   UNSAFE_componentWillMount() {
-    this.getUserid();
     this.getUserName();
   }
 
   // Called when the component is already mounted
   componentDidMount() {
     this.getUserProjects();
-  }
-
-  // Get the id of the logged in user
-  getUserid() {
-    httpService
-      .get(`${BASE_URL}/api/auth/show/current`)
-      .then((response) => {
-        if (response.data._id) {
-          this.setState({
-            id: response.data._id,
-          });
-          this.userName(response.data._id);
-        }
-      })
-      .catch((error) => {
-        // User is not logged in
-        this.props.navigate("/signin");
-      });
   }
 
   // Get fname of a user
@@ -71,31 +52,23 @@ class Projects extends PureComponent {
   }
   // Logout and reset the cookie session
   onLogout() {
-    axios
-      .request({
-        method: "get",
-        url: "/api/auth/logout",
-      })
+    httpService
+      .get(`${BASE_URL}/api/auth/logout`)
       .then((response) => {
-        console.log(response.data);
-        window.location.href = "http://localhost:3000/";
+        this.props.navigate("/");
+        storage.clear();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
 
   // Get projects of a user
   getUserProjects() {
     this.user = new URLSearchParams(this.props.location.search).get("id");
-    // console.log(this.user);
-    axios
-      .request({
-        method: "get",
-        url: "/api/projects/user/" + this.user,
-      })
+    httpService
+      .get(`${BASE_URL}/api/projects/user/${this.user}`)
       .then((response) => {
-        console.log(response.data);
         this.setState({
           projects: response.data,
         });
