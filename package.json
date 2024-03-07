@@ -2,7 +2,6 @@
   "name": "project-watchdog-dev",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:4500",
   "dependencies": {
     "@nicolo-ribaudo/semver-v6": "^6.3.3",
     "@types/jest": "^29.5.11",
@@ -47,7 +46,8 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^4.1.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "tailwindcss": "^3.3.7"
   },
   "browserslist": {
     "production": [
