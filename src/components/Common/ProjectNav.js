@@ -2,9 +2,6 @@ import React, { Component } from "react";
 // import { NavLink } from "react-router-dom";
 import DetailsModal from "./DetailsModal";
 import Sidebar from "./Sidebar";
-import axios from "axios";
-import { httpService } from "../../utils/helpers";
-import { BASE_URL } from "../../utils/constants";
 
 class ProjectNav extends Component {
   constructor(props) {
@@ -17,64 +14,25 @@ class ProjectNav extends Component {
     this.keyword = "";
   }
 
-  UNSAFE_componentWillMount() {
-    this.getUserid();
-  }
-
   componentDidMount() {
-    // if (this.state.id !== "") {
-    //   this.userName(this.state.id);
-    // }
+    this.setState({
+      username: this.props.authState?.user?.Fname,
+      id: this.props.authState?.user?._id,
+    });
   }
-  getUserid() {
-    httpService
-      .get(`${BASE_URL}/api/auth/show/current`)
-      .then((response) => {
-        if (response.data._id) {
-          this.setState({
-            id: response.data._id,
-          });
-          this.userName(response.data._id);
-        }
-      })
-      .catch((error) => {
-        // User is not logged in
-        this.props.navigate("/signin");
-      });
-  }
-
-  userName = (userid) => {
-    axios
-      .request({
-        method: "get",
-        url: "/api/users/name/" + userid,
-      })
-      .then((response) => {
-        if (response.data.Fname) {
-          this.setState({
-            username: response.data.Fname,
-          });
-        } else {
-          window.location.href = "http://localhost:3000/signin";
-        }
-      })
-      .catch((error) => {});
-  };
 
   onChange(e) {
     this.keyword = e.target.value;
   }
   onSubmit(e) {
     if (this.keyword !== "") {
-      window.location.href =
-        "http://localhost:3000/search?id=" +
-        new URLSearchParams(this.props.location.search).get("id") +
-        "&keyword=" +
-        this.keyword;
-      e.preventDefault();
-    } else {
-      e.preventDefault();
+      this.props.navigate(
+        `/search?id=${new URLSearchParams(this.props.location.search).get(
+          "id"
+        )}&keyword=${this.keyword}`
+      );
     }
+    e.preventDefault();
   }
   render() {
     const style = {
@@ -90,7 +48,7 @@ class ProjectNav extends Component {
       );
       icon = (
         <div className="float-left">
-          <a data-activates="slide-out" className="button-collapse">
+          <a href="#!" data-activates="slide-out" className="button-collapse">
             <i className="fa fa-bars" />
           </a>
         </div>
@@ -100,6 +58,7 @@ class ProjectNav extends Component {
       details = (
         <li className="nav-item">
           <a
+            href="#!"
             className="nav-link"
             data-toggle="modal"
             data-target="#detailsModal"
@@ -114,6 +73,7 @@ class ProjectNav extends Component {
       quickadd = (
         <li className="nav-item">
           <a
+            href="#!"
             className="nav-link"
             data-toggle="modal"
             data-target="#createProjectModal"
@@ -130,7 +90,7 @@ class ProjectNav extends Component {
     } else {
       quickadd = (
         <li className="nav-item">
-          <a
+          <span
             className="nav-link"
             data-toggle="modal"
             data-target="#quickAddModal"
@@ -139,7 +99,7 @@ class ProjectNav extends Component {
             <span className="clearfix d-none d-sm-inline-block">
               {this.props.quickadd}
             </span>
-          </a>
+          </span>
         </li>
       );
     }
@@ -166,7 +126,7 @@ class ProjectNav extends Component {
             {icon}
             <div className="breadcrumb-dn mr-auto">
               <span to="#!" className="ml-2">
-                <strong>ProjectWatchdog</strong>
+                <strong>Project Watchdog</strong>
               </span>
             </div>
             <ul className="nav navbar-nav nav-flex-icons ml-auto">
@@ -219,13 +179,13 @@ class ProjectNav extends Component {
                     <i className="fa fa-id-card-o" aria-hidden="true" /> Profile
                   </a>
                   <div className="dropdown-divider" />
-                  <a
+                  <span
                     className="dropdown-item"
                     onClick={() => this.props.onLogout()}
                   >
                     <i className="fa fa-sign-out fa-sm fa-fw" />
                     Logout
-                  </a>
+                  </span>
                 </div>
               </li>
             </ul>
