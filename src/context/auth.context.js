@@ -17,18 +17,15 @@ const AuthProvider = ({ children }) => {
   }, [authState]);
 
   async function saveAuthStateInfo(_authState) {
-    localStorage.setItem(constants.USER, JSON.stringify(_authState?.user));
-    await storage.setItem(constants.TOKEN, _authState.token);
+    localStorage.setItem(constants.USER, JSON.stringify(_authState));
+    await storage.setItem(constants.USER, _authState);
   }
 
   // Saves authState to context and to browser storage
   function setAuthInfo(authInfo) {
     setLoading(true);
-    const authItems = {
-      user: authInfo?.user,
-    };
-    setAuthState(authItems);
-    saveAuthStateInfo(authItems);
+    setAuthState(authInfo);
+    saveAuthStateInfo(authInfo);
     setLoading(false);
   }
 
