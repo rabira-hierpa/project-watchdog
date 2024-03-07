@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { BASE_URL } from "../../utils/constants";
 import { httpService } from "../../utils/helpers";
 import withNavigation from "../../utils/wrapper/withNavigator";
+import { AuthContext } from "../../context/auth.context";
+import Spinner from "../../assets/img/spinner";
 
 class LoginForm extends Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class LoginForm extends Component {
       loginError: false,
     };
   }
+  static contextType = AuthContext;
 
   onEmailChange(e) {
     this.setState({
@@ -73,6 +76,8 @@ class LoginForm extends Component {
       })
       .then((response) => {
         if (response.status === 200) {
+          const { setAuthState } = this.context;
+          setAuthState({ ...response.data });
           if (response.data.Type === "1") {
             this.props.navigate("/admin-dashboard?id" + response.data._id);
           } else if (response.data.Type === "3") {
@@ -85,17 +90,16 @@ class LoginForm extends Component {
         }
       })
       .catch((error) => {
-        console.log(error);
         this.setState({
           error: true,
           erro_mesg:
-            "Some error occured whilet trying to fetch the data! Please try again",
+            "Some error occured while trying to fetch the data! Please try again",
         });
       });
   }
 
   googleSignin() {
-    window.location.href = "/api/auth/google";
+    this.props.navigate("/api/auth/google");
   }
   onSubmit(e) {
     if (this.state.emailError === false && this.state.passwdError === false) {
@@ -105,8 +109,8 @@ class LoginForm extends Component {
   }
 
   render() {
-    // console.log(this.props.history);
     let emailError, passwdError, loginError, connError;
+    const { loading } = this.context;
     if (this.state.emailError) {
       emailError = <div className="text-danger"> Invalid Email address </div>;
     }
@@ -200,6 +204,7 @@ class LoginForm extends Component {
                         onSubmit={this.onSubmit.bind(this)}
                         className="btn blue-gradient btn-rounded z-depth-1a"
                       >
+                        <Spinner loading={loading} />
                         Sign in
                       </button>
                     </div>
@@ -221,7 +226,10 @@ class LoginForm extends Component {
                 <div className="modal-footer mx-5 pt-3 mb-1">
                   <p className="font-small grey-text d-flex justify-content-end">
                     Not a member ?
-                    <NavLink to="/signup" className="blue-text ml-1">
+                    <NavLink
+                      to="/signup"
+                      className="blue-text ml-1 cursor-pointer"
+                    >
                       Sign Up
                     </NavLink>
                   </p>
