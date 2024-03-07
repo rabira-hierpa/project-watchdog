@@ -1,68 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Project Watchdog</title>
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="%PUBLIC_URL%/favicon.ico" />
+    <!-- Font Awesome -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Material Design Bootstrap -->
+    <link href="css/mdb.min.css" rel="stylesheet" />
+    <!-- Your custom styles (optional) -->
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/compiled.css" rel="stylesheet" />
+    <!-- Google Fonts  -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Archivo+Black"
+      rel="stylesheet"
+    />
+    <!-- <link rel='stylesheet' id='compiled.css-css' href='https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled.min.css?ver=4.4.0' type='text/css' media='all' /> -->
+    <!-- Tailwindcss -->
+    <link href="css/output.css" rel="stylesheet" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Project Watchdog</title>
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-  <link rel="manifest" href="%PUBLIC_URL%/favicon.ico">
-  <!-- Font Awesome -->
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-  <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="css/mdb.min.css" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/compiled.css" rel="stylesheet">
-  <!-- Google Fonts  -->
-  <link href="https://fonts.googleapis.com/css?family=Archivo+Black" rel="stylesheet">
-  <!-- <link rel='stylesheet' id='compiled.css-css' href='https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled.min.css?ver=4.4.0' type='text/css' media='all' /> -->
-</head>
-
-<body class="hidden-sn" id="bodyFont">
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-  <!-- App root -->
-  <div id="root">
-    <div id="mdb-preloader" className="flex-center">
-      <div id="preloader-markup" />
+  <body class="hidden-sn" id="bodyFont">
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <!-- App root -->
+    <div id="root">
+      <div id="mdb-preloader" className="flex-center">
+        <div id="preloader-markup" />
+      </div>
     </div>
-  </div>
-  <!-- /App root -->
-  <!-- SCRIPTS -->
-  <!-- JQuery -->
-  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="js/popper.min.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="js/mdb.min.js"></script>
-  <!-- Holder.js -->
-  <script type="text/javascript" src="js/holder.js"></script>
-  <!-- Custome script -->
-  <!-- <script type="text/javascript" src="js/compiled.js"></script> -->
-  <script>
-    $('.mdb-select').material_select();
-    // Material Select Initialization
-    $(document).ready(function () {
-      // SideNav Initialization
-      $(".button-collapse").sideNav();
-      // Dropdown toggle
-      // $('.dropdown-toggle').dropdown();
-      // popovers Initialization
-      $(function () {
-        $('[data-toggle="popover"]').popover()
+    <!-- /App root -->
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <!-- Holder.js -->
+    <script type="text/javascript" src="js/holder.js"></script>
+    <!-- Custome script -->
+    <!-- <script type="text/javascript" src="js/compiled.js"></script> -->
+    <script>
+      $(".mdb-select").material_select();
+      // Material Select Initialization
+      $(document).ready(function () {
+        // SideNav Initialization
+        $(".button-collapse").sideNav();
+        // Dropdown toggle
+        // $('.dropdown-toggle').dropdown();
+        // popovers Initialization
+        $(function () {
+          $('[data-toggle="popover"]').popover();
+        });
+        $(".mdb-select").material_select();
+        // Data Picker Initialization
+        $(".datepicker").pickadate();
       });
-      $('.mdb-select').material_select();
-      // Data Picker Initialization
-      $('.datepicker').pickadate();
-    });
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
