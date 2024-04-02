@@ -7,7 +7,10 @@ const GoogleStrategy = require("passport-google-oauth20");
 // const keys = require('../config/keys');
 const LocalStrategy = require("passport-local").Strategy;
 const ServerIp = require("./ServerIP");
-const { comparePassword } = require("../utils/helpers/comparePassword");
+const {
+  comparePassword,
+  hashPassword,
+} = require("../utils/helpers/comparePassword");
 
 // To encode user into a cookie
 passport.serializeUser((user, done) => {
@@ -131,14 +134,16 @@ router.post("/login/local", (req, res, next) => {
       return res.status(err.status).json({ error: err });
     }
     if (!user) {
-      return res.status(404).json({ message: "Login failed" });
+      return res.status(404).json({
+        message: "User does not exists. Try to signup with this email",
+      });
     }
-    req.logIn(user, async (err) => {
+    req.logIn(user, (err) => {
       if (err) {
-        return next(err);
+        return res.status(500).json({ error: err });
       }
       const { Password, ...userWithoutPassword } = user._doc;
-      return res.send(userWithoutPassword);
+      return res.status(200).send(userWithoutPassword);
     });
   })(req, res, next);
 });
@@ -154,6 +159,7 @@ router.post("/signup/local", async (req, res) => {
     const { ...data } = req.body;
     const newUser = new userModel({
       ...data,
+      Password: hashPassword(data.Password),
     });
 
     const savedUser = await newUser.save();
