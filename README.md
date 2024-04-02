@@ -48,6 +48,7 @@ To run the backend (express app)
 git clone https://gitlab.com/rabira-hierpa/project_watchdog.git
 cd project_watchdog/server
 npm install # or yarn start
+cp .env.example .env # you can change the REACT_APP_PUBLIC_URL to point to the port your backend is running 
 npm start # starts the backend
 ```
 
